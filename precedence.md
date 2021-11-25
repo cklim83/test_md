@@ -140,5 +140,8 @@ mapped_array.tap { |value| p value }              # => [2, 3, 4]
 ```
 <br>
 
+### Test Section
+Blah
+
 #### Tags
 #precedence, #left-to-right, #right-to-left, #short_circuiting, #logical_operators
