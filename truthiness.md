@@ -103,7 +103,7 @@ Logical operators return either "truthy" or "falsey" values after evaluating exp
 	=> true
 	```
 
-- Comparison operators such as `>,<,>=,<=, ==` has a higher [[precedence]] than `&&` so  `num < 10 && num.odd?` is automatically interpreted as  `(num < 10) && (num.odd?)` rather than  `num < (10 && num.odd?)` without the need for parenthesis
+- Comparison operators such as `>,<,>=,<=, ==` has a higher [precedence](precedence.md) than `&&` so  `num < 10 && num.odd?` is automatically interpreted as  `(num < 10) && (num.odd?)` rather than  `num < (10 && num.odd?)` without the need for parenthesis
 	```ruby
 	irb:001> num = 5
 	=> 5
