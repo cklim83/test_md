@@ -6,6 +6,7 @@
 [Logical Operators](#logical-operators)\
 [Expressions and Conditionals](#expressions-and-conditionals)
 <br>
+
 ---
 
 #### Summary
@@ -15,6 +16,7 @@
 - Short-circuiting behavior of logical operators allows certain operations to be skipped if the truthiness of the expression is not longer in doubt
 
 [Back to top](#sections)
+
 ---
 
 #### Boolean
@@ -32,6 +34,7 @@ false.methods       # => list of methods you can call on the false object
 ```
 
 [Back to top](#sections)
+
 ---
 
 #### Truthiness
@@ -42,6 +45,7 @@ false.methods       # => list of methods you can call on the false object
 5 == true        # => false
 ```
 [Back to top](#sections)
+
 ---
 
 #### Logical Operators
@@ -166,6 +170,7 @@ ZeroDivisionError: divided by 0
 - `ZeroDivisionError` results as no short circuiting applicable
 
 [Back to top](#sections)
+
 ---
 
 #### Expressions and Conditionals
@@ -203,4 +208,5 @@ end
 ```
 
 [Back to top](#sections)
+
 ---
