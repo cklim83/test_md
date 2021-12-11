@@ -1,11 +1,12 @@
 ## Truthiness and Logical Operations
 #### Sections
-[Summary](#summary)
-[Boolean](#boolean)
-[Truthiness](#truthiness)
-[Logical Operators](#logical-operators)
+[Summary](#summary)\
+[Boolean](#boolean)\
+[Truthiness](#truthiness)\
+[Logical Operators](#logical-operators)\
 [Expressions and Conditionals](#expressions-and-conditionals)
 <br>
+---
 
 #### Summary
 - Truthiness: All values except `false` and `nil`
@@ -14,6 +15,7 @@
 - Short-circuiting behavior of logical operators allows certain operations to be skipped if the truthiness of the expression is not longer in doubt
 
 [Back to top](#sections)
+---
 
 #### Boolean
 - `Boolean` datatypes represented by `true` or `false` values are used in Ruby for conditional logic expressions.
@@ -30,6 +32,7 @@ false.methods       # => list of methods you can call on the false object
 ```
 
 [Back to top](#sections)
+---
 
 #### Truthiness
 - In Ruby, "falsey" is a superset of `false` and contains both the values `false` and `nil`
@@ -39,6 +42,7 @@ false.methods       # => list of methods you can call on the false object
 5 == true        # => false
 ```
 [Back to top](#sections)
+---
 
 #### Logical Operators
 Logical operators return either "truthy" or "falsey" values after evaluating expressions
@@ -162,6 +166,7 @@ ZeroDivisionError: divided by 0
 - `ZeroDivisionError` results as no short circuiting applicable
 
 [Back to top](#sections)
+---
 
 #### Expressions and Conditionals
 In real code, we often use expressions that evaluates to either `true` or `false` objects in conditionals
@@ -198,3 +203,4 @@ end
 ```
 
 [Back to top](#sections)
+---
