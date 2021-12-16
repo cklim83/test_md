@@ -13,6 +13,7 @@ Course: RB109
 [Truthiness](#truthiness)\
 [each, map, select](#collection-methods-each-map-select)\
 [Array Sorting](#array-sorting)\
+[Summary Table of Common Collection Methods](#summary-table-of-common-collection-methods)\
 [Dup, Clone and Freezing](#dup-clone-and-freezing)\
 [Examples](#examples)
 
@@ -324,6 +325,18 @@ b[0].object_id		# => 70216084941500, same as a[0] object_id
  [Back to top](#sections)
  
  ---
+ 
+### Summary Table of Common Collection Methods
+|Class/Module| each | select | map | sort|
+|---|---|---|---|---|
+|String|`#each_char`||||
+| Array | `#each` | `#select`, `#select!` | `#map`, `#map!` | `sort`, `sort!`, `sort_by!`|
+| Hash | `#each` | `#select`, `#select!` |  |  |
+| Enumerable |  | `#select` | `#map` | `sort`, `sort_by` |
+
+[Back to top](#sections)
+
+---
 
 ### Dup, Clone and Freezing
 #### Dup and Clone
@@ -417,15 +430,82 @@ puts greeting
 ```
 Examine the code example above. The last line outputs the String `Hi` rather than the String `Hello`. Explain what is happening here and identify the underlying principle that this demonstrates. <br>
 
-On line 1, local variable `greeting` was **initialized** to the String `Hello`. The **`do..end`** that follows the `loop` method invocation on lines 3-6 **defines a block**. Within the block, `greeting` was **reassigned** to another String `Hi` on line 4. On line 8, the **`puts` method was called** with local variable **`greeting` passed as an argument**. Since `greeting` is now assigned to `Hi`, this is what is **output**. This example **demonstrates local variable scoping rules in Ruby: local variables initialized outside of a block is accessible inside the block**.
+On line 1, local variable `greeting` was **initialized** to the String `Hello`. The **`do..end`** that follows the `loop` method invocation on lines 3-6 **defines a block**. Since local variables initialized outside a block can be accessed within the block, `greeting` was able to be **reassigned** to another String `Hi` on line 4. On line 8, the **`puts` method was called** with local variable **`greeting` passed as an argument**. Since `greeting` is now referencing `Hi`, this is what is being **output**. This example **demonstrates local variable scoping rules in Ruby: local variables initialized outside of a block is accessible inside the block**.
 
-#### `map` Example
+#### Map
 ```Ruby
 [[1, 2], [3, 4]].map { |arr| puts arr[0] }
 ```
 Explain the output and return value of above code example <br>
 
+1
+3
+=> [nil, nil]
+We have a multi-dimensional array calling the method `map` with a block having `arr` as parameter. `map` iterates through each element in the caller, and assign it to `arr` for block execution. In each iteration `puts arr[0]` **outputs** the first element and returns `nil` which is also the **return value** of the block and **used as elements in a new array** to be returned by `map`
 
+In 1st iteration, `arr` is assigned to subarray `[1, 2]` and `puts arr[0]` output `1` and returns `nil`
+In 2nd iteration, `arr` is assigned to subarray `[3, 4]` and `puts arr[0]` output `3` and returns `nil`
+`map` then include both block return values in new array to return `[nil, nil]`
+
+```Ruby
+['ant', 'bear'].map do |elem|
+  if elem.length > 3
+    elem
+  end
+end
+```
+
+
+#### Mutating Collections While Iterating
+```ruby
+def remove_evens!(arr)
+  arr.each do |num|
+    if num % 2 == 0
+      arr.delete(num)
+    end
+  end
+  arr
+end
+
+p remove_evens!([1,1,2,3,4,6,8,9])
+# expected return value [1, 1, 3, 9]
+# actual return value [1, 1, 3, 6, 9]
+```
+The `Array#delete` method is destructive, and is changing the contents of `arr` during iteration.
+
+One way you could fix the code above is to create a shallow copy of the array and iterate through it while mutating the original array.
+```ruby
+def remove_evens!(arr)
+  cloned_arr = arr.dup
+  cloned_arr.each do |num|
+    if num % 2 == 0
+      arr.delete(num)
+    end
+  end
+  arr
+end
+```
+
+#### Sorting
+```ruby
+arr = [['1', '8', '11'], ['2', '6', '13'], ['2', '12', '15'], ['1', '8', '9']]
+
+arr.sort # => [["1", "8", "11"], ["1", "8", "9"], ["2", "12", "15"], ["2", "6", "13"]]
+```
+
+- sorting nested arrays which involves two sets of comparisons
+	- Each of the inner arrays is compared with the other inner arrays.
+	- Arrays are compared using element-wise comparison. Since the elements are Strings, we are comparing using `String#<=>`. Hence `"11"` comes before `'9'`, which explains the order of the return result.
+	
+- To sort by numberical comparisons, we need to convert the elements to Integers first using 	`sort_by` to tap on `Integer#<=>`
+```ruby
+arr.sort_by do |sub_arr|
+  sub_arr.map do |num|
+    num.to_i
+  end
+end
+# => [["1", "8", "9"], ["1", "8", "11"], ["2", "6", "13"], ["2", "12", "15"]]
+```
 
 
 #### Reassignment
@@ -462,3 +542,22 @@ example('hello')
 - As there is no explicit `return` expression in `example`, `break if i == 0` is the last expression to be executed and returns `nil` when the method call completes.
 
 [Back to top](#sections)
+
+### Template Collection Answers
+We have a ... calling the method `method_name` with a block having `param_name` as parameter. `method_name` iterates through each element in the caller, and assign the element to `param_name` for block execution. In each iteration, ... [output/mutate/reassign] and the block returns `...` to `method_name`. `method_name` [ignores/use ...] and returns [the original caller/new array/hash].
+
+In 1st iteration, `param_name` is assigned to `...` and `code_segment` [output/mutate/reassign] ... and the block returns `block_return_value`
+In similar fashion, subsequent iterations output ... and the block returns ... respectively
+`method_name` then include these block return values in [new_array|original object] to return 
+
+```Ruby
+['ant', 'bear'].map do |elem|
+  if elem.length > 3
+    elem
+  end
+end
+```
+
+We have an array ['ant', 'bear'] calling the method `map` with a block having `elem` as parameter. `map` iterates through each element in the caller, and assign the element to `elem` for block execution. In each iteration, the if statement returns either the string referenced by `elem` if its length is greater than `3` or `nil` otherwise. This value is also the block's return value to `map`. `map` then used these block return values as elements in a new array as its return value.
+
+In 1st iteration, `elem` is assigned to `'ant'` and the if statement evaluates to `false` and the block return `nil`. In the second iteration, `elem` is assigned to `'bear'` and the if conditional evaluates to `true` and the block returns `'bear'`. Thus `map` uses `nil` and `bear` in a new array to return `[nil, 'ant']`
