@@ -1,6 +1,6 @@
 Topic: RB109 Written Assessment Preparation\
 Date: 14 Dec 2021\
-Course: RB109\
+Course: RB109
 
 ---
 
@@ -272,9 +272,9 @@ b[0].object_id		# => 70216084941500, same as a[0] object_id
 ##### `Array#<=>` 
 - Arrays are also compared in an **element-wise** manner: 
 	- We start by comparing the first object in each array. We move on to the next object until the return value (`-1, 0, 1 or nil`) is established
-	- If two arrays are exactly equal when all the comparable elements are exhausted, the shorter array is deemed smaller e.g. `['a', 'car', 'd', 3]` <=> `['a', 'car', 'd']` will return 1 and not generate an ArgumentError since the different array lengths ensure there is no comparison between 3 and another object type.
+	- If two arrays are exactly equal when all the comparable elements are exhausted, the shorter array is deemed smaller e.g. `['a', 'car', 'd', 3]` <=> `['a', 'car', 'd']` will return `1` and not generate an `ArgumentError` since the different array lengths ensure there is no comparison between `3` and another object type.
 
-- Comparison between non-comparable elements need not necessary raise an `ArgumentError` if that comparison is not necessary
+- Comparison between non-comparable elements need not necessarily raise an `ArgumentError` if that comparison is not necessary
  
 	```Ruby
 	[['a', 'cat', 'b', 'c'], ['b', 2], ['a', 'car', 'd', 3], ['a', 'car', 'd']].sort
