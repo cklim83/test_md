@@ -5,16 +5,16 @@ Course: RB109
 ---
 
 ### Sections
-[Variable Scoping Rules](#local-variable-scope-rules-in-ruby)
-[Method Definition & Method Invocation](#method-definition-and-method-invocation)
-[Mutating vs Non-Mutating Methods](#mutating-vs-non-mutating-methods)
-[Pass by Value vs Pass by Reference](#pass-by-value-vs-pass-by-reference)
-[Implicit Return Value of Method Invocations, Blocks and Puts](#implicit-return-value-of-method-invocations,-blocks-and-puts)
-[Truthiness](#truthiness)
-[each, map, select](#collection-methods-(each,-map,-select))
-[Array Sorting](#array-sorting)
-[Dup, Clone and Freezing](#dup,-clone-and-freezing)
-[Examples](#examples)
+[Variable Scoping Rules](#local-variable-scope-rules-in-ruby)\
+[Method Definition & Method Invocation](#method-definition-and-method-invocation)\
+[Mutating vs Non-Mutating Methods](#mutating-vs-non-mutating-methods)\
+[Pass by Value vs Pass by Reference](#pass-by-value-vs-pass-by-reference)\
+[Implicit Return Value of Method Invocations, Blocks and Puts](#implicit-return-value-of-method-invocations,-blocks-and-puts)\
+[Truthiness](#truthiness)\
+[each, map, select](#collection-methods-(each,-map,-select))\
+[Array Sorting](#array-sorting)\
+[Dup, Clone and Freezing](#dup,-clone-and-freezing)\
+[Examples](#examples)\
 
 ---
 
@@ -24,6 +24,8 @@ Course: RB109
 - A block parameter sharing **same name** as an local variable initialized outside the block will **prevent** the **outer scoped variable** from being **accessed inside** the block in a phenomenon called **Variable Shadowing**
 - Inner and outer scopes are **relative** in nature and also apply to multi-level nested constructs
 - Method definitions create their own scope: local variable **initialized outside** of a method definition is **not accessible inside** the method unless it is passed in as an argument
+
+[Back to top](#sections)
 
 ---
 
@@ -100,6 +102,8 @@ a = "hello"
 
 The `Array#map` method is defined in such a way that it uses the return value of the block to perform transformation on each element in an array. In the above example, the `#map` method doesn't have direct access to the `a` variable. However, the block that we pass to `map` (and that `map` calls) does have access to `a`. Thus, the block can use the value of `a` to determine the transformation value for each array element
 
+[Back to top](#sections)
+
 ---
 
 ### Mutating vs Non-Mutating Methods
@@ -125,6 +129,8 @@ The `Array#map` method is defined in such a way that it uses the return value of
 	
 	- The distinction disappears once we call the `String#slice or Array#slice` method using the `String/Array#[start, length]` or `String/Array#[range]` syntax.  **Both** String and Array will return a **new object**
 
+[Back to top](#sections)
+
 ---
 
 ### Pass by Value vs Pass by Reference
@@ -134,6 +140,8 @@ The `Array#map` method is defined in such a way that it uses the return value of
 	- If the method scoped local variable (parameter) mutates the actual object using the passed reference (assuming said object is mutable), the original argument will also be affected and the method is deemed mutating. 
 	- If however, we are just reassigning the method scoped local variable (parameter) to a new object, the original argument will not be changed and the method will be deemed non-mutating. 
 
+[Back to top](#sections)
+
 ---
 
 ### Implicit Return Value of Method Invocations, Blocks and Puts
@@ -141,6 +149,8 @@ The `Array#map` method is defined in such a way that it uses the return value of
 - Ruby blocks will return the **value of the last evaluated expression**
 - A `return` reserved word is **not** required to return a value from a method/block
 - `puts` converts its argument into a String by calling `#to_s` before it outputs the result and return `nil`
+
+[Back to top](#sections)
 
 ---
 
@@ -169,7 +179,9 @@ The `Array#map` method is defined in such a way that it uses the return value of
 	- Correct explanation
 		- `a` evaluates as `true` in the conditional statement and so 'Hello is truthy' is output OR
 		- `a` is `truthy` and so 'Hello is truthy' is output
-		
+
+[Back to top](#sections)
+
 ---
 
 ### Collection Methods (each, map, select)
@@ -187,6 +199,8 @@ b					# => ["hello"]
 b.object_id			# => 70216088501460, different from a
 b[0].object_id		# => 70216084941500, same as a[0] object_id
 ```
+
+[Back to top](#sections)
 
 ---
 
@@ -307,6 +321,8 @@ b[0].object_id		# => 70216084941500, same as a[0] object_id
 	# => [[:john, 25], [:Kate, 27], [:Mike, 18]]
 	```
  
+ [Back to top](#sections)
+ 
  ---
 
 ### Dup, Clone and Freezing
@@ -382,7 +398,11 @@ b[0].object_id		# => 70216084941500, same as a[0] object_id
 	
 	arr << 10	# => FrozenError, cant modify frozen Array
 	```
-	
+
+[Back to top](#sections)
+
+---
+
 ### Examples
 #### Local Variable Scope
 ```Ruby
@@ -440,3 +460,5 @@ example('hello')
 - On line `5`, `i -= 1` is essentially syntatic sugar for `i = i.-(1)`. `i` calls the method `Integer#-` and pass `1` in as an argument. The return value is then reassigned to local variable `i`. This line essentially decrement `i` by 1 every time it is executed
 - On line `6`, we execute `break` to exit the loop if `i` has a value of 0. Together with line `5` and the initial value of `i`, it ensures the loop will be executed 3 times before exiting, causing 'hello' to be output `3` times
 - As there is no explicit `return` expression in `example`, `break if i == 0` is the last expression to be executed and returns `nil` when the method call completes.
+
+[Back to top](#sections)
