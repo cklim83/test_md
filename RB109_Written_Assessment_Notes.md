@@ -11,7 +11,7 @@ Course: RB109
 [Pass by Value vs Pass by Reference](#pass-by-value-vs-pass-by-reference)\
 [Implicit Return Value of Method Invocations, Blocks and Puts](#implicit-return-value-of-method-invocations-blocks-and-puts)\
 [Truthiness](#truthiness)\
-[each, map, select](#collection-methods-(each-map-select))\
+[each, map, select](#collection-methods-each-map-select)\
 [Array Sorting](#array-sorting)\
 [Dup, Clone and Freezing](#dup-clone-and-freezing)\
 [Examples](#examples)
