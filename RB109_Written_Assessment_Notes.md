@@ -455,7 +455,6 @@ In 2nd iteration, `arr` is assigned to subarray `[3, 4]` and `puts arr[0]` outpu
 end
 ```
 
-
 #### Mutating Collections While Iterating
 ```ruby
 def remove_evens!(arr)
@@ -507,48 +506,16 @@ end
 # => [["1", "8", "9"], ["1", "8", "11"], ["2", "6", "13"], ["2", "12", "15"]]
 ```
 
-
-#### Reassignment
-```Ruby
-a = 'hello'
-b = a
-a = 'goodbye'
-```
-On line `1`, local variable `a` is **initialized** to a string object with value 'hello'.
-
-On line `2`, local variable `b` is initialized to the same object **referenced** by local variable `a`.
-
-One line `3`, local variable `a` is **reassigned** to a different string object with value 'goodbye'. Now `a` is pointing to a string object with value 'goodbye' while local variable `b` is pointing to another string object with value 'hello'.
-
-#### Loop
-```Ruby
-def example(str)
-  i = 3
-  loop do
-    puts str
-	i -= 1
-	break if i == 0
-  end
-end
-
-example('hello')
-```
-- On line `10`, we call custom method `example` and pass it a string literal object with value of 'hello' as argument. This is assigned to local variable `str`, a parameter of method `example`
-- On line `2`, we initialize a local variable `i` with an integer object of value `3`
-- On line `3`, we call the `loop` method and pass it a `do .. end` block as argument
-- On line `4`, we call the `puts` method and pass local variable `str` as argument. 'hello' is being output.
-- On line `5`, `i -= 1` is essentially syntatic sugar for `i = i.-(1)`. `i` calls the method `Integer#-` and pass `1` in as an argument. The return value is then reassigned to local variable `i`. This line essentially decrement `i` by 1 every time it is executed
-- On line `6`, we execute `break` to exit the loop if `i` has a value of 0. Together with line `5` and the initial value of `i`, it ensures the loop will be executed 3 times before exiting, causing 'hello' to be output `3` times
-- As there is no explicit `return` expression in `example`, `break if i == 0` is the last expression to be executed and returns `nil` when the method call completes.
-
 [Back to top](#sections)
 
 ### Template Collection Answers
 We have a ... calling the method `method_name` with a block having `param_name` as parameter. `method_name` iterates through each element in the caller, and assign the element to `param_name` for block execution. In each iteration, ... [output/mutate/reassign] and the block returns `...` to `method_name`. `method_name` [ignores/use ...] and returns [the original caller/new array/hash].
 
 In 1st iteration, `param_name` is assigned to `...` and `code_segment` [output/mutate/reassign] ... and the block returns `block_return_value`
+
 In similar fashion, subsequent iterations output ... and the block returns ... respectively
 `method_name` then include these block return values in [new_array|original object] to return 
+
 
 ```Ruby
 ['ant', 'bear'].map do |elem|
@@ -558,6 +525,6 @@ In similar fashion, subsequent iterations output ... and the block returns ... r
 end
 ```
 
-We have an array ['ant', 'bear'] calling the method `map` with a block having `elem` as parameter. `map` iterates through each element in the caller, and assign the element to `elem` for block execution. In each iteration, the if statement returns either the string referenced by `elem` if its length is greater than `3` or `nil` otherwise. This value is also the block's return value to `map`. `map` then used these block return values as elements in a new array as its return value.
+We have an array `['ant', 'bear']` calling the method `map` with a block having `elem` as parameter. `map` iterates through each element in the caller, and assign the element to `elem` for block execution. In each iteration, the if statement returns either the string referenced by `elem` if its length is greater than `3` or `nil` otherwise. This value is also the block's return value to `map`. `map` then used these block return values as elements in a new array as its return value.
 
 In 1st iteration, `elem` is assigned to `'ant'` and the if statement evaluates to `false` and the block return `nil`. In the second iteration, `elem` is assigned to `'bear'` and the if conditional evaluates to `true` and the block returns `'bear'`. Thus `map` uses `nil` and `bear` in a new array to return `[nil, 'ant']`
