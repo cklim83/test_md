@@ -114,6 +114,8 @@ Course: Launch School Open Bookshelf
 |`String#sub`|Replace regex match **one** time|
 |`String#gsub`|Replace regex match globally|
 
+[Back to top](#sections)
+
 ---
 
 ### Basic Matching - Alphanumerics
@@ -206,6 +208,8 @@ We can make a regex pattern case insensitive by appending `i` after the `/` of a
 !!"Hello".match(/hello/i) 	=> true
 ```
 
+[Back to top](#sections)
+
 ---
 
 ### Character Classes - Set of Characters
@@ -232,6 +236,8 @@ We can make a regex pattern case insensitive by appending `i` after the `/` of a
 
 ### Character Classes - Negated Classes
 - Range negation is to match characters other than those in the brackets e.g. `/[^aeiou]/` will match any character except lowercase vowel characters. The caret `^` has to be the first character in the `[]` for it to be a meta_character (negation).
+
+[Back to top](#sections)
 
 ---
 
@@ -276,6 +282,8 @@ Similar to `\s` and `\S`, `\d` and `\D` can be used in and other of square brack
 - `/\W/` matches any non-word characters `/[^0-9a-zA-Z_]/`
 
 - Similarly `\w` and `\W` can be used in and other of square brackets.
+
+[Back to top](#sections)
 
 ---
 
@@ -378,6 +386,8 @@ Similar to `\s` and `\S`, `\d` and `\D` can be used in and other of square brack
 	```
 
 	Note: `\b` and `\B` do not work as word boundaries inside of character classes (between square brackets). In fact, `\b` means something else entirely when inside square brackets: it matches a backspace character.
+
+[Back to top](#sections)
 
 ---
 
@@ -487,6 +497,8 @@ Similar to `\s` and `\S`, `\d` and `\D` can be used in and other of square brack
 
 - `?` is added after the main quantifier if we want to match the **least characters possible**, called a **lazy match**. For example, `a[abc]*?c/` matches `abc` and `ac` in `xabcbcbacy`
 
+[Back to top](#sections)
+
 ---
 
 ### Ruby Regex Application - Matching Strings
@@ -567,6 +579,8 @@ Similar to `\s` and `\S`, `\d` and `\D` can be used in and other of square brack
 	puts text.sub(/(['"]).+\1/, "\\1The Time Machine\\1")
 	```
 	Where possible, try to use single quotes to avoid **leaning toothpick syndrome**
+
+[Back to top](#sections)
 
 ---
 
