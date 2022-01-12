@@ -6,8 +6,8 @@ Course: Launch School Open Bookshelf
 
 ### Sections
 [Summary](#summary)\
-[Basic Matching - Alphanumerics](#basic-matching-alphanumerics)\
-[Basic Matching - Special Characters](#basic-matching-special-characters)\
+[Basic Matching - Alphanumerics](#basic-matching---alphanumerics)\
+[Basic Matching - Special Characters](#basic-matching---special-characters)\
 [Basic Matching - Concatenation](#basic-matching-concatenation)\
 [Basic Matching - Alternation](#basic-matching-alternation)\
 [Basic Matching - Control Character Escapes](#basic-matching-control-character-escapes)
@@ -95,10 +95,8 @@ Course: Launch School Open Bookshelf
 
 ---
 
-### Detailed Notes
+### Basic Matching - Alphanumerics
 - In Ruby, regular expressions are delimited by `/` in the format `/pattern/`.
-
-#### Basic Matching - Alphanumerics
 - Most basic regex is to match a specific alphanumeric character. 
 	- For example, `/s/` matches `s`, `sand`, `cats`, `cast` and even `Mississippi` but does not match `S` or `KANSAS` as regex are case sensitive by default.
 - The `match` method accepts a regex argument to find a pattern match in a string. `match` returns a `MatchData` object (which is truthy) if the pattern in found in the caller, `nil` otherwise
