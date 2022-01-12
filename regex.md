@@ -131,34 +131,34 @@ Course: Launch School Open Bookshelf
 	# => matched 's' printed
 	```
 
-### Basic Matching - Special Characters**
+### Basic Matching - Special Characters
 - `$ ^ * + ? . ( ) [ ] { } | \ /` are _meta-characters_ and have a special meaning in Ruby or JavaScript regex.
 
 - To match a meta-character **literally**, we need to escape it using a leading backslash `\`. 
 	```Ruby
 	# using /\?/ to match "?" prefixed with to !! to conver to boolean
 
-	!!"?".match(/\?/)               => true
-	!!"What's up, doc?".match(/\?/) => true
-	!!"Silence!".match(/\?/)        => false
-	!!"What's that?".match(/\?/)    => true
+	!!"?".match(/\?/)               # => true
+	!!"What's up, doc?".match(/\?/) # => true
+	!!"Silence!".match(/\?/)        # => false
+	!!"What's that?".match(/\?/)    # => true
 	```
 
 - Remaining characters, including colons `:` and spaces ` ` are not meta-characters and do not need to be escaped when inside a pattern. Note: `/ /` and `/[ ]/` are equivalent and both match to spaces.  
 	```Ruby
-	!!"chris:x:300".match(/:/)				 	=> true
-	!!"A thought; no, forget it.".match(/ /) 	=> true
-	!!"::::".match(/:/)						 	=> true	
-	!!"meta-characters".match(/-/)				=> true
+	!!"chris:x:300".match(/:/)                  # => true
+	!!"A thought; no, forget it.".match(/ /)    # => true
+	!!"::::".match(/:/)                         # => true	
+	!!"meta-characters".match(/-/)              # => true
 	```
 
 ### Basic Matching - Concatenation
 - We can **concatenate two or more patterns into a new pattern** that matches each of the original pattern in sequence: `/cat/` is a concatenation of `c`, `a` and `t` patterns and matches any strings that contains `c` followed by an `a` followed by a `t`
 	```Ruby
-	!!"copycat".match(/cat/)	=> true
-	!!"cast".match(/cat/)		=> false as "t" not after "ca"
-	!!"CAT".match(/cat/)		=> false as different case
-	!!"CAT".match(/cat/i)		=> true as i flag asked for case-insensitive match
+	!!"copycat".match(/cat/)	# => true
+	!!"cast".match(/cat/)		# => false as "t" not after "ca"
+	!!"CAT".match(/cat/)		# => false as different case
+	!!"CAT".match(/cat/i)		# => true as i flag asked for case-insensitive match
 	```
 
 Note: It is easy to write an unreadable and unmaintainable mess. Use regex only when required and refactor them to reduce complexity.
@@ -168,31 +168,31 @@ Note: It is easy to write an unreadable and unmaintainable mess. Use regex only 
 	```Ruby
 	pattern = /(cat|dog|rabbit)/ #match "cat" or "dog" or "rabbit"
 
-	!!"The lazy cat".match(pattern)                     => true
-	!!"The dog barks".match(pattern)                    => true
-	!!"The cat ran from the barking dog".match(pattern) => true
-	!!"dives down the rabbit hole".match(pattern)       => true
-	!!"catalog".match(pattern)                          => true
-	!!"The Yellow Dog".match(pattern)                   => false
+	!!"The lazy cat".match(pattern)                     # => true
+	!!"The dog barks".match(pattern)                    # => true
+	!!"The cat ran from the barking dog".match(pattern) # => true
+	!!"dives down the rabbit hole".match(pattern)       # => true
+	!!"catalog".match(pattern)                          # => true
+	!!"The Yellow Dog".match(pattern)                   # => false
 	```
 
 ```Ruby
 # Example to show how to escape mata-characters `()` and `|`
 pattern = /\(cat\|dog\|rabbit\)/ #match "(cat|dog|rabbit)"
 
-!!"(cat|dog)".match(pattern)                => false
-!!"bird(cat|dog)zebra".match(pattern)       => false
-!!"cat".match(pattern)                      => false
-!!"dog".match(pattern)                      => false
-!!"dn(cat|dog|rabbit)!!!".match(pattern)    => true
+!!"(cat|dog)".match(pattern)                # => false
+!!"bird(cat|dog)zebra".match(pattern)       # => false
+!!"cat".match(pattern)                      # => false
+!!"dog".match(pattern)                      # => false
+!!"dn(cat|dog|rabbit)!!!".match(pattern)    # => true
 ```
 
 ### Basic Matching - Control Character Escapes
 - Control character escapes such as `\n`,`\r` and `\t` representing newline, carriage returns and tabs can also be matched using regex
 	```Ruby
-	!!"\thello".match(/\t/) 				=> true
-	!!"Goodbye!\n".match(/\n/)				=> true
-	puts "\\hello" if "\\hello".match(/\\/)	=> outputs \hello
+	!!"\thello".match(/\t/)                 # => true
+	!!"Goodbye!\n".match(/\n/)              # => true
+	puts "\\hello" if "\\hello".match(/\\/) # => outputs \hello
 	```
 
 - Not everything with `\` are control character escapes
@@ -204,8 +204,8 @@ pattern = /\(cat\|dog\|rabbit\)/ #match "(cat|dog|rabbit)"
 ### Basic Matching - Case Insensitive Match
 We can make a regex pattern case insensitive by appending `i` after the `/` of a regex. These options are called **flags** or **modifiers** and are language specific.
 ```Ruby
-!!"Hello".match(/hello/) 	=> false
-!!"Hello".match(/hello/i) 	=> true
+!!"Hello".match(/hello/)    # => false
+!!"Hello".match(/hello/i)   # => true
 ```
 
 [Back to top](#sections)
@@ -249,16 +249,16 @@ We can make a regex pattern case insensitive by appending `i` after the `/` of a
 ### Character Class Shortcuts - Whitespace
 - `/\s/` matches all whitespace characters which includes a) space `' '`, b) tab `\t`, c) vertical tab `\v`, d) carriage return `\r`, e) line feed `\n` and f) form feed `\f`. Thus `/\s/` is equivalent to `/[ \t\v\r\n\f]/`
 	```ruby
-	p 'matched' if 'Four score'.match(/\s/) 	=> matched
-	p 'matched' if "Four\tscore".match(/\s/) 	=> matched
-	p 'matched' if "Four-score\n".match(/\s/) 	=> matched
-	p 'matched' if "Four-score".match(/\s/) 	=> nil
+	p 'matched' if 'Four score'.match(/\s/) 	# => matched
+	p 'matched' if "Four\tscore".match(/\s/) 	# => matched
+	p 'matched' if "Four-score\n".match(/\s/) 	# => matched
+	p 'matched' if "Four-score".match(/\s/) 	# => nil
 	```
 
 - `/\S/` matches all non-whitespace characters and is equivalent to `/[^ \t\v\r\n\f]/`
 	```ruby
-	p 'matched' if 'a b'.match(/\S/)			=> matched
-	p 'matched' if " \t\n\r\f\v".match(/\S/)	=> nil
+	p 'matched' if 'a b'.match(/\S/)            # => matched
+	p 'matched' if " \t\n\r\f\v".match(/\S/)    # => nil
 	```
 
 - `/\s/` and `/\S/` can both be used outside or inside square brackets: 
@@ -312,15 +312,15 @@ Similar to `\s` and `\S`, `\d` and `\D` can be used in and other of square brack
 - `^` and `$` anchors lines (`\n`), NOT strings.
 	```Ruby
 	TEXT1 = "red fish\nblue fish"
-	p "matched red" if TEXT1.match(/^red/) 		=> matched red
-	p "matched blue" if TEXT1.match(/^blue/)	=> matched blue
+	p "matched red" if TEXT1.match(/^red/)      # => matched red
+	p "matched blue" if TEXT1.match(/^blue/)    # => matched blue
 	```
 	The matching with regex `/^blue/` confirms that it anchor lines and not strings since `blue` is the start of a new line but not that of a string
 
 	```ruby
 	TEXT2 = "red fish\nred shirt"
-	p "matched fish" if TEXT2.match(/fish$/)	=> matched fish
-	p "matched shirt" if TEXT2.match(/shirt$/)	=> matched shirt
+	p "matched fish" if TEXT2.match(/fish$/)    # => matched fish
+	p "matched shirt" if TEXT2.match(/shirt$/)  # => matched shirt
 	```
 	In Ruby, each line **starts after** `\n` and end either with a `\n` or end of string.
 	Even though the first line in the string ends with a `\n`, `fish` is still said to occur at the end of the line. `$` doesn't care if there is a `\n` character at the end
@@ -334,15 +334,15 @@ Similar to `\s` and `\S`, `\d` and `\D` can be used in and other of square brack
 	TEXT3 = "red fish\nblue fish"
 	TEXT4 = "red fish\nred shirt"
 
-	p "matched red" if TEXT3.match(/\Ared/)		=> matched red
-	p "matched blue" if TEXT3.match(/\Ablue/)	=> nil
-	p "matched fish" if TEXT4.match(/fish\z/)	=> nil
-	p "matched shirt" if TEXT4.match(/shirt\z/)	=> matched shirt
+	p "matched red" if TEXT3.match(/\Ared/)         # => matched red
+	p "matched blue" if TEXT3.match(/\Ablue/)       # => nil
+	p "matched fish" if TEXT4.match(/fish\z/)       # => nil
+	p "matched shirt" if TEXT4.match(/shirt\z/)     # => matched shirt
 
 	TEXT5 = "red fish\ngreen shirt\n"
-	p "matched shirt" if TEXT5.match(/shirt\z/)     => nil
-	p "matched shirt" if TEXT5.match(/shirt\n\z/)   => matched shirt
-	p "matched shirt" if TEXT5.match(/shirt\Z/)     => matched shirt
+	p "matched shirt" if TEXT5.match(/shirt\z/)     # => nil
+	p "matched shirt" if TEXT5.match(/shirt\n\z/)   # => matched shirt
+	p "matched shirt" if TEXT5.match(/shirt\Z/)     # => matched shirt
 	```
 
 ### Anchors - Word Boundaries
