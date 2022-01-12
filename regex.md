@@ -19,9 +19,9 @@ Course: Launch School Open Bookshelf
 [Character Class Shortcuts - Whitespace](#character-class-shortcuts---whitespace)\
 [Character Class Shortcuts - Digits and Hex Digits](#character-class-shortcuts---digits-and-hex-digits)\
 [Character Class Shortcuts - Word Characters](#character-class-shortcuts---word-characters)\
-[Anchors - Start/End of Line](#anchors---start/end-of-line)\
+[Anchors - Start/End of Line](#anchors---startend-of-line)\
 [Anchors - Lines vs String](#anchors---lines-vs-string)\
-[Anchors - Start/End of String](#anchors---start/end-of-string)\
+[Anchors - Start/End of String](#anchors---startend-of-string)\
 [Anchors - Word Boundaries](#anchors---word-boundaries)\
 [Quantifiers - Zero or More](#quantifiers---zero-or-more)\
 [Quantifiers - One or More](#quantifiers---one-or-more)\
