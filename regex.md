@@ -364,7 +364,7 @@ Similar to `\s` and `\S`, `\d` and `\D` can be used in and other of square brack
 	```
 	Here word boundaries occur **before** `E` `s` and `f` and **after** `t`, `e` and `d`. Non-word boundaries occur elsewhere such as between `o` and `m` in `some` and between `.` and end of the string.
 
-	**Word boundary `\b` Example**
+	**Example: Word boundary `\b`**
 	```Ruby
 	pattern = /\b\w\w\w\b/
 
@@ -375,7 +375,7 @@ Similar to `\s` and `\S`, `\d` and `\D` can be used in and other of square brack
 	123 456 7890        # Matches 123 and 456
 	```
 
-	**Non-word boundary `\B` Example
+	**Example: Non-word boundary `\B`**
 	```Ruby
 	pattern = /\Bjohn/i
 
