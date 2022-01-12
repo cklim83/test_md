@@ -1,6 +1,6 @@
-Topic: Introduction to Regular Expressions in Ruby
-Date: 06 Jan 2022
-Course:
+Topic: Introduction to Regular Expressions in Ruby\
+Date: 06 Jan 2022\
+Course: Launch School Open Bookshelf
 
 ---
 
@@ -9,7 +9,7 @@ Course:
 ---
 
 ### Summary
-Use [rubular](https://rubular.com/) to test out Regex for Ruby.
+Use [rubular](https://rubular.com/) to test out Regex in Ruby.
 
 
 In the following tables, unescaped `a`, `b`, and `z` characters denote regular characters (letters, digits, punctuations) while unescaped `p` and `q` characters represent patterns (each pattern may be arbitrarily complex). Other characters are literals.
@@ -23,7 +23,7 @@ In the following tables, unescaped `a`, `b`, and `z` characters denote regular c
 |`/\n/`, `/\t/`|Match a control character (newline, tab etc)|
 |`/pq/`| Concatenation (`p` followed by `q`)|
 |`/(p)/`| Capture group |
-|`/(p|q)/`| Alternation (`p` or `q`)|
+|`/(p \| q)/`| Alternation (`p` or `q`)|
 |`/p/i`| Case insensitive match|
 
 #### Character Classes and Shortcuts
@@ -106,17 +106,17 @@ In the following tables, unescaped `a`, `b`, and `z` characters denote regular c
 	# => matched 's' printed
 	```
 
-**Special Characters**
+**Special Characters**\
 `$ ^ * + ? . ( ) [ ] { } | \ /` are _meta-characters_ and have a special meaning in Ruby or JavaScript regex.
 
 To match a meta-character **literally**, we need to escape it using a leading backslash `\`. 
 ```Ruby
 # using /\?/ to match "?" prefixed with to !! to conver to boolean
 
-!!"?".match(/\?/) 				=> true
+!!"?".match(/\?/)               => true
 !!"What's up, doc?".match(/\?/) => true
-!!"Silence!".match(/\?/)		=> false
-!!"What's that?".match(/\?/)	=> true
+!!"Silence!".match(/\?/)        => false
+!!"What's that?".match(/\?/)    => true
 ```
 
 Remaining characters, including colons `:` and spaces ` ` are not meta-characters and do not need to be escaped when inside a pattern. Note: `/ /` and `/[ ]/` are equivalent and both match to spaces.  
