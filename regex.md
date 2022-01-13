@@ -10,7 +10,7 @@ Course: Launch School Open Bookshelf
 [Basic Matching - Special Characters](#basic-matching---special-characters)\
 [Basic Matching - Concatenation](#basic-matching---concatenation)\
 [Basic Matching - Alternation](#basic-matching---alternation)\
-[Basic Matching - Control Character Escapes](#basic-matching---control-character-escapes)\
+[Basic Matching - Control Characters](#basic-matching---control-characters)\
 [Basic Matching - Case Insensitive Match](#basic-matching---case-insensitive-match)\
 [Character Classes - Set of Characters](#character-classes---set-of-characters)\
 [Character Classes - Range of Characters](#character-classes---range-of-characters)\
@@ -61,7 +61,7 @@ Course: Launch School Open Bookshelf
 |`/[^ab]/`| Not(`a` or `b` )|
 |`/[^a-z]/`| Not(`a` through `z`)|
 |`/./`| Any character except newline|
-|`/\s/`, `/[\s/]`| Whitespace character (space, tab, newline etc)|
+|`/\s/`, `/[\s]/`| Whitespace character (space, tab, newline etc)|
 |`/\S/`, `/[\S]/`| Not whitespace character|
 |`/\d/`, `/[\d]/`| Decimal digit (0-9)|
 |`/\D/`, `/[\D]/`| Not a decimal digit|
@@ -120,9 +120,9 @@ Course: Launch School Open Bookshelf
 
 ### Basic Matching - Alphanumerics
 - In Ruby, regular expressions are delimited by `/` in the format `/pattern/`.
-- Most basic regex is to match a specific alphanumeric character. 
-	- For example, `/s/` matches `s`, `sand`, `cats`, `cast` and even `Mississippi` but does not match `S` or `KANSAS` as regex are case sensitive by default.
-- The `match` method accepts a regex argument to find a pattern match in a string. `match` returns a `MatchData` object (which is truthy) if the pattern in found in the caller, `nil` otherwise
+- At the most basic, we delimit a literal alphanumeric character between `/` to form a regex 
+	- e.g. `/s/` will match `s`, `sand`, `cats`, `cast` and even `Mississippi`. However it will not match `S` or `KANSAS` as regex are case sensitive by default
+- `String#match` accepts a regex argument to find a pattern match in the caller string. It returns a `MatchData` object (truthy) if the pattern is found or `nil` otherwise
 	```Ruby
 	str = "cast"
 	print "matched 's'" if str.match(/s/)
@@ -131,12 +131,13 @@ Course: Launch School Open Bookshelf
 	# => matched 's' printed
 	```
 
-### Basic Matching - Special Characters
-- `$ ^ * + ? . ( ) [ ] { } | \ /` are _meta-characters_ and have a special meaning in Ruby or JavaScript regex.
 
-- To match a meta-character **literally**, we need to escape it using a leading backslash `\`. 
+### Basic Matching - Special Characters
+- `$ ^ * + ? . ( ) [ ] { } | \ /` are _meta-characters_ and can have special meanings in Ruby or JavaScript regex, depending on the context
+
+- To use a meta-character as a **literal**, it has to be escaped using a leading backslash `\`
 	```Ruby
-	# using /\?/ to match "?" prefixed with to !! to conver to boolean
+	# using /\?/ to match "?" instead of the special meaning of ? as a quantifier or to indicate lazy match. We prepend the match with !! to convert result to boolean
 
 	!!"?".match(/\?/)               # => true
 	!!"What's up, doc?".match(/\?/) # => true
@@ -144,7 +145,7 @@ Course: Launch School Open Bookshelf
 	!!"What's that?".match(/\?/)    # => true
 	```
 
-- Remaining characters, including colons `:` and spaces ` ` are not meta-characters and do not need to be escaped when inside a pattern. Note: `/ /` and `/[ ]/` are equivalent and both match to spaces.  
+- Remaining characters, including colons `:` and spaces ` ` are not meta-characters and do not have to be escaped when used to construct a pattern. Note: `/ /` and `/[ ]/` are equivalent and both match to spaces.  
 	```Ruby
 	!!"chris:x:300".match(/:/)                  # => true
 	!!"A thought; no, forget it.".match(/ /)    # => true
@@ -152,8 +153,9 @@ Course: Launch School Open Bookshelf
 	!!"meta-characters".match(/-/)              # => true
 	```
 
+
 ### Basic Matching - Concatenation
-- We can **concatenate two or more patterns into a new pattern** that matches each of the original pattern in sequence: `/cat/` is a concatenation of `c`, `a` and `t` patterns and matches any strings that contains `c` followed by an `a` followed by a `t`
+- A new pattern can be formed by **concatenating 2 or more patterns**. For example, the pattern `/cat/` is formed by concatenating `c`, `a` and `t` in that order and will match any `cat` substrings
 	```Ruby
 	!!"copycat".match(/cat/)	# => true
 	!!"cast".match(/cat/)		# => false as "t" not after "ca"
@@ -161,10 +163,11 @@ Course: Launch School Open Bookshelf
 	!!"CAT".match(/cat/i)		# => true as i flag asked for case-insensitive match
 	```
 
-Note: It is easy to write an unreadable and unmaintainable mess. Use regex only when required and refactor them to reduce complexity.
+- While concatenation allows us to construct complex regex from simpler ones, it is easy to go overboard and build something overly complex and unreadable. We should use regex judiciously and try to keep their complexity at the lowest.
+
 
 ### Basic Matching - Alternation
-- We can construct a regex that matches one of severall sub-patterns by separating each pattern using pipe `|` and enclosing them using `()`
+- Alternation involves building a regex that matches one of several sub-patterns using the syntax: `(pattern_a|...| pattern_n)`
 	```Ruby
 	pattern = /(cat|dog|rabbit)/ #match "cat" or "dog" or "rabbit"
 
@@ -176,6 +179,7 @@ Note: It is easy to write an unreadable and unmaintainable mess. Use regex only 
 	!!"The Yellow Dog".match(pattern)                   # => false
 	```
 
+- Meta-characters such as `()` and `|` can also be escaped to yield their literals as patterns to be matched
 ```Ruby
 # Example to show how to escape mata-characters `()` and `|`
 pattern = /\(cat\|dog\|rabbit\)/ #match "(cat|dog|rabbit)"
@@ -187,67 +191,74 @@ pattern = /\(cat\|dog\|rabbit\)/ #match "(cat|dog|rabbit)"
 !!"dn(cat|dog|rabbit)!!!".match(pattern)    # => true
 ```
 
-### Basic Matching - Control Character Escapes
-- Control character escapes such as `\n`,`\r` and `\t` representing newline, carriage returns and tabs can also be matched using regex
+
+### Basic Matching - Control Characters
+- Control characters such as `\n` (newline), `\r` (carriage return) and `\t` (tabs) can also be matched using regex
 	```Ruby
 	!!"\thello".match(/\t/)                 # => true
 	!!"Goodbye!\n".match(/\n/)              # => true
 	puts "\\hello" if "\\hello".match(/\\/) # => outputs \hello
 	```
 
-- Not everything with `\` are control character escapes
-	- `\s` and `\d` are shortcuts (covered below)
-	- `\A` and `\z` are anchors (covered below)
-	- `\x` and `\u` are special character code markers (we won't cover these)
+- Not all characters with leading `\` are control characters
+	- `\s` and `\d` are shortcuts
+	- `\A` and `\z` are anchors
+	- `\x` and `\u` are special character code markers (not covered in this introduction)
 	- `\y` and `\q` have no special meaning at all
 
 ### Basic Matching - Case Insensitive Match
-We can make a regex pattern case insensitive by appending `i` after the `/` of a regex. These options are called **flags** or **modifiers** and are language specific.
-```Ruby
-!!"Hello".match(/hello/)    # => false
-!!"Hello".match(/hello/i)   # => true
-```
+- A regex pattern is case insensitive if it has a `i` appended after the closing `/`. These options are called **flags** or **modifiers** and are language specific
+	```Ruby
+	!!"Hello".match(/hello/)    # => false
+	!!"Hello".match(/hello/i)   # => true
+	```
 
 [Back to top](#sections)
 
 ---
 
 ### Character Classes - Set of Characters
-- Character class patterns use a list of characters between square brackets e.g. `/[abc]/` to match **single occurrences** of **any** characters between the brackets.
+- Character class patterns use a list of characters between square brackets e.g. `/[abc]/`. They match **single occurrence** of **any** of the characters between the brackets
 
-- Character class patterns can be used to validate user inputs since user need to choose from a set of valid inputs: e.g. `/[ynYN]/` for `y/n` prompt responses `/[12345]/` for options between 1 to 5
+- We could use these patterns if only a **subset of characters need to be case insensitive** e.g. `/[Hh]oover/` to match `Hoover` or `hoover`
 
-- It is also useful if case insensitive flag is not suitable e.g. `/[Hh]oover/` to match `Hoover` or `hoover`
+- When listing characters in `[]`, we should **order them by type** e.g. digits followed by upper and lower case letters `[0-9A-Za-z]` to aid readability
 
-- When writing character classes, it's good practice to group characters by type: digits, uppercase letters, lowercase letters, whitespace, and non-alphanumeric characters. You can arrange the groups in any order, though typically the non-alphanumerics come first or last in the character class. This practice aids readability.
+- Character classes can also be concatenated e.g. `/[abc][12]/` will match any of `a1`, `a2`, `b1`, `b2`, `c1` or `c2`.
 
-- We can also concatenate character classes e.g. `/[abc][12]/` will match any of `a1`, `a2`, `b1`, `b2`, `c1` or `c2`.
-
-- Of the full set of meta-characters, only a subset `^ \ - [ ]` retain their special meaning inside a character class. Hence `/[*+]/` will match any literal `*` or `+` without need for backslash. We can add backlash even when it is not required: `/[\*\+]/` is equivalent to `/[*+]/` but the latter is preferred for better readability.
-
-- Among this subset, some are meta_characters in specific situations. For example, `^` is only a meta-character if it is the **first character** in the class i.e. `/[^...]/`, otherwise it is just a literal. `-` becomes a literal if it is the first character in the class.
+- Among the full set of meta-characters, only `^, \, -, [ ]` retain their special meaning **inside** a character class
+	- `^`, `\`, `-` are only meta_characters in specific situations. `^` only represent negation if it is the **first character** in the class i.e. `/[^...]/`, otherwise it is just a literal. `-` will represent an inclusive character range in `/[c-z]/` but becomes a literal if it is the first character in the square bracket i.e. `/[-z]/`
+	- As `*` and `+` do not have special meaning in `[]`, `/[*+]/` will match any literal `*` or `+` without the need for backslash. Although adding backslash `/[\*\+]/` do not change the meaning, `/[*+]/` is preferred for readability
+ 
 
 ### Character Classes - Range of Characters
-- For consecutive sequence of characters e.g. letters `a` through `z`, we can abbreviate it using `-`. Thus `/[a-z]/` matches any lower case alphabetic character, `/[0-9]/` matches any digits. We can also combine ranges e.g. `/[0-9A-Fa-f]/` matches any alphanumeric. 
+- `-` is used for consecutive and inclusive sequence of characters in a character class. For example, `/[a-z]/` matches any lower case alphabetic character, `/[0-9]/` matches any digits. We can also combine ranges to create more patterns e.g. `/[0-9A-Fa-f]/` to match any alphanumeric. 
 
-- Note: 
-	- It is advised not to use character range for non-alphanumeric even though this can be done
-	- Do not combine lowercase and uppercase alphabetic cases in a single range `/[A-z]/`. Use `/[A-Za-z]/` instead to prevent inclusion of other non-alphabetic characters such as brackets (`[,]`), caret (`^`) and underscore (`_`) as matched characters unintentionally.
+- Best practices:
+	- It is not advisable to use range for non-alphanumeric characters
+	- Do not combine lowercase and uppercase alphabetic cases in a single range i.e. `/[A-z]/` as several non-alphabetic characters such as such as brackets (`[`, `]`), caret (`^`) and underscore (`_`) lies between `Z` to `a`. Use `/[A-Za-z]/` instead if we only want to include letters.
 
 ### Character Classes - Negated Classes
-- Range negation is to match characters other than those in the brackets e.g. `/[^aeiou]/` will match any character except lowercase vowel characters. The caret `^` has to be the first character in the `[]` for it to be a meta_character (negation).
+- Negation is to match characters **other than** those listed in the brackets e.g. `/[^aeiou]/` will match all characters except lowercase vowels. The caret `^` has to be the first character in `[]` to represent negation.
 
 [Back to top](#sections)
 
 ---
 
 ### Character Class Shortcuts - Any Character
-- `/./` is used to match any character, including spaces except newline. To also match newlines, we need to include the `m` (multiline) option
+- `/./` is used to match a single occurrence of **any character except newline (`\n`)**. To also match newlines, we need to include the `m` (multiline) option
 
-- Note: Even though `.` is a shortcut for character class, it should not be inside square bracket. A `.` inside square bracket becomes a literal
+- **Note:** Even though `.` is a shortcut for a character class, it **literally** just matches a **dot** inside square brackets
 
 ### Character Class Shortcuts - Whitespace
-- `/\s/` matches all whitespace characters which includes a) space `' '`, b) tab `\t`, c) vertical tab `\v`, d) carriage return `\r`, e) line feed `\n` and f) form feed `\f`. Thus `/\s/` is equivalent to `/[ \t\v\r\n\f]/`
+- `/\s/` is a shortcut for **all whitespace characters** which encompasses 
+	- space `' '`, 
+	- tab `\t`,
+	- vertical tab `\v`,
+	- carriage return `\r`, 
+	- line feed `\n` and 
+	- form feed `\f`. 
+- Thus `/\s/` is equivalent to `/[ \t\v\r\n\f]/`
 	```ruby
 	p 'matched' if 'Four score'.match(/\s/) 	# => matched
 	p 'matched' if "Four\tscore".match(/\s/) 	# => matched
@@ -255,50 +266,51 @@ We can make a regex pattern case insensitive by appending `i` after the `/` of a
 	p 'matched' if "Four-score".match(/\s/) 	# => nil
 	```
 
-- `/\S/` matches all non-whitespace characters and is equivalent to `/[^ \t\v\r\n\f]/`
+- `/\S/` is a shortcut for **all non-whitespace characters** and is equivalent to `/[^ \t\v\r\n\f]/`
 	```ruby
 	p 'matched' if 'a b'.match(/\S/)            # => matched
 	p 'matched' if " \t\n\r\f\v".match(/\S/)    # => nil
 	```
 
-- `/\s/` and `/\S/` can both be used outside or inside square brackets: 
-	- Outside square brackets e.g. `/\s/`, the regex match one of the whitespace characters, 
+- `/\s/` and `/\S/` can be used outside or inside square brackets 
+	- Outside square brackets e.g. `/\s/`, the regex matches any of the whitespace characters, 
 	- Inside the square brackets, it represent an **OR** relationship to other members of the class e.g. `/[a-z\s]/` will match either a lowercase letter or any whitespace characters.
 
 ### Character Class Shortcuts - Digits and Hex Digits
 
 | Shortcut | Meaning |
 |---|---|
-| `\d` | Any decimal digit /`[0-9]`/ |
+| `\d` | Any decimal digit `/[0-9]/` |
 | `\D` | Any character other than a decimal digit `/[^0-9]/` |
 | `\h` | Any hexadecimal digit `[0-9A-Fa-f]` (**Ruby**) |
 | `\H` | Any character other than a hexadecmial digit (**Ruby**) |
 
-Similar to `\s` and `\S`, `\d` and `\D` can be used in and other of square brackets
+Like `\s` and `\S`, `\d` and `\D` can be used both inside and outside square brackets. `/[a-z\d]/` matches any lower case letters or decimal digits. 
 
 ### Character Class Shortcuts - Word Characters
-- `/\w/` match any word characters and is equivalent to `/[0-9a-zA-Z_]/`
+- `/\w/` is a shortcut for any **word characters** and is equivalent to **`/[0-9a-zA-Z_]/`**
 
-- `/\W/` matches any non-word characters `/[^0-9a-zA-Z_]/`
+- `/\W/` is a shortcut for any **non-word characters** **`/[^0-9a-zA-Z_]/`**
 
-- Similarly `\w` and `\W` can be used in and other of square brackets.
+- `\w` and `\W` can be used inside and outside of square brackets.
 
 [Back to top](#sections)
 
 ---
 
 ### Anchors - Start/End of Line
-- `^` to match start of **line**
-- `$` to match end of **line**
+- `^` matches the start of **line**
+- `$` matches the end of **line**
 
 | string | `/^cat/` | `/cat$/` | `/^cat$/` |
 | --- | --- | --- | --- |
-|cat| match | match | match |
-|catastrophe| match | no match | no match |
-|wildcat| no match | match | no match |
-|\<cat\>| no match | no match | no match|
+|"cat"| match | match | match |
+|"catastrophe"| match | no match | no match |
+|"wildcat"| no match | match | no match |
+|"\<cat\>""| no match | no match | no match|
 	
-- They serve as anchors when NOT inside square brackets (`[]`) but will have different meaning if inside.
+	
+- `^` and `$` serve as anchors when outside square brackets `[]` but have different meaning inside.
 
 | Regex | Meaning|
 | --- | --- |
@@ -309,27 +321,25 @@ Similar to `\s` and `\S`, `\d` and `\D` can be used in and other of square brack
 
 
 ### Anchors - Lines vs String
-- `^` and `$` anchors lines (`\n`), NOT strings.
+- `^` and `$` anchor lines NOT strings.
 	```Ruby
 	TEXT1 = "red fish\nblue fish"
 	p "matched red" if TEXT1.match(/^red/)      # => matched red
 	p "matched blue" if TEXT1.match(/^blue/)    # => matched blue
 	```
-	The matching with regex `/^blue/` confirms that it anchor lines and not strings since `blue` is the start of a new line but not that of a string
+	Regex `/^blue/` matching `TEXT1` confirms `^` anchor lines and not strings since `blue` is the start of a new line but is in the middle of the `TEXT1` string
 
-	```ruby
+	```Ruby
 	TEXT2 = "red fish\nred shirt"
 	p "matched fish" if TEXT2.match(/fish$/)    # => matched fish
 	p "matched shirt" if TEXT2.match(/shirt$/)  # => matched shirt
 	```
-	In Ruby, each line **starts after** `\n` and end either with a `\n` or end of string.
-	Even though the first line in the string ends with a `\n`, `fish` is still said to occur at the end of the line. `$` doesn't care if there is a `\n` character at the end
+	In Ruby, each line ends with either with a `\n` or string end. A line starts with either the start of a string or immediately after `\n`.
+	Even though the first line in the string contains `\n`, `fish` is still positioned at end of the line. `$` doesn't care if there is a `\n` character at the end.
 
 ### Anchors - Start/End of String
-- `\A` to match start of **string**
-- `\z` or `\Z` to match end of **string**
-- `\z` always matches at the end of a string, while `\Z` matches up to, but not including, a newline at the end of the string. As a rule, use `\z` until you determine that you need `\Z`
-
+- `\A` matches the start of a **string**
+- `\z` matches the end of a **string**
 	```Ruby
 	TEXT3 = "red fish\nblue fish"
 	TEXT4 = "red fish\nred shirt"
@@ -338,61 +348,70 @@ Similar to `\s` and `\S`, `\d` and `\D` can be used in and other of square brack
 	p "matched blue" if TEXT3.match(/\Ablue/)       # => nil
 	p "matched fish" if TEXT4.match(/fish\z/)       # => nil
 	p "matched shirt" if TEXT4.match(/shirt\z/)     # => matched shirt
-
-	TEXT5 = "red fish\ngreen shirt\n"
-	p "matched shirt" if TEXT5.match(/shirt\z/)     # => nil
-	p "matched shirt" if TEXT5.match(/shirt\n\z/)   # => matched shirt
-	p "matched shirt" if TEXT5.match(/shirt\Z/)     # => matched shirt
 	```
+
+- `\Z` matches the end of a string unless the string ends with a `\n`, in which case it matches up to but excluding `\n`.
+```Ruby
+# No newline at string end
+"hello world".match(/world\z/)      # => #<MatchData "world">
+"hello world".match(/world\Z/)      # => #<MatchData "world">
+
+# With newline at string end
+"hello world\n".match(/world\z/)    # => nil
+"hello world\n".match(/world\n\z/)  # => #<MatchData "world\n">
+"hello world\n".match(/world\Z/)     # => #<MatchData "world">
+
+# With 2 newline at string end
+"hello world\n\n".match(/world\Z/)   # => nil
+```
+- So use lowercase `\z` for exact character match at string end. `\Z` would still return a match by ignoring a `\n` at string end which may cause unexpected behavior.
+
 
 ### Anchors - Word Boundaries
-- `\b` to anchor regex to word (`\w` i.e. `[0-9A-Za-z_]`) boundaries
-- `\B` to anchor regex to non-word (`\W` i.e. `[^0-9A-Za-z_]`) boundaries
+- `\b` matches word boundaries (`\w` i.e. `[0-9A-Za-z_]`)
+- `\B` matches non-word boundaries (`\W` i.e. `[^0-9A-Za-z_]`) boundaries
 
-- A word boundary occurs when:
-	- between any pair of characters, one a word character and the other a non-word character
-	- At the start of a string **IF** first character is a word character
-	- At the end of a string **IF** the last character is a word character
+- A word boundary occurs:
+	- Between any pair of characters, where one is a word character and the other a non-word character
+	- At the **start of a string** provided first character is a word character
+	- At the **end of a string** provided the last character is a word character
 
 - A non-word boundary occurs:
-	- Between any pair of characters where both are word or non-word characters
-	- At the start of a string if first character is NOT a word character
-	- At the end of a string if the last character is NOT a word character
+	- Between any pair of characters, where both are word or both are non-word characters
+	- At the **start of a string** if first character is NOT a word character
+	- At the **end of a string** if the last character is NOT a word character
 
-	```Ruby 
-	Eat some food.
-	```
-	Here word boundaries occur **before** `E` `s` and `f` and **after** `t`, `e` and `d`. Non-word boundaries occur elsewhere such as between `o` and `m` in `some` and between `.` and end of the string.
+	
+- In the string `Eat some food`, word boundaries occur **before** `E` `s` and `f` and **after** `t`, `e` and `d`. Non-word boundaries occur elsewhere such as between `o` and `m` in `some` and between `.` and end of the string.
 
-	**Example: Word boundary `\b`**
-	```Ruby
-	pattern = /\b\w\w\w\b/
+**Example: Word boundary (`\b`) Match**
+```Ruby
+pattern = /\b\w\w\w\b/
 
-	One fish,           # Matches One since we have'\AOne '
-	Two fish,           # Matches Two since we have '\nTwo '
-	Red fish,           # Matches Red since we have '\nRed '
-	Blue fish.          # No match
-	123 456 7890        # Matches 123 and 456
-	```
+One fish,           # Matches One since we have'\AOne '
+Two fish,           # Matches Two since we have '\nTwo '
+Red fish,           # Matches Red since we have '\nRed '
+Blue fish.          # No match
+123 456 7890        # Matches 123 and 456
+```
 
-	**Example: Non-word boundary `\B`**
-	```Ruby
-	pattern = /\Bjohn/i
+**Example: Non-word boundary (`\B`) Match**
+```Ruby
+pattern = /\Bjohn/i
 
-	John Silver        # No match
-	Randy Johnson      # No match
-	Duke Pettijohn     # Match john since i\Bjohn
-	Joe_Johnson        # Match John since _\BJohn
-	```
-
-	Note: `\b` and `\B` do not work as word boundaries inside of character classes (between square brackets). In fact, `\b` means something else entirely when inside square brackets: it matches a backspace character.
+John Silver        # No match
+Randy Johnson      # No match
+Duke Pettijohn     # Match john since i\Bjohn
+Joe_Johnson        # Match John since _\BJohn
+```
+**Note:** `\b` and `\B` do not work as word boundaries inside of character classes (between square brackets). In fact, `\b` inside square brackets matches a backspace character instead.
 
 [Back to top](#sections)
 
 ---
 
 ### Quantifiers - Zero or More
-- `*` matches zero or more occurrence of the pattern to its left
+- `*` matches **0 or more** occurrence of the pattern to its left
 	```Ruby
 	pattern = /\b\d\d\d\d*\b/  # match 3 or more digits surrounded by word boundaries
 
@@ -412,7 +431,7 @@ Similar to `\s` and `\S`, `\d` and `\D` can be used in and other of square brack
 	| `\d*` | followed by 0 or more digits |
 	| `\b` | ending with a word boundary |
 
-- The quantifier always applies to a single pattern on its left. We can use grouping parentheses to define the pattern to apply the `*`. For example `/1(234)*5/` matches all below as `(234)` is treated as a single pattern by the regex engine to apply the `*` on.
+- The quantifier always applies to a single pattern on its left. We can use parentheses to define group pattern to apply the `*`. For example `/1(234)*5/` matches all the below as `(234)` is treated as a single pattern by the regex engine to apply the `*`.
 	```Ruby
 	15
 	12345
@@ -420,21 +439,21 @@ Similar to `\s` and `\S`, `\d` and `\D` can be used in and other of square brack
 	12342342345
 	```
 
-- Because `*` can match zero occurrence, it match any string as any string has an empty string as its subset
+- Since `*` will match zero occurrence, it will match all strings since they all contain empty strings `""` by default
 	```Ruby
-	"hello".match(/x*/) => <MatchData ""> 
+	"hello".match(/x*/)    # => <MatchData ""> 
 	```
 
-- Note: The regex `*` quantifier is different from the `*` wildcard used in command line even though they looked the same: 
-	- `*` wildcard is like `/.*/`. Hence the wildcard `blue*doc` in command line matches any files whose name begins with `blue` and ends with `doc`. 
-	- `/blue*doc/` regex meant the `*` is apply on a single pattern `e` and matches any sequence of characters starting with `blu` and ending with `doc` with 0 or more consecutive `e`s in between.
+- **Note:** The regex `*` quantifier has a different meaning to the `*` wildcard used in command line even though they both looked the same 
+	- The `*` wildcard is equivalent to `/.*/` in regex. For example, `blue*doc` in command line matches any files whose name begins with `blue` and ends with `doc`. 
+	- The regex `/blue*doc/` has the `*` applied on the `e` character and matches any sequence of characters starting with `blu` and ending with `doc` with 0 or more consecutive `e`s in between.
 
 ### Quantifiers - One or More
-- `+` quantifier to match 1 or more occurrence of a pattern to its left
-- To match at least 3 digits, we could use `/\b\d\d\d+\b/` instead of `/\b\d\d\d\d*\b/`
+- `+` quantifier matches **1 or more** occurrence of a pattern to its left
+- To match 3 or more digits, we could use `/\b\d\d\d+\b/` instead of `/\b\d\d\d\d*\b/`
 
 ### Quantifiers - Zero or One
-- `?` quantifier to match 0 or 1 occurrence of a pattern to its left
+- `?` quantifier matches **0 or 1** occurrence of a pattern to its left
 	```Ruby
 	pattern = /coo?t/ 
 
@@ -442,7 +461,7 @@ Similar to `\s` and `\S`, `\d` and `\D` can be used in and other of square brack
 	coot    # matches pattern
 	```
 
-- `?` can be useful to match dates with may or may not include `-` separator characters.
+- `?` is useful in matching optional characters e.g. `-` separator in dates
 	```Ruby
 	pattern = /\b\d\d\d\d-?\d\d-?\d\d\b/
 
@@ -452,7 +471,7 @@ Similar to `\s` and `\S`, `\d` and `\D` can be used in and other of square brack
 	201701-11    # matches pattern
 	```
 
-- Since `?` can match zero occurrence `/h?/` can match all these strings: 
+- Since `?` can match zero occurrence `/h?/` will match any string since it will also match `""` 
 	```Ruby
 	pattern = `/h?/
 	`
@@ -461,19 +480,18 @@ Similar to `\s` and `\S`, `\d` and `\D` can be used in and other of square brack
 	ish     # matches 'h'
 	```
 
-- Note: `?` wildcard in command line shells is different from `?` in regex
+- **Note:** The `?` wildcard used in command line is different from the `?` used in regex
 	- `?` wildcard in command line matches 0 or 1 occurrence of **any** character
 	- `?` quantifier in regex match 0 or 1 occurrence of a pattern (which could be multiple characters e.g. `(abc)?`) to its left.
 
 ### Quantifiers - Ranges
-- Allows us to precisely specify the number of occurrences. Range quantifiers contains a pair of curly braces `{}`
+- Range quantifiers allow us to specify the number of occurrences more precisely. The quantities are enclosed within curly braces `{}`
 	- `p{m}` matches **precisely `m`** occurrences of pattern `p`
 	- `p{m,}` matches **m or more** occurrences of `p`
 	- `p{m,n}` matches **at least `m` and up till `n`** occurrences of pattern `p`
 
 	```Ruby
 	/\b\d{10}\b/                                 # matches exactly 10 consecutive digits
-	2225551212 1234567890 123456789 12345678900
 
 
 	/\b\d{3,}\b/                                 # matches 3 or more digits
@@ -493,7 +511,7 @@ Similar to `\s` and `\S`, `\d` and `\D` can be used in and other of square brack
 
 
 ### Quantifiers - Greedy vs Lazy Match
-- These quantifiers are **greedy** in that they try to match the longest possible string they can. For example `/a[abc]*c/` matching `xabcbcbacy` will match `abcbcbac`, not `abc` or `abcbc`.
+- Quantifier matches are **greedy** by nature: strive to match the longest string that meets the pattern. For example using regex `/a[abc]*c/` on `xabcbcbacy` will match `abcbcbac`, not `abc` or `abcbc`.
 
 - `?` is added after the main quantifier if we want to match the **least characters possible**, called a **lazy match**. For example, `a[abc]*?c/` matches `abc` and `ac` in `xabcbcbacy`
 
@@ -502,34 +520,43 @@ Similar to `\s` and `\S`, `\d` and `\D` can be used in and other of square brack
 ---
 
 ### Ruby Regex Application - Matching Strings
-- `String#match` is used in conditionals and return `MatchData` if a match is found or `nil` otherwise
-- The `MatchData` isn't an Array but responds to element referencing syntax e.g. `[0]`, `[1]` etc
+- `String#match` are often used in conditionals. They return `MatchData`, a truthy value if a match is found or `nil` otherwise
 	```Ruby
 	fetch_url(text) if text.match(/\Ahttps?:\/\/\S+\z/)
 	```
 
-- `=~` is similar to `match` but returns the **index** within the string at which the regex matched or `nil` if there is no match. It is faster than `match`.
+- `MatchData` is not an Array but responds to element referencing syntax such as `[0]`, `[1]` etc
+	
+- `=~` is similar to `String#index` and returns the **lowest index** within the string at which the regex matched or `nil` if there is no match. It is faster than `match`.
 	```ruby
-	fetch_url(text) if text =~ /\Ahttps?:\/\/\S+\z/
+	str = "hello world"
+
+	str.match(/\bw.*?l\B/)		# => #<MatchData "worl">
+	str =~ /\bw.*?l\B/          # => 6
+	str.index(/\bw.*?l\B/)		# => 6
 	```
 
 - `String#scan` is a global form of `match` that returns an Array of all matching substrings
+	```ruby
+	str = "hello world"
+	str.scan(/\b.*?l\B/)		# => ["hel", " worl"]
+	```
 
 ### Ruby Regex Application - Splitting Strings
-- `String#split` accepts both string delimiter and regex to split a string and return an array containing the substrings as elements.
+- `String#split` can both string delimiter or regex as arguments to split a string, returning an array containing the substrings as elements.
 	```Ruby
-	# simple well formatted input string
+	# use str to split for well formatted inputs
 	record = "xyzzy\t3456\t334\tabc"
 	fields = record.split("\t")
 	# -> ['xyzzy', '3456', '334', 'abc']
 
-	# less well formatted input string
+	# use regex to split less well formatted inputs
 	record = "xyzzy  3456  \t  334\t\t\tabc"
 	fields = record.split(/\s+/)
 	# -> ['xyzzy', '3456', '334', 'abc']
 	```
 
-- Note: Beware of regex like `/:*/` and `/\t?/` when using `split`. Recall that the `*` quantifier matches zero or more occurrences of the pattern it is modifying. In the case of `split`, the result may be totally unexpected:
+- **Beware** of `*` or `?` quantifiers in single character regex e.g. `/:*/` and `/\t?/` as they can produce unexpected results when using `split`. Since the `*` quantifier matches 0 or more occurrences of a pattern, they can split a string on `""`
 	```Ruby
 	'abc:xyz'.split(/:*/)
 	# -> ['a', 'b', 'c', 'x', 'y', 'z']
@@ -537,44 +564,44 @@ Similar to `\s` and `\S`, `\d` and `\D` can be used in and other of square brack
 	A six element array instead of the two element array you may have expected. This result occurs because the regex matches the gaps between each letter; zero occurrences of `:` occurs between each pair of characters.
 
 ### Ruby Regex Application - Capture Groups
-- **Capture groups** capture the matching characters that correspond to part of a regex using parentheses `()`. You can **reuse these matches later in the same regex**, and when constructing new values based on the matched string.
+- **Capture groups** uses parentheses `()` to demarcate subsegments of a regex and stores the captured matches in variables e.g. `\1, \2`. These variables can then be **used as backreferences in the same regex or replacement strings in `String#gsub`/`String#sub`** (see transformation section below)
 
-- For example, we may try using match single or double quotes
-	```Ruby
-	# Initial attempt lazy match single and double quotes but 
-	# also includes mixed quotes ('..." or "...') unintendedly
-	/['"].+?['"]/ 
+**Example: Matching Quotes**
+```Ruby
+# Initial attempt lazy match single and double quotes but 
+# also includes mixed quotes ('..." or "...') unintendedly
+/['"].+?['"]/ 
 
-	# using two regex
-	if text.match(/".+?"/) || text.match(/'.+?'/)
-		puts "Got a quoted string"
-	end
+# using two regex
+if text.match(/".+?"/) || text.match(/'.+?'/)
+	puts "Got a quoted string"
+end
 
-	# using captured groups
-	# \1 is a backreference and ensure the closing quote matches 
-	# the opening one
-	/(['"]).+?\1/
-	```
+# using captured groups
+# \1 is a backreference and ensure the closing quote matches 
+# the opening one
+/(['"]).+?\1/
+```
 
-- Multiple capture groups: A regex can contain multiple capture groups, numbered from left to right as groups `1,2, ... up till 9` and the corresponding backreferences are `\1`, `\2`, ... `\9`
+- A regex can contain multiple capture groups, up till 9. They are numbered from left to right as groups `1, 2, ... 9` and the corresponding backreferences are `\1`, `\2`, ... `\9`
 
 - Note: We may also explore using **named groups** and **named backreferences**
 
 ### Ruby Regex Application - Transformations in Ruby
-- `String#sub` and `String#gsub` are used in Ruby to transform a string. `#sub` transforms the **first instance** of a string that matches a regex while `gsub` transforms **every instance** of string that matches.
+- `String#sub` and `String#gsub` are used in Ruby to transform a string. `#sub` finds and replaces the **first instance** of a string that matches a regex while `gsub` does that for **every matched substring** in that string.
 	```Ruby
 	text = 'Four score and seven'
 	vowelless = text.gsub(/[aeiou]/, '*')
 	# -> 'F**r sc*r* *nd s*v*n'
 	```
 
-- Using backreferences in replacement string
+- Using **backreferences in replacement string**
 	```Ruby
 	text = %(We read "War of the Worlds".)
 	puts text.sub(/(['"]).+\1/, '\1The Time Machine\1')
 	# prints: We read "The Time Machine".
 	```
-	Note: if we use double quotes in replacement strings, we need to use double backlashes:
+	**Note:** if we use double quotes in replacement strings, we need to use double backlashes:
 	```Ruby
 	puts text.sub(/(['"]).+\1/, "\\1The Time Machine\\1")
 	```
