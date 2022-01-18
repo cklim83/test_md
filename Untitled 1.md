@@ -11,20 +11,6 @@ Course: RB109
 
 ### Integer Methods
 #### Integer - Iteration
-[`#downto`](https://docs.ruby-lang.org/en/master/Integer.html#method-i-downto)\
-downto(limit) {|i| ... } → self\
-downto(limit) → enumerator
-
-Calls the given block with each integer value from `self` down to `limit`; returns `self`:
-```Ruby
-a = []
-10.downto(5) {|i| a << i }              # => 10
-a                                       # => [10, 9, 8, 7, 6, 5]
-a = []
-0.downto(-5) {|i| a << i }              # => 0
-a                                       # => [0, -1, -2, -3, -4, -5]
-4.downto(5) {|i| fail 'Cannot happen' } # => 4
-```
 
 [`#downto`](https://docs.ruby-lang.org/en/master/Integer.html#method-i-downto)\
 **downto(limit) {|i| ... } → self\
@@ -45,11 +31,12 @@ a                                       # => [0, -1, -2, -3, -4, -5]
 
 Calls the given block with each integer value from `self` up to `limit`; returns `self`:
 ```Ruby
-Signatures 
+# Signatures 
 upto(limit) {|i| ... } → self
 upto(limit) → enumerator
+
 ---
-	
+# Examples	
 a = []
 5.upto(10) {|i| a << i }              # => 5
 a                                     # => [5, 6, 7, 8, 9, 10]
