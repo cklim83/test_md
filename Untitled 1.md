@@ -27,9 +27,9 @@ a                                       # => [0, -1, -2, -3, -4, -5]
 4.downto(5) {|i| fail 'Cannot happen' } # => 4
 ```
 
-[`#upto`](https://docs.ruby-lang.org/en/master/Integer.html#method-i-upto)
+[`#upto`](https://docs.ruby-lang.org/en/master/Integer.html#method-i-upto)\
 **upto(limit) {|i| ... } → self\
-upto(limit) → enumerator**
+upto(limit) → enumerator**\
 Calls the given block with each integer value from `self` up to `limit`; returns `self`:
 ```Ruby	
 a = []
