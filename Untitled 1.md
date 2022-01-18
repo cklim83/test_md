@@ -27,16 +27,11 @@ a                                       # => [0, -1, -2, -3, -4, -5]
 4.downto(5) {|i| fail 'Cannot happen' } # => 4
 ```
 
-[`Integer#upto`](https://docs.ruby-lang.org/en/master/Integer.html#method-i-upto)
-
+[`#upto`](https://docs.ruby-lang.org/en/master/Integer.html#method-i-upto)
+**upto(limit) {|i| ... } → self\
+upto(limit) → enumerator**
 Calls the given block with each integer value from `self` up to `limit`; returns `self`:
-```Ruby
-# Signatures 
-upto(limit) {|i| ... } → self
-upto(limit) → enumerator
-
----
-# Examples	
+```Ruby	
 a = []
 5.upto(10) {|i| a << i }              # => 5
 a                                     # => [5, 6, 7, 8, 9, 10]
