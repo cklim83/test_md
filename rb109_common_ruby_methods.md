@@ -1,71 +1,254 @@
-Topic: RB109 Interview Assessment Preparation
-Date: 03 Jan 2022
+Topic: Common Ruby Methods\
+Date: 18 Jan 2022\
 Course: RB109
 
 ---
 
 ### Sections
+[Kernel Methods](#Kernel-methods)\
+[Integer Methods](#integer-methods)\
+[String Methods](#string-methods)\
+[Array Methods](#array-methods)\
 
 ---
+
+### Kernel Methods
+#### Kernel - Formatting
+`#format`
+```Ruby
+# Use "%0.nf" to round decimals, 
+# Use "%0nd" for leading 0s
+
+format("%04d, and %0.3f", 2, 34.53145)    # => "0002, and 34.531"
+format("%04d, and %0.3f" % [2, 34.53145]) # => "0002, and 34.531"
+
+#For String#%, each % in string corresponds to 1 argument in array
+puts "The scores are %04d, %0.2f and %0.2f" % [78, 68.9, 70.156]
+# Ouput:
+The scores are 0078, 68.90 and 70.16
+```
 
 ### Integer Methods
-#### downto, upto
-**downto(limit) {|i| block } → self
-downto(limit) → an_enumerator**
+#### Integer - Iteration
+[`#downto`](https://docs.ruby-lang.org/en/master/Integer.html#method-i-downto)\
+**downto(limit) {|i| ... } → self\
+downto(limit) → enumerator**
 
-Iterates the given block, passing in decreasing values from `int` down to and including `limit`.
-
-If no block is given, an Enumerator is returned instead.
+Calls the given block with each integer value from `self` down to `limit`; returns `self`:
 ```Ruby
-5.downto(1) { |n| print n, ".. " }
-puts "Liftoff!"
-#=> "5.. 4.. 3.. 2.. 1.. Liftoff!"
+a = []
+10.downto(5) {|i| a << i }              # => 10
+a                                       # => [10, 9, 8, 7, 6, 5]
+a = []
+0.downto(-5) {|i| a << i }              # => 0
+a                                       # => [0, -1, -2, -3, -4, -5]
+4.downto(4) {|i| puts 'executed' }      # output "executed", returns 4
+4.downto(5) {|i| puts 'executed' }      # block skipped, returns 4
 ```
 
-**upto(limit) {|i| block } → self
-upto(limit) → an_enumerator**
+[`#upto`](https://docs.ruby-lang.org/en/master/Integer.html#method-i-upto)\
+**upto(limit) {|i| ... } → self\
+upto(limit) → enumerator**
 
-Iterates the given block, passing in integer values from `int` up to and including `limit`.
-If no block is given, an [`Enumerator`](https://docs.ruby-lang.org/en/2.6.0/Enumerator.html) is returned instead.
-```Ruby
-5.upto(10) {|i| print i, " " }   #=> 5 6 7 8 9 10
+Calls the given block with each integer value from `self` up to `limit`; returns `self`:
+```Ruby	
+a = []
+5.upto(10) {|i| a << i }              # => 5
+a                                     # => [5, 6, 7, 8, 9, 10]
+a = []
+-5.upto(0) {|i| a << i }              # => -5
+a                                     # => [-5, -4, -3, -2, -1, 0]
+5.upto(5) {|i| puts 'executed' } # output "executed", returns 5
+5.upto(4) {|i| puts 'executed' } # block skipped, returns 5
 ```
 
-#### times
-**times {|i| block } → self
-times → an_enumerator**
+[`times`](https://docs.ruby-lang.org/en/master/Integer.html#method-i-times)\
+**times {|i| ... } → self\
+times → enumerator**
 
-Iterates the given block `int` times, passing in values from zero to `int - 1`.
-If no block is given, an `Enumerator` is returned instead.
+Calls the given block `self` times with each integer in `(0..self-1)`; returns `self`:
 ```Ruby
-5.times {|i| print i, " " }   #=> 0 1 2 3 4
+a = []
+5.times {|i| a.push(i) } # => 5
+a                        # => [0, 1, 2, 3, 4]
 ```
----
+<br>
 
-#### %, remainder and divmod
-int % other → real
+#### Integer - Rounding
+[`#ceil`](https://docs.ruby-lang.org/en/master/Integer.html#method-i-ceil)\
+**ceil(ndigits = 0) → integer**
 
-Returns `int` modulo `other`.
+Returns the smallest number greater than or equal to `self` with a precision of `ndigits` decimal digits.
 
-See [`Numeric#divmod`](https://docs.ruby-lang.org/en/2.6.0/Numeric.html#method-i-divmod) for more information.
+When the precision is negative, the returned value is an integer with at least `ndigits.abs` trailing zeros:
+```Ruby
+555.ceil(-1)  # => 560
+555.ceil(-2)  # => 600
+-555.ceil(-2) # => -500
+555.ceil(-3)  # => 1000
 
-loat % other → float
+# Returns `self` when `ndigits` is zero or positive.
 
-Returns the modulo after division of `float` by `other`.
+555.ceil     # => 555
+555.ceil(50) # => 555
+```
 
-6543.21.modulo(137)      #=> 104.21000000000004
-6543.21.modulo(137.24)   #=> 92.92999999999961
+
+[`#floor`](https://docs.ruby-lang.org/en/master/Integer.html#method-i-floor)\
+**floor(ndigits = 0) → integer**
+
+Returns the largest number less than or equal to `self` with a precision of `ndigits` decimal digits.
+
+When `ndigits` is negative, the returned value has at least `ndigits.abs` trailing zeros:
+```Ruby
+555.floor(-1)  # => 550
+555.floor(-2)  # => 500
+-555.floor(-2) # => -600
+555.floor(-3)  # => 0
+
+Returns `self` when `ndigits` is zero or positive.
+
+555.floor     # => 555
+555.floor(50) # => 555
+```
 
 
-**numeric % other_numeric -> real**
-Returns `numeric` modulo `other_numeric`
+[`#round`](https://docs.ruby-lang.org/en/master/Integer.html#method-i-round)\
+**round(ndigits= 0, [half: :up]) → integer**
 
-**numeric.remainder(numeric) → real**
-Returns the remainder: `x.remainder(y)` returns `x-y*(x/y).truncate`
+Returns `self` rounded to the nearest value with a precision of `ndigits` decimal digits.
 
-**numeric.divmod(numeric) → array**
-Returns an **array** containing the **quotient** and **modulus** obtained by dividing `num` by `numeric`.
+When `ndigits` is negative, the returned value has at least `ndigits.abs` trailing zeros:
+```Ruby
+555.round(-1)      # => 560
+555.round(-2)      # => 600
+555.round(-3)      # => 1000
+-555.round(-2)     # => -600
+555.round(-4)      # => 0
 
+# Returns `self` when `ndigits` is zero or positive.
+
+555.round     # => 555
+555.round(1)  # => 555
+555.round(50) # => 555
+```
+
+If keyword argument `half` is given, and `self` is equidistant from the two candidate values, the rounding is according to the given `half` value:
+- `:up` or `nil`: round away from zero:
+	```Ruby    
+	25.round(-1, half: :up)      # => 30
+	(-25).round(-1, half: :up)   # => -30
+	```
+- `:down`: round toward zero:
+	```Ruby  
+	25.round(-1, half: :down)    # => 20
+	(-25).round(-1, half: :down) # => -20
+	```    
+- `:even`: round toward the candidate whose last nonzero digit is even:
+	```Ruby
+	25.round(-1, half: :even)    # => 20
+	15.round(-1, half: :even)    # => 20
+	(-25).round(-1, half: :even) # => -20
+	```
+
+#### Integer - Division & Modulo
+[`#%`](https://docs.ruby-lang.org/en/master/Integer.html#method-i-25)\
+**self % other → real_number**
+
+Returns `self` modulo `other` as a real number. Result follows the **sign of `other`** (Alias for `Integer#modulo`)
+```Ruby
+10 % 2              # => 0
+10 % 3              # => 1
+-10 % 3				# => 2
+10 % 4              # => 2
+
+10 % -2             # => 0
+10 % -3             # => -2
+10 % -4             # => -2
+
+10 % 3.0            # => 1.0
+10 % Rational(3, 1) # => (1/1)
+```
+
+
+[`#modulo`](https://docs.ruby-lang.org/en/master/Integer.html#method-i-modulo)\
+**modulo(p1)**
+
+Returns `self` modulo `other` as a real number. (Alias for `Integer#%`)
+
+
+[`#div`](https://docs.ruby-lang.org/en/master/Integer.html#method-i-div)\
+**div(numeric) → integer**
+
+Performs integer division; returns the integer result of dividing `self` by `numeric`:
+```Ruby
+  4.div(3)      # => 1
+  4.div(-3)      # => -2
+  -4.div(3)      # => -2
+  -4.div(-3)      # => 1
+  4.div(3.0)      # => 1
+  4.div(Rational(3, 1))      # => 1
+
+Raises an exception if +numeric+ does not have method +div+.
+```
+
+[`#divmod`](https://docs.ruby-lang.org/en/master/Integer.html#method-i-divmod)\
+**divmod(other) → array**
+
+Returns a 2-element array `[q, r]`, where
+```Ruby
+q = (self/other).floor    # Quotient
+r = self % other          # Remainder
+
+# Examples:
+11.divmod(4)              # => [2, 3]
+11.divmod(-4)             # => [-3, -1]
+-11.divmod(4)             # => [-3, 1]
+-11.divmod(-4)            # => [2, -3]
+
+12.divmod(4)              # => [3, 0]
+12.divmod(-4)             # => [-3, 0]
+-12.divmod(4)             # => [-3, 0]
+-12.divmod(-4)            # => [3, 0]
+
+13.divmod(4.0)            # => [3, 1.0]
+13.divmod(Rational(4, 1)) # => [3, (1/1)]
+```
+
+
+[`#fdiv`](https://docs.ruby-lang.org/en/master/Integer.html#method-i-fdiv)\
+**fdiv(numeric) → float**
+
+Returns the `Float` result of dividing `self` by `numeric`:
+```Ruby
+4.fdiv(2)      				# => 2.0
+4.fdiv(-2)      			# => -2.0
+-4.fdiv(2)      			# => -2.0
+4.fdiv(2.0)      			# => 2.0
+4.fdiv(Rational(3, 4))      # => 5.333333333333333
+```
+
+
+[`#remainder`](https://docs.ruby-lang.org/en/master/Integer.html#method-i-remainder)\
+**remainder(other) → real_number**
+
+Returns the remainder after dividing `self` by `other`. Result follows the **sign of the caller**.
+```Ruby
+11.remainder(4)              # => 3
+11.remainder(-4)             # => 3
+-11.remainder(4)             # => -3
+-11.remainder(-4)            # => -3
+
+12.remainder(4)              # => 0
+12.remainder(-4)             # => 0
+-12.remainder(4)             # => 0
+-12.remainder(-4)            # => 0
+
+13.remainder(4.0)            # => 1.0
+13.remainder(Rational(4, 1)) # => (1/1)
+```
+
+**Comparison Summary**
 
 | a | b | a.divmod(b) | a/b | a.modulo(b) | a.remainder(b) |
 |---|---|---|---|---|---|
@@ -80,161 +263,279 @@ Returns an **array** containing the **quotient** and **modulus** obtained by div
 
 - The quotient returned by `divmod` is equal to the **floor of a/b** and always an **integer**
 - The modulus portion of `divmod` is equal to `a.modulo(b)`. The sign of this result follows the **sign of the argument** while the result of a `remainder` call follows the **sign of the caller**.
+<br>
 
-#### odd?, even?, prime?
-**odd? → true or false**
-Returns `true` if `int` is an odd number.
-
+#### Integer - Type Checks
+[`#even?`](https://docs.ruby-lang.org/en/master/Integer.html#method-i-even-3F)\
 **even? → true or false**
+
 Returns `true` if `int` is an even number.
-
-**prime?()**
-Returns `true` if `self` is a prime number, else returns `false`.
-
-#### round
-**round([ndigits] [, half: mode]) → integer or float**
-
-Returns `int` rounded to the nearest value with a precision of `ndigits` decimal digits (default: 0).
-When the precision is negative, the returned value is an integer with at least `ndigits.abs` trailing zeros.
-Returns `self` when `ndigits` is zero or positive.
 ```Ruby
-1.round           #=> 1
-1.round(2)        #=> 1
-15.round(-1)      #=> 20
-(-15).round(-1)   #=> -20
-``
-#### chr
-**chr([encoding]) → string**
-Returns a string containing the character represented by the `int`'s value according to `encoding`.
-```Ruby
-65.chr    #=> "A"
-230.chr   #=> "\xE6"
-255.chr(Encoding::UTF_8)   #=> "\u00FF"
+3.even?		# => false
+4.even?		# => true
+(4.0).even?	# undefined method 'even?' for 4.0:float
 ```
 
-#### abs
+
+[`#integer?`](https://docs.ruby-lang.org/en/master/Integer.html#method-i-integer-3F)\
+**integer? → true**
+
+Since `int` is already an `Integer`, this always returns `true`. 
+```Ruby
+5.integer?	    # => true
+(5.3).integer?  # => false
+'5'.integer?    # No method error, no integer? for string
+```
+
+
+[`#odd?`](https://docs.ruby-lang.org/en/master/Integer.html#method-i-odd-3F)\
+**odd? → true or false**
+
+Returns `true` if `int` is an odd number.
+```Ruby
+3.odd?		# => true
+4.odd?		# => false
+(4.0).odd?	# undefined method 'odd?' for 4.0:float
+```
+
+
+[`#zero?`](https://docs.ruby-lang.org/en/master/Integer.html#method-i-zero-3F)\
+**zero? → true or false**
+
+Returns `true` if `int` has a zero value.
+```Ruby
+0.zero?      # => true
+(0.0).zero?  # => true
+20.zero?     # => false
+```
+<br>
+
+#### Integer - Arithmetic
+[`#+`](https://docs.ruby-lang.org/en/master/Integer.html#method-i-2B)\
+**self + numeric → numeric_result**
+
+Performs addition:
+```Ruby
+2 + 2              # => 4
+-2 + 2             # => 0
+-2 + -2            # => -4
+2 + 2.0            # => 4.0
+2 + Rational(2, 1) # => (4/1)
+2 + Complex(2, 0)  # => (4+0i)
+```
+
+
+[`#-`](https://docs.ruby-lang.org/en/master/Integer.html#method-i-2D)\
+**self - numeric → numeric_result**
+
+Performs subtraction:
+```Ruby
+4 - 2              # => 2
+-4 - 2             # => -6
+-4 - -2            # => -2
+4 - 2.0            # => 2.0
+4 - Rational(2, 1) # => (2/1)
+4 - Complex(2, 0)  # => (2+0i)
+```
+
+
+[`#*`](https://docs.ruby-lang.org/en/master/Integer.html#method-i-2A)\
+**self * numeric → numeric_result**
+Performs multiplication
+```Ruby
+4 * 2              # => 8
+4 * -2             # => -8
+-4 * 2             # => -8
+4 * 2.0            # => 8.0
+4 * Rational(1, 3) # => (4/3)
+4 * Complex(2, 0)  # => (8+0i)
+```
+
+
+[`#/`](https://docs.ruby-lang.org/en/master/Integer.html#method-i-2F)\
+**self / numeric → numeric_result**
+
+Performs division; for integer `numeric`, truncates the result to an integer:
+```Ruby
+ 4 / 3              # => 1
+ 4 / -3             # => -2
+ -4 / 3             # => -2
+ -4 / -3            # => 1
+
+# For other +numeric+, returns non-integer result:
+
+ 4 / 3.0            # => 1.3333333333333333
+ 4 / Rational(3, 1) # => (4/3)
+ 4 / Complex(3, 0)  # => ((4/3)+0i)
+ ```
+
+
+[`#**`](https://docs.ruby-lang.org/en/master/Integer.html#method-i-2A-2A)\
+**self ** numeric → numeric_result**
+
+Raises `self` to the power of `numeric`:
+```Ruby
+2 ** 3              # => 8
+2 ** -3             # => (1/8)
+-2 ** 3             # => -8
+-2 ** -3            # => (-1/8)
+2 ** 3.3            # => 9.849155306759329
+2 ** Rational(3, 1) # => (8/1)
+2 ** Complex(3, 0)  # => (8+0i)
+```
+
+
+[`#pow`](https://docs.ruby-lang.org/en/master/Integer.html#method-i-pow)\
+**pow(numeric) → numeric\
+pow(integer, integer) → integer**
+
+Returns (modular) exponentiation as:
+```Ruby
+a.pow(b)     #=> same as a**b
+a.pow(b, m)  #=> same as (a**b) % m, but avoids huge temporary values
+```
+<br>
+
+#### Integer - Type Conversion
+[`#to_f`](https://docs.ruby-lang.org/en/master/Integer.html#method-i-to_f)\
+**to_f → float**
+
+Converts `self` to a Float:
+```Ruby
+1.to_f          # => 1.0
+-1.to_f         # => -1.0
+
+# If the value of `self` does not fit in a Float, the result is # infinity:
+
+(10**400).to_f  # => Infinity
+(-10**400).to_f # => -Infinity
+```
+
+
+[`#to_i`](https://docs.ruby-lang.org/en/master/Integer.html#method-i-to_i)\
+**to_i → integer**
+
+Since `int` is already an `Integer`, returns `self`.
+
+
+[`#to_s`](https://docs.ruby-lang.org/en/master/Integer.html#method-i-to_s)\
+**to_s(base = 10) → string**
+
+Returns a string containing the place-value representation of `self` in radix `base` (in 2..36). Also aliased as `Integer#inspect`
+```Ruby
+12345.to_s               # => "12345"
+12345.to_s(2)            # => "11000000111001"
+12345.to_s(8)            # => "30071"
+12345.to_s(10)           # => "12345"
+12345.to_s(16)           # => "3039"
+12345.to_s(36)           # => "9ix"
+78546939656932.to_s(36)  # => "rubyrules"
+```
+Raises an exception if `base` is out of range.
+<br>
+
+#### Integer - Bitwise Operation
+[`#&`](https://docs.ruby-lang.org/en/master/Integer.html#method-i-26)\
+**self & other → integer**
+
+Convert `self` and `other` to binary, then perform bitwise AND; each bit in the result is 1 if both corresponding bits in `self` and `other` are 1, 0 otherwise:
+```Ruby
+"%04b" % (0b0101 & 0b0110) # => "0100"
+
+7 & 3 					   # => 3 as 0b0111 & 0b0011 == 0b0011
+```
+Raises an exception if `other` is not an Integer.
+
+
+[`#|`](https://docs.ruby-lang.org/en/master/Integer.html#method-i-7C)\
+**self | other → integer**
+
+Convert `self` and `other` to binary, then perform **bitwise OR**; each bit in the result is 1 if either corresponding bit in `self` or `other` is 1, 0 otherwise:
+```Ruby
+"%04b" % (0b0101 | 0b0110) # => "0111"
+7 | 3 					   # => 7 as 0b0111 | 0b0011 == 0b0111
+```
+Raises an exception if `other` is not an Integer.
+
+
+[`#^`](https://docs.ruby-lang.org/en/master/Integer.html#method-i-5E)\
+**self ^ other → integer**
+
+Convert `'self` and `other` to binary, then perform **bitwise EXCLUSIVE OR**; each bit in the result is 1 if the corresponding bits in `self` and `other` are different, 0 otherwise:
+```Ruby
+"%04b" % (0b0101 ^ 0b0110) # => "0011"
+7 ^ 3 					   # => 4 as 0b0111 ^ 0b0011 == 0b0100
+```
+Raises an exception if `other` is not an Integer.
+<br>
+
+#### Integer - Others
+[`#abs`](https://docs.ruby-lang.org/en/master/Integer.html#method-i-abs)\
 **abs → integer**
-Returns the absolute value of `int`.
+
+Returns the absolute value of `int`. `Integer#magnitude` ia an alias.
 ```Ruby
 (-12345).abs   #=> 12345
 -12345.abs     #=> 12345
 12345.abs      #=> 12345
 ```
 
-#### gcd, lcm
-**gcd(other_int) → integer**
-Returns the greatest common divisor of the two integers. The result is always positive. 0.gcd(x) and x.gcd(0) return x.abs.
-```Ruby
-36.gcd(60)                  #=> 12
-2.gcd(2)                    #=> 2
-3.gcd(-7)                   #=> 1
-```
-
-**lcm(other_int) → integer**
-Returns the least common multiple of the two integers. The result is always positive. 0.lcm(x) and x.lcm(0) return zero.
-```Ruby
-36.lcm(60)                  #=> 180
-2.lcm(2)                    #=> 2
-3.lcm(-7)                   #=> 21
-```
-
+---
 
 ### String Methods
-#### `String#%`
-**str % arg → new_str**
+#### String - Concatenation
+[`#*`](https://docs.ruby-lang.org/en/master/String.html#method-i-2A)\
+**self * integer -> new string**
 
-Format - Uses _str_ as a format specification, and returns the result of applying it to _arg_. If the format specification contains more than one substitution, then _arg_ must be an `Array` or `Hash` containing the values to be substituted. See `Kernel::sprintf` for details of the format string.
+Returns a new string containing `integer` copies of `self`
 ```Ruby
-"%05d" % 123                              #=> "00123"
-"%-5s: %016x" % [ "ID", self.object_id ]  #=> "ID   : 00002b054ec93168"
-"foo = %{foo}" % { :foo => 'bar' }        #=> "foo = bar"
+"Ho! " * 3 # => "Ho! Ho! Ho! "
+"Ho! " * 0 # => ""
 ```
 
-#### `String#*`
-**str * integer → new_str**
 
-Copy: Returns a **new `String`** containing `integer` copies of the receiver. `integer` must be greater than or equal to 0.
+[`#+`](https://docs.ruby-lang.org/en/master/String.html#method-i-2B)\
+**self + other_string -> new string**
+
+Returns new string containing `other_string` concatenated to `self`
 ```Ruby
-"Ho! " * 3   #=> "Ho! Ho! Ho! "
-"Ho! " * 0   #=> ""
+"Hello from " + self.to_s # => "Hello from main"
 ```
 
-#### `String#+`
-**str + other_str → new_str**
 
-Concatenation: Returns a **new `String`** containing _other_str_ concatenated to _str_.
+[`#<<`](https://docs.ruby-lang.org/en/master/String.html#method-i-3C-3C)\
+**self << object -> string**
+
+Concatenate `object` to `self` and return `self`
 ```Ruby
-"Hello from " + self.to_s   #=> "Hello from main"
+s = 'foo'
+s << 'bar' # => "foobar"
+s          # => "foobar"
 ```
 
-#### `String#<<`
-**str << obj → str
-str << integer → str**
-
-Destructively appends the given object to _str_. If the object is an `Integer`, it is considered a codepoint and converted to a character from ascii table before being appended.
+If `object` is an Integer, the value is treated as a codepoint and converted to a character (based on ascii table) before concatenation:
 ```Ruby
-a = "hello "
-a << "world"   #=> "hello world"
-a << 33        #=> "hello world!"
+s = 'foo'
+s << 33 # => "foo!"
 ```
 
-#### `String#concat`
-**concat(obj1, obj2, ...) → str**
+[`#concat`](https://docs.ruby-lang.org/en/master/String.html#method-i-concat)\
+**concat(\*objects) -> string**
 
-Destructively concatenates one or more object(s) in given order to _str_. If an object is an `Integer`, it is considered a codepoint and converted to a character from ascii table before concatenation.
+Multiple argument version of `#<<`. Concatenate each object in `objects` to `self` and return `self`
 ```Ruby
-a = "hello "
-a.concat("world", 33)      #=> "hello world!"
-a                          #=> "hello world!"
+s = 'foo'
+s.concat(32, 'bar', 32, 'baz') # => "foo bar baz" 
 
-b = "sn"
-b.concat("_", b, "_", b)   #=> "sn_sn_sn"
+# Note: 32 corresponds to ' ' in ascii table
 ```
+<br>
 
-#### `String#=~`
-**str =~ obj → integer or nil**
-Match: If _obj_ is a `Regexp`, use it as a pattern to match against _str_, and returns the index where the match starts, or `nil` if there is no match. Otherwise, invokes _obj.=~_, passing _str_ as an argument. The default `=~` in `Object` returns `nil`.
-
-Note: `str =~ regexp` is not the same as `regexp =~ str`. Strings captured from named capture groups are assigned to local variables only in the second case.
-```Ruby
-"cat o' 9 tails" =~ /\d/   #=> 7
-"cat o' 9 tails" =~ 9      #=> nil
-```
-
-#### `String#capitalize`, `String#capitalize!`
-**capitalize → new_str**
-Returns a copy of _str_ with the first character converted to uppercase and the remainder to lowercase.
-```Ruby
-"hello".capitalize    #=> "Hello"
-"HELLO".capitalize    #=> "Hello"
-"123ABC".capitalize   #=> "123abc"
-```
-
-**capitalize! → str or nil**
-Modifies _str_ by converting the first character to uppercase and the remainder to lowercase. Returns `nil` if no changes are made. 
-```Ruby
-a = "hello"
-a.capitalize!   #=> "Hello"
-a               #=> "Hello"
-a.capitalize!   #=> nil
-```
-
-#### `String#center`
-**center(width, padstr=' ') → new_str**
-Centers `str` in `width`. If `width` is greater than the length of `str`, returns a new [`String`](https://docs.ruby-lang.org/en/2.6.0/String.html) of length `width` with `str` centered and padded with `padstr`; otherwise, returns `str`.
-```Ruby
-"hello".center(4)         #=> "hello"
-"hello".center(20)        #=> "       hello        "
-"hello".center(20, '123') #=> "1231231hello12312312"
-```
-
-#### `String#chars`
-**chars → an_array**
-Returns an array of characters in _str_. This is a shorthand for `str.each_char.to_a`.
-
-#### `String#chomp` and `String#chomp!`
+#### String - Cleaning
+[`#chomp`](https://docs.ruby-lang.org/en/master/String.html#method-i-chomp)\
 **chomp(separator=$/) → new_str**
-Returns a new `String` with the given record separator removed from the end of _str_ (if present). If `$/` has not been changed from the default Ruby record separator, then `chomp` also removes carriage return characters (that is it will remove `\n`, `\r`, and `\r\n`). If `$/` is an empty string, it will remove all trailing newlines from the string.
+
+Return new string with given separator removed from end of string if present. `$/` default value will remove trailing `\n`, `\r` or `\r\n`.
 ```Ruby
 "hello".chomp                #=> "hello"
 "hello\n".chomp              #=> "hello"
@@ -247,12 +548,13 @@ Returns a new `String` with the given record separator removed from the end of _
 "hello\r\n\r\r\n".chomp('')  #=> "hello\r\n\r"
 ```
 
-**chomp!(separator=$/) → str or nil**
-Modifies _str_ in place as described for `String#chomp`, returning _str_, or `nil` if no modifications were made.
+`#chomp!` version exist to modify string in-place and return `str` or `nil` if no modifications made
 
-#### `String#chop` and `String#chop!`
-**chop → new_str**
-Returns a new `String` with the last character removed. If the string ends with `\r\n`, both characters are removed. Applying `chop` to an empty string returns an empty string. `String#chomp` is often a safer alternative, as it leaves the string unchanged if it doesn't end in a record separator.
+
+[`#chop`](https://docs.ruby-lang.org/en/master/String.html#method-i-chop)\
+**chop -> new_str**
+
+Return new string with last character removed. The removed character could be `\n'`, `\r`, `\r\n` or any other character. `#chomp` is safer as it won't truncate the string unintentionally
 ```Ruby
 "string\r\n".chop   #=> "string"
 "string\n\r".chop   #=> "string\n"
@@ -261,78 +563,207 @@ Returns a new `String` with the last character removed. If the string ends with 
 "x".chop.chop       #=> ""
 ```
 
-**chop! → str or nil**
-Processes _str_ as for `String#chop`, returning _str_, or `nil` if _str_ is the empty string.
+`#chop!` version exist to modify string in-place. Returns `str` or `nil` if no modification made
 
-#### `String#chr`
-**chr → new string**
-Returns the **first character** of the caller string
+
+[`#lstrip`](https://docs.ruby-lang.org/en/master/String.html#method-i-lstrip)\
+**lstrip -> new_str**
+
+Return new string with leading whitespace (`"\x00\t\n\v\f\r "` i.e. `/\A\s*/`) removed
 ```Ruby
-a = "abcde"
-a.chr    #=> "a"
+"  hello  ".lstrip   #=> "hello  "
+"hello".lstrip       #=> "hello"
 ```
 
-#### `String#count`
+`#lstrip!` version exists to modify string in-place and return `str` or `nil` if no modification made
+
+
+[`#rstrip`](https://docs.ruby-lang.org/en/master/String.html#method-i-rstrip)\
+**rstrip -> new_str**
+
+Return new string with trailing whitespaces i.e. `/\s*\z/` removed
+```Ruby
+"  hello  ".rstrip   #=> "  hello"
+"hello".rstrip       #=> "hello"
+```
+
+`#rstrip!` version exists to modify string in-place and return `str` or `nil` if no modification made
+
+
+[`#strip`](https://docs.ruby-lang.org/en/master/String.html#method-i-strip)\
+**strip -> new_str**
+
+Return new string with both leading and trailing whitespaces i.e. `/\A\s*/` and `/\s*\z/` removed
+```Ruby
+"    hello    ".strip   #=> "hello"
+"\tgoodbye\r\n".strip   #=> "goodbye"
+"\x00\t\n\v\f\r ".strip #=> ""
+"hello".strip           #=> "hello"
+```
+
+`#strip!` version exists to modify string in-place and return `str` or `nil` if no modification made
+<br>
+
+#### String - Change Case
+[`#capitalize`](https://docs.ruby-lang.org/en/master/String.html#method-i-capitalize)\
+**capitalize(\*options) -> new_str**
+
+Return new string with first character upcased and the rest downcased
+```Ruby
+s = 'hello World!' # => "hello World!"
+s.capitalize       # => "Hello world!"
+```
+
+`#capitalize!` version exists to modify string in-place and return `str` or `nil` if no modification made.
+
+
+[`#downcase`](https://docs.ruby-lang.org/en/master/String.html#method-i-downcase)\
+**downcase(\*options) -> new_str**
+
+Return new string with all characters downcased
+```Ruby
+s = 'Hello World!' # => "Hello World!"
+s.downcase         # => "hello world!"
+```
+
+`#downcase!` version exists to modify string in-place and return `str` or `nil` if no modification made.
+
+
+[`#swapcase`](https://docs.ruby-lang.org/en/master/String.html#method-i-swapcase)\
+**swapcase(\*options) -> new_str**
+
+Return new string with cases of original characters inverted: upcase becomes downcase and vice versa
+```Ruby
+s = 'Hello World!' # => "Hello World!"
+s.swapcase         # => "hELLO wORLD!"
+```
+
+`#swapcase!` version exists to modify string in-place and return `str` or `nil` if no modification made.
+
+
+[`#upcase`](https://docs.ruby-lang.org/en/master/String.html#method-i-upcase)\
+**upcase(\*options) -> new_str**
+
+Return new string with all characters upcased.
+```Ruby
+s = 'Hello World!' # => "Hello World!"
+s.upcase         # => "HELLO WORLD!"
+```
+
+`#upcase!` version exists to modify string in-place and return `str` or `nil` if no modification made.
+<br>
+
+#### String - Comparison
+[`#<=>`](https://docs.ruby-lang.org/en/master/String.html#method-i-3C-3D-3E)\
+**string <=> other_string -> -1, 0, 1 or nil**
+
+Compares `string` and `other_string`, returning:
+- -1 if `other_string` is larger.
+- 0 if the two are equal.
+- 1 if `other_string` is smaller.
+- `nil` if the two are incomparable. 
+
+In general, `0-9` < `A-Z` < `a-z`. If both strings share the same preceding characters, the longer string is larger.
+```Ruby
+'foo' <=> 'foo' # => 0
+'foo' <=> 'food' # => -1
+'food' <=> 'foo' # => 1
+'FOO' <=> 'foo' # => -1
+'foo' <=> 'FOO' # => 1
+'foo' <=> 1 # => nil
+```
+
+
+[`#==`](https://docs.ruby-lang.org/en/master/String.html#method-i-3D-3D)\
+**string == object -> boolean**
+
+Returns `true` if `object` has the same value as `string`. Returns `false` otherwise.
+```Ruby
+s = 'foo'
+s == 'foo' # => true
+s == 'food' # => false
+s == 'FOO' # => false
+```
+
+
+[`#casecmp`](https://docs.ruby-lang.org/en/master/String.html#method-i-casecmp)\
+**casecmp(other_string) -> -1, 0, 1, or nil**
+
+Case insensitive comparison i.e. `self.downcase <=> other_string.downcase` and returns:
+- -1 if `other_string.downcase` is larger.
+- 0 if the two are equal.
+- 1 if `other_string.downcase` is smaller.
+- `nil` if the two are incomparable.
+```Ruby
+'foo'.casecmp('foo') # => 0
+'foo'.casecmp('food') # => -1
+'food'.casecmp('foo') # => 1
+'FOO'.casecmp('foo') # => 0
+'foo'.casecmp('FOO') # => 0
+'foo'.casecmp(1) # => nil
+```
+
+
+[`#casecmp?`](https://docs.ruby-lang.org/en/master/String.html#method-i-casecmp-3F)\
+**casecmp?(other_string) -> true, false or nil**
+
+Returns `true` if `self` and `other_string` are equal after Unicode case folding, otherwise `false`:
+```Ruby
+'foo'.casecmp?('foo') # => true
+'foo'.casecmp?('food') # => false
+'food'.casecmp?('foo') # => false
+'FOO'.casecmp?('foo') # => true
+'foo'.casecmp?('FOO') # => true
+```
+
+Returns `nil` if the two values are incomparable:
+```Ruby
+'foo'.casecmp?(1) # => nil
+```
+
+
+[`#count`](https://docs.ruby-lang.org/en/master/String.html#method-i-count)\
 **count([other_str]+) → integer**
-- Does not accept regex
-- Accepts one or more strings, the resultant intersection of string will be the character sets that it find and count
-	- count("hello", "^l") == count("heo")
-- Uses some regex notation in the string argument
+
+Accepts **one or more strings (not regex)** and return the number of occurrences of the character set, which are determined by **intersection** of characters from each string argument
+- e.g. count("hello", "^l") == count("heo")
+- Uses some regex like notation in the string are 
 	- ^ for negation
 	- "Am-z" for range
-- String count is case sensitive.
-
-Accepts **1 or more String arguments** represented by `[`other_str`]+`. Each String defines **a set of characters** to count. The **intersection of these sets defines the characters to count in `str`. Any `other_str` that starts with a caret `^` is negated. The sequence `c1-c2` means all characters between c1 and c2. The backslash character `\` can be used to escape `^` or `-` and is otherwise ignored unless it appears at the end of a sequence or the end of a `other_str`.
+	- `\\` can be used to escape special characters `^` and `-`
 ```Ruby
 a = "hello world"
-a.count "lo"                   #=> 5 count of l and o
+a.count "lo"                   #=> 5 count of l or o
 a.count "lo", "o"              #=> 2 count of o
-a.count "hello", "^l"          #=> 4 count of h, e and o
-a.count "ej-m"                 #=> 4 count of e, j, k, l, m
+a.count "hello", "^l"          #=> 4 count of h, e or o
+a.count "ej-m"                 #=> 4 count of e, j, k, l or m
 
-"hello^world".count "\\^aeiou" #=> 4 count of ^, and vowels
-"hello-world".count "a\\-eo"   #=> 4 count of a, -, e and o
+"hello^world".count "\\^aeiou" #=> 4 count of ^, or vowels
+"hello-world".count "a\\-eo"   #=> 4 count of a, -, e or o
 
 c = "hello world\\r\\n"
 c.count "\\"                   #=> 2 count of \\
 c.count "\\A"                  #=> 0 count of A
 c.count "X-\\w"                #=> 3
 ```
+<br>
 
-#### `String#delete` and `String#delete!`
-**delete([other_str]+) → new_str**
-Accepts 1 or more String arguments. Returns a copy of _str_ with all characters in the **intersection of its arguments** deleted. Uses the same rules for building the set of characters as `String#count`.
+#### String - Inspect
+[`#empty?`](https://docs.ruby-lang.org/en/master/String.html#method-i-empty-3F)\
+**empty? -> boolean**
+
+Returns `true` if the length of `self` is zero, `false` otherwise
 ```Ruby
-"hello".delete "l","lo"        #=> "heo" 
-"hello".delete "lo"            #=> "he"
-"hello".delete "aeiou", "^e"   #=> "hell"
-"hello".delete "ej-m"          #=> "ho"
+"hello".empty? # => false
+" ".empty? # => false
+"".empty? # => true
 ```
 
-**delete!([other_str]+) → str or nil**
-Performs a `delete` operation in place, returning _str_, or `nil` if _str_ was not modified
 
-#### `String#downcase`, `String#downcase!`
-**downcase → new_str
-downcase([options]) → new_str**
-Returns a copy of _str_ with all uppercase letters replaced with their lowercase counterparts. Which letters exactly are replaced, and by which other letters, depends on the presence or absence of [options](https://docs.ruby-lang.org/en/2.6.0/String.html#method-i-downcase), and on the `encoding` of the string.
+[`#end_with?`](https://docs.ruby-lang.org/en/master/String.html#method-i-end_with-3F)\
+**end_with?(\[suffixes\]+) -> boolean**
 
-**downcase! → str or nil
-downcase!([options]) → str or nil**
-Downcases the contents of _str_, returning `nil` if no changes were made.
-
-#### `String#empty?`
-**empty? → true or false**
-Returns `true` if _str_ has a length of zero.
-```Ruby
-"hello".empty?   #=> false
-" ".empty?       #=> false
-"".empty?        #=> true
-```
-
-#### `String#end_with?`
-**end_with?([suffixes]+) → true or false**
-Returns true if `str` ends with one of the `suffixes` given.
+Returns `true` if `str` ends with one of the suffixes given
 ```Ruby
 "hello".end_with?("ello")               #=> true
 
@@ -341,236 +772,288 @@ Returns true if `str` ends with one of the `suffixes` given.
 "hello".end_with?("heaven", "paradise") #=> false
 ```
 
-#### `String#gsub` and `String#gsub!`
-**gsub(pattern, replacement) → new_str
-gsub(pattern, hash) → new_str
-gsub(pattern) {|match| block } → new_str
-gsub(pattern) → enumerator**
 
-Returns a copy of _str_ with **_all_** occurrences of _pattern_ substituted for the second argument. The _pattern_ is typically a `Regexp`; if given as a `String`, any regular expression metacharacters it contains will be interpreted literally, e.g. `'\\d'` will match a backslash followed by 'd', instead of a digit.
+[`#include?`](https://docs.ruby-lang.org/en/master/String.html#method-i-include-3F)\
+**include? other_string -> boolean**
 
-If _replacement_ is a `String` it will be substituted for the matched text. It may contain back-references to the pattern's capture groups of the form `\\d`, where _d_ is a group number, or `\\k<n>`, where _n_ is a group name. If it is a double-quoted string, both back-references must be preceded by an additional backslash. However, within _replacement_ the special match variables, such as `$&`, will not refer to the current match.
-
-If the second argument is a `Hash`, and the matched text is one of its keys, the corresponding value is the replacement string.
-
-In the block form, the current match string is passed in as a parameter, and variables such as `$1`, `$2`, ``$` ``, `$&`, and `$'` will be set appropriately. The value returned by the block will be substituted for the match on each call.
-
-The result inherits any tainting in the original string or any supplied replacement string.
-
-When neither a block nor a second argument is supplied, an `Enumerator` is returned.
+Return `true` if other_string is a contiguous substring of `self`. Return false otherwise.
 ```Ruby
-"hello".gsub(/[aeiou]/, '*')                  #=> "h*ll*"
-
-#group number example
-"hello".gsub(/([aeiou])/, '<\1>')             #=> "h<e>ll<o>"
-
-# Block example
-"hello".gsub(/./) {|s| s.ord.to_s + ' '}      #=> "104 101 108 108 111 "
-
-#group name example
-"hello".gsub(/(?<foo>[aeiou])/, '{\k<foo>}')  #=> "h{e}ll{o}"
-
-#hash example
-'hello'.gsub(/[eo]/, 'e' => 3, 'o' => '*')    #=> "h3ll*"		
+"abc".include?("a") => true
+"abc".include?("ab") => true
+"abc".include?("ac") => false
+"abc".include?("abc") => true
+"abc".include?("Abc") => false
+"abc".include?("abcd") => false
 ```
 
-#### `String#include?`
-**include? other_str → true or false**
-Returns `true` if _str_ contains the given string or character.
+[`#start_with?`](https://docs.ruby-lang.org/en/master/String.html#method-i-start_with-3F)\
+**start_with?(\[prefixes\]+) -> boolean**
+
+Returns true if `str` starts with one of the `prefixes` given. Each of the `prefixes` should be a `String` or a `Regexp`
 ```Ruby
-"hello".include? "lo"   #=> true	string example
-"hello".include? "ol"   #=> false	string example
-"hello".include? ?h     #=> true  	single_char example
+"hello".start_with?("hell")               #=> true
+"hello".start_with?(/H/i)                 #=> true
+
+# returns true if one of the prefixes matches.
+"hello".start_with?("heaven", "hell")     #=> true
+"hello".start_with?("heaven", "paradise") #=> false
+```
+<br>
+
+#### String - Iteration
+[`#chars`](https://docs.ruby-lang.org/en/master/String.html#method-i-chars)\
+**chars -> array**
+
+Returns an array whose elements are individual characters of `self`. Equivalent to `str.each_char.to_a`.
+
+
+[`#each_char`](https://docs.ruby-lang.org/en/master/String.html#method-i-each_char)\
+**each_char { |char| ... } -> self\
+**each_char -> enumerator**
+
+When called with a block, pass each character in sequence as a **new string** as arguments to the block and return `self` 
+```Ruby
+"hello".each_char {|c| print c, ' ' }
+
+# outputs
+h e l l o
 ```
 
-#### `String#index`
-**index(substring [, offset]) → integer or nil
-index(regexp [, offset]) → integer or nil**
-Returns the **index of the first occurrence** of the given _substring_ or pattern (_regexp_) in _str_. Returns `nil` if not found. If the second parameter is present, it specifies the position in the string to begin the search.
+
+[`#length`](https://docs.ruby-lang.org/en/master/String.html#method-i-length)\
+**length -> integer**
+
+Returns the count of characters in `self`. Alias for `String#size`
 ```Ruby
-"hello".index('e')             #=> 1
-"hello".index('lo')            #=> 3
-"hello".index('a')             #=> nil
-
-# Single character example using ?char
-"hello".index(?e)              #=> 1
-
-# offset example, start search from index -3, 
-# matched 'o', return its index in 'hello'
-"hello".index(/[aeiou]/, -3)   #=> 4
+"\x80\u3042".length # => 2
+"hello".length # => 5
 ```
 
-#### `String#insert`
-**insert(index, other_str) → str**
-Destructively inserts _other_str_ before the character at the given _index_, modifying _str_. Negative indices count from the end of the string, and insert _after_ the given character. The intent is insert _aString_ so that it starts at the given _index_.
-```Ruby
-# positive index, insert AT that index
-"abcd".insert(0, 'X')    #=> "Xabcd"
-"abcd".insert(3, 'X')    #=> "abcXd"
-"abcd".insert(4, 'X')    #=> "abcdX"
+[`#size`](https://docs.ruby-lang.org/en/master/String.html#method-i-size)\
+**size -> integer**
 
-# negative index, insert AFTER that index
-"abcd".insert(-3, 'X')   #=> "abXcd"
-"abcd".insert(-1, 'X')   #=> "abcdX"
+Returns the count of characters in `self`. Alias for `String#length`
+```Ruby
+"\x80\u3042".length # => 2
+"hello".length # => 5
 ```
 
-#### `String#intern` or `String#to_sym`
-**intern → symbol
-to_sym → symbol**
-Returns the `Symbol` corresponding to _str_, creating the symbol if it did not previously exist.
+
+[`#upto`](https://docs.ruby-lang.org/en/master/String.html#method-i-upto)\
+**upto(other_str, exclusive=false) { |string| ... } -> self\
+upto(other_str, exclusive=false) -> enumerator**
+
+When called with a block, pass strings of consecutive increments given by `String#succ` from `self` to `other_str` as arguments to the block and return `self`
 ```Ruby
-"Koala".intern         #=> :Koala
-s = 'cat'.to_sym       #=> :cat
-s == :cat              #=> true
-'cat and dog'.to_sym   #=> :"cat and dog"
+'a8'.upto('b6') {|s| print s, ' ' } # => "a8"
+
+# outputs
+# a8 a9 b0 b1 b2 b3 b4 b5 b6
+```
+If exclusive is assigned a truthy value, the last value is ommitted, similar to `(a...b)` 
+
+Block is not called if other_string cannot be reached.
+<br>
+
+#### String - Formatting
+[`#%`](https://docs.ruby-lang.org/en/master/String.html#method-i-25)\
+**string % object -> new_string**
+
+Returns the result of formatting `object` into the format specification `self`
+```Ruby
+"%05d" % 123 # => "00123"
 ```
 
-#### `String#length` or `String#size`
-**length → integer
-size → integer**
-Returns the character length of _str_.
-
-#### `String#ljust`
-**ljust(integer, padstr=' ') → new_str**
-If _integer_ is greater than the length of _str_, returns a new `String` of length _integer_ with _str_ left justified and padded with _padstr_; otherwise, returns _str_.
+If `self` specified >1 substitutions, `object` must be an Array or Hash containing the values to be substituted.
 ```Ruby
-# Example of integer < str.length
+"%-5s: %016x" % [ "ID", self.object_id ] # => "ID   : 00002b054ec93168"
+"foo = %{foo}" % {foo: 'bar'} # => "foo = bar"
+"foo = %{foo}, baz = %{baz}" % {foo: 'bar', baz: 'bat'} # => "foo = bar, baz = bat"
+```
+
+
+[`#center`](https://docs.ruby-lang.org/en/master/String.html#method-i-center)\
+**center(integer, padstr=" ") -> new_string**
+
+If integer > `self.length`, centers `self` and padd its left and right with `padstr` such that `new_string.length == integer`. Else return a new string with same value as `self`. 
+```Ruby
+"hello".center(4)         #=> "hello"
+"hello".center(20)        #=> "       hello        "
+"hello".center(20, '123') #=> "1231231hello12312312"
+```
+
+
+[`ljust`](https://docs.ruby-lang.org/en/master/String.html#method-i-ljust)\
+**ljust(integer, padstr=" ") -> new_string**
+
+If integer > `self.length`, left justify `self` and padd its right with `padstr` such that `new_string.length == integer`. Else return a new string with same value as `self`.
+```Ruby
 "hello".ljust(4)            #=> "hello"
-
-# Example of integer > str.length, default ' ' padding
 "hello".ljust(20)           #=> "hello               "
-
-# Example of different padding
 "hello".ljust(20, '1234')   #=> "hello123412341234123"
 ```
+<br>
 
-#### `String#lstrip` or `String#lstrip!`
-**lstrip → new_str**
-Returns a copy of the receiver with leading whitespace removed. See also [`String#rstrip`](https://docs.ruby-lang.org/en/2.6.0/String.html#method-i-rstrip) and [`String#strip`](https://docs.ruby-lang.org/en/2.6.0/String.html#method-i-strip).
+#### String - Matching
+[`#=~`](https://docs.ruby-lang.org/en/master/String.html#method-i-3D~)\
+**str =~ regex -> integer or nil\
+str =~ object -> integer or nil**
+
+Returns the index of the first character of the first substring match in string or `nil` if no match found. 
 ```Ruby
-"  hello  ".lstrip   #=> "hello  "
-"hello".lstrip       #=> "hello"
-```
-
-**lstrip! → self or nil**
-Removes leading whitespace from the receiver. Returns the altered receiver, or `nil` if no change was made.
-
-#### `String#match`
-**match(pattern) → matchdata or nil
-match(pattern, pos) → matchdata or nil**
-Converts _pattern_ to a `Regexp` (if it isn't already one), then invokes its `match` method on _str_. If the second parameter is present, it specifies the position in the string to begin the search.
-```Ruby
-'hello'.match('(.)\1')      #=> #<MatchData "ll" 1:"l">
-'hello'.match('(.)\1')[0]   #=> "ll"
-'hello'.match(/(.)\1/)[0]   #=> "ll"
-'hello'.match(/(.)\1/, 3)   #=> nil
-'hello'.match('xx')         #=> nil
-```
-
-If a block is given, invoke the block with [`MatchData`](https://docs.ruby-lang.org/en/2.6.0/MatchData.html) if match succeed. The return value is a value from block execution in this case.
-
-#### `String#match?`
-**match?(pattern) → true or false
-match?(pattern, pos) → true or false**
-Converts _pattern_ to a `Regexp` (if it isn't already one), then returns a `true` or `false` indicates whether the regexp is matched _str_ or not without updating `$~` and other related variables. If the second parameter is present, it specifies the position in the string to begin the search.
-```Ruby
-"Ruby".match?(/R.../)    #=> true
-
-# Index offset in string before match
-"Ruby".match?(/R.../, 1) #=> false
-
-"Ruby".match?(/P.../)    #=> false
-```
-
-#### `String#ord`
-**ord → integer**
-Returns the `Integer` ordinal of a one-character string.
-```Ruby
-"a".ord         #=> 97
+'foo' =~ /f/ # => 0
+'foo' =~ /o/ # => 1
+'foo' =~ /x/ # => nil
 ```
 
 
-#### `String#replace`
-**replace(other_str) → str**
-Replaces the contents and taintedness of _str_ with the corresponding values in _other_str_.
+[`#index`](https://docs.ruby-lang.org/en/master/String.html#method-i-index)\
+**index(substring, offset=0) -> integer or nil\
+index(regex, offset=0) -> integer or nil**
+
+Returns the index of the first character of the first substring match in string or `nil` if no match found. 
 ```Ruby
-s = "hello"         #=> "hello"
-s.replace "world"   #=> "world"
+#string
+'foo'.index('f') # => 0
+'foo'.index('o') # => 1
+'foo'.index('oo') # => 1
+'foo'.index('ooo') # => nil
+
+# regex
+'foo'.index(/f/) # => 0
+'foo'.index(/o/) # => 1
+'foo'.index(/oo/) # => 1
+'foo'.index(/ooo/) # => nil
 ```
 
-#### `String#reverse` or `String#reverse!`
-**reverse → new_str**
-Returns a new string with the characters from _str_ in reverse order.
+Integer argument `offset`, if given, specifies the position in the string to begin the search:
 ```Ruby
-"stressed".reverse   #=> "desserts"
+'foo'.index('o', 1) # => 1
+'foo'.index('o', 2) # => 2
+'foo'.index('o', 3) # => nil
 ```
 
-**reverse! → str**
-Reverses _str_ in place.
-
-#### `String#slice` or `String#[]` or `String#slice!`
-**slice(index) → new_str or nil
-slice(start, length) → new_str or nil
-slice(range) → new_str or nil
-slice(regexp) → new_str or nil
-slice(regexp, capture) → new_str or nil
-slice(match_str) → new_str or nil**
-
-Element Reference — If passed a single `index`, returns a substring of one character at that index. If passed a `start` index and a `length`, returns a substring containing `length` characters starting at the `start` index. If passed a `range`, its beginning and end are interpreted as offsets delimiting the substring to be returned.
-
-In these three cases, if an index is negative, it is counted from the end of the string. For the `start` and `range` cases the starting index is just before a character and an index matching the string's size. Additionally, an empty string is returned when the starting index for a character range is at the end of the string.
-
-Returns `nil` if the initial index falls outside the string or the length is negative.
-
-If a `Regexp` is supplied, the matching portion of the string is returned. If a `capture` follows the regular expression, which may be a capture group index or name, follows the regular expression that component of the [`MatchData`](https://docs.ruby-lang.org/en/2.6.0/MatchData.html) is returned instead.
-
-If a `match_str` is given, that string is returned if it occurs in the string.
-
-Returns `nil` if the regular expression does not match or the match string cannot be found.
+If `offset` is negative, counts backward from the end of `self`:
 ```Ruby
-a = "hello there"
-
-a[1]                   #=> "e"
-a[2, 3]                #=> "llo"
-a[2..3]                #=> "ll"
-
-a[-3, 2]               #=> "er"
-a[7..-2]               #=> "her"
-a[-4..-2]              #=> "her"
-a[-2..-4]              #=> ""
-
-a[11, 0]               #=> ""
-a[11]                  #=> nil
-a[12, 0]               #=> nil
-a[12..-1]              #=> nil
-
-a[/[aeiou](.)\1/]      #=> "ell"
-a[/[aeiou](.)\1/, 0]   #=> "ell"
-a[/[aeiou](.)\1/, 1]   #=> "l"
-a[/[aeiou](.)\1/, 2]   #=> nil
-
-a[/(?<vowel>[aeiou])(?<non_vowel>[^aeiou])/, "non_vowel"] #=> "l"
-a[/(?<vowel>[aeiou])(?<non_vowel>[^aeiou])/, "vowel"]     #=> "e"
-
-a["lo"]                #=> "lo"
-a["bye"]               #=> nil
+'foo'.index('o', -1) # => 2
+'foo'.index('o', -2) # => 1
+'foo'.index('o', -3) # => 1
+'foo'.index('o', -4) # => nil
 ```
 
-#### `String#split`
-**split(pattern=nil, [limit]) → an_array
+
+[`#match?`](https://docs.ruby-lang.org/en/master/String.html#method-i-match-3F)\
+**match?(pattern, offset=0) -> boolean**
+
+Returns `true` if the pattern (which can be a string or regex) is found in the string. Returns `false` otherwise. 
+```Ruby
+'foo'.match?(/o/) # => true
+'foo'.match?('o') # => true
+'foo'.match?(/x/) # => false
+```
+
+If Integer argument `offset` is given, the search begins at index `offset`:
+```Ruby
+'foo'.match?('f', 1) # => false
+'foo'.match?('o', 1) # => true
+```
+
+
+[`#scan`](https://docs.ruby-lang.org/en/master/String.html#method-i-scan)\
+**scan(pattern) → array\
+scan(pattern) {|match, ...| block } → str**
+
+Returns an array containing all the substrings that matches given pattern. Pattern can be a string or regex. If pattern contains groups, the matched substring is an array, nested in the return result array.
+
+```Ruby
+a = "cruel world"
+a.scan(/\w+/)        #=> ["cruel", "world"]
+a.scan(/.../)        #=> ["cru", "el ", "wor"]
+a.scan(/(...)/)      #=> [["cru"], ["el "], ["wor"]]
+a.scan(/(..)(..)/)   #=> [["cr", "ue"], ["l ", "wo"]]
+```
+
+Block form
+```Ruby
+a = "cruel world"
+a.scan(/\w+/) {|w| print "<<#{w}>> " }
+print "\n"
+a.scan(/(.)(.)/) {|x,y| print y, x }
+print "\n"
+
+# outputs
+<<cruel>> <<world>>
+rceu lowlr
+```
+<br>
+
+#### String - Substring
+[`#[]`](https://docs.ruby-lang.org/en/master/String.html#method-i-5B-5D)\
+**string[index] → new_string or nil\
+string[start, length] → new_string or nil\
+string[range] → new_string or nil\
+string[regexp, capture = 0] → new_string or nil\
+string[substring] → new_string or nil**
+
+Returns the substring of `self` specified by the arguments and `nil` if not found. Indices can be positive or negative (count from end of `self`) `String#[]` is an alias for `String#slice`. 
+
+
+[`#slice`](https://docs.ruby-lang.org/en/master/String.html#method-i-slice)\
+**slice(*args)**
+
+Returns the substring of `self` specified by the arguments. `String#slice` is an alias for `String#[]`.
+<br>
+
+#### String - Transformation
+[`#delete`](https://docs.ruby-lang.org/en/master/String.html#method-i-delete)\
+**delete([other_str]+) → new_str**
+
+Returns a new string with characters matching the intersections of string arguments deleted. Uses the same rules for building the set of characters as `String#count`
+```Ruby
+"hello".delete "l","lo"        #=> "heo" as delete "l"
+"hello".delete "lo"            #=> "he" as delete "lo"
+"hello".delete "aeiou", "^e"   #=> "hell" as delet "aiou"
+"hello".delete "ej-m"          #=> "ho" as delete "e" and "j" to "m"
+```
+
+Has `#delete!` version exists which deletes the string in-place and returns `self` or `nil` if no changes made.
+
+
+[`#gsub`](https://docs.ruby-lang.org/en/master/String.html#method-i-gsub)\
+**gsub(pattern, replacement) → new_string\
+gsub(pattern) {|match| ... } → new_string\
+gsub(pattern) → enumerator**
+
+Returns a copy of `self` with **all occurrences** of the given `pattern` replaced.
+```Ruby
+"zz22zz12zz12zz".gsub("12", "00")         # => "zz22zz00zz00zz"
+"zz22zz12zz12zz".gsub(/12/, "00")         # => "zz22zz00zz00zz"
+      
+"zz22zz12zz12zz".gsub(/12/) { |str| "00" }  # => "zz22zz00zz00zz"
+"zz22zz12zz12zz".gsub(/12/) { |str| nil }   # => "zz22zzzzzz"
+```
+
+[`#insert`](https://docs.ruby-lang.org/en/master/String.html#method-i-insert)\
+**insert(index, other_string) → self**
+
+Inserts the given `other_string` into `self`; returns `self`.
+
+If the Integer `index` is positive, inserts `other_string` at offset `index`:
+```Ruby
+'foo'.insert(1, 'bar') # => "fbaroo"
+```
+
+If the Integer `index` is **negative**, counts backward from the end of `self` and inserts `other_string` at offset `index+1` (that is, **_after_** `self[index]`):
+```Ruby
+'foo'.insert(-2, 'bar') # => "fobaro"
+```
+
+
+[`#split`](https://docs.ruby-lang.org/en/master/String.html#method-i-split)\
+**split(pattern=nil, [limit]) → an_array\
 split(pattern=nil, [limit]) {|sub| block } → str**
 
-Divides _str_ into substrings based on a delimiter, returning an array of these substrings.
-
-If _pattern_ is a `String`, then its contents are used as the delimiter when splitting _str_. If _pattern_ is a single space, _str_ is split on whitespace, with leading and trailing whitespace and runs of contiguous whitespace characters ignored.
-
-If _pattern_ is a `Regexp`, _str_ is divided where the pattern matches. Whenever the pattern matches a zero-length string, _str_ is split into individual characters. If _pattern_ contains groups, the respective matches will be returned in the array as well.
-
-If _pattern_ is `nil`, the value of `$;` is used. If `$;` is `nil` (which is the default), _str_ is split on whitespace as if ' ' were specified.
-
-If the _limit_ parameter is omitted, trailing null fields are suppressed. If _limit_ is a positive number, at most that number of split substrings will be returned (captured groups will be returned as well, but are not counted towards the limit). If _limit_ is `1`, the entire string is returned as the only entry in an array. If negative, there is no limit to the number of fields returned, and trailing null fields are not suppressed.
-
-When the input `str` is empty an empty [`Array`](https://docs.ruby-lang.org/en/2.6.0/Array.html) is returned as the string is considered to have no fields to split.
+Divides `str` into substrings based on pattern, which can be a `String` or a `Regex`
 ```Ruby
 " now's  the time ".split       #=> ["now's", "the", "time"]
 " now's  the time ".split(' ')  #=> ["now's", "the", "time"]
@@ -589,125 +1072,1048 @@ When the input `str` is empty an empty [`Array`](https://docs.ruby-lang.org/en/2
 
 "".split(',', -1)               #=> []
 ```
+If a block is given, invoke the block with each split substring.
 
-#### `String#squeeze`
+
+[`#sub`](https://docs.ruby-lang.org/en/master/String.html#method-i-sub)\
+**sub(pattern, replacement) → new_string\
+sub(pattern) {|match| ... } → new_string**
+
+- Returns a copy of `self` with only the **first** occurrence (not all occurrences) of the given `pattern` replaced
+- Can use "" in replacement to delete a pattern
+- Pattern can be `String` (exactly match) or `Regex`
+
+```Ruby
+"zz22zz12zz12zz".sub("12", "00")          # => "zz22zz00zz12zz"
+"zz22zz12zz12zz".sub(/12/, "00")          # => "zz22zz00zz12zz"
+      
+"zz22zz12zz2zz".sub(/12/) { |str| "00" }  # => "zz22zz00zz12zz"
+"zz22zz12zz12zz".sub(/12/) { |str| nil }  # => "zz22zzzz12zz"
+```
+
+Has `#sub!` version which modifies the string in-place and return `self` or `nil` if no changes made.
+<br>
+
+#### String - Type Conversion
+[`#to_i`](https://docs.ruby-lang.org/en/master/String.html#method-i-to_i)\
+**to_i(base = 10) → integer**
+
+Returns the result of interpreting leading characters in `self` as an integer in the given `base` (which must be in (2..36)):
+```Ruby
+'123456'.to_i     # => 123456
+'123def'.to_i(16) # => 1195503
+```
+
+
+[`#to_sym`](https://docs.ruby-lang.org/en/master/String.html#method-i-to_sym)\
+**to_sym -> symbol**
+
+Returns the `Symbol` corresponding to `self`, creating the symbol if it did not previously exist. Alias for `String#intern`
+```Ruby
+"Koala".intern         #=> :Koala
+s = 'cat'.to_sym       #=> :cat
+s == :cat              #=> true
+s = '@cat'.to_sym      #=> :@cat
+s == :@cat             #=> true
+```
+<br>
+
+#### String - Others
+[`#squeeze`](https://docs.ruby-lang.org/en/master/String.html#method-i-squeeze)\
 **squeeze([other_str]*) → new_str**
 
-Builds a set of characters from the _other_str_ parameter(s) using the procedure described for `String#count`. Returns a new string where runs of the same character that occur in this set are replaced by a single character. If no arguments are given, all runs of identical characters are replaced by a single character.
+Builds a set of characters from the `other_str` parameter(s) using the procedure described for `String#count`. Returns a new string where **contiguous runs of the same character** that occur in this set are **replaced by a single character**. If no arguments are given, all runs of identical characters are replaced by a single character.
 ```Ruby
 "yellow moon".squeeze                  #=> "yelow mon"
+"helloo ooo".squeeze				   #=> "helo o"
 "  now   is  the".squeeze(" ")         #=> " now is the"
 "putters shoot balls".squeeze("m-z")   #=> "puters shot balls"
 ```
 
-#### `String#start_with?`
-**start_with?([prefixes]+) → true or false**
+Has `String#squeeze!` version which modifies `self` in-place and return `self` or `nil` if no modifications are made.
 
-Returns true if `str` starts with one of the `prefixes` given. Each of the `prefixes` should be a [`String`](https://docs.ruby-lang.org/en/2.6.0/String.html) or a [`Regexp`](https://docs.ruby-lang.org/en/2.6.0/Regexp.html).
+
+[`#reverse`](https://docs.ruby-lang.org/en/master/String.html#method-i-reverse)\
+**reverse → new_string**
+
+Returns a new string with the characters from `self` in reverse order.
 ```Ruby
-"hello".start_with?("hell")               #=> true
-"hello".start_with?(/H/i)                 #=> true
-
-# returns true if one of the prefixes matches.
-"hello".start_with?("heaven", "hell")     #=> true
-"hello".start_with?("heaven", "paradise") #=> false
+'stressed'.reverse # => "desserts"
 ```
 
-#### `String#strip`
-**strip → new_str**
-Returns a copy of the receiver with leading and trailing whitespace removed.
-
-Whitespace is defined as any of the following characters: null, horizontal tab, line feed, vertical tab, form feed, carriage return, space.
-```Ruby
-"    hello    ".strip   #=> "hello"
-"\tgoodbye\r\n".strip   #=> "goodbye"
-"\x00\t\n\v\f\r ".strip #=> ""
-"hello".strip           #=> "hello"
-```
-
-#### `String#sub`
-**sub(pattern, replacement) → new_str
-sub(pattern, hash) → new_str
-sub(pattern) {|match| block } → new_str**
-
-Returns a copy of `str` with the **_first_** occurrence of `pattern` replaced by the second argument. The `pattern` is typically a [`Regexp`](https://docs.ruby-lang.org/en/2.6.0/Regexp.html); if given as a [`String`](https://docs.ruby-lang.org/en/2.6.0/String.html), any regular expression metacharacters it contains will be interpreted literally, e.g. `'\\d'` will match a backslash followed by 'd', instead of a digit.
-
-If `replacement` is a [`String`](https://docs.ruby-lang.org/en/2.6.0/String.html) it will be substituted for the matched text. It may contain back-references to the pattern's capture groups of the form `"\d"`, where _d_ is a group number, or `"\k<n>"`, where _n_ is a group name. If it is a double-quoted string, both back-references must be preceded by an additional backslash. However, within `replacement` the special match variables, such as `$&`, will not refer to the current match. If `replacement` is a [`String`](https://docs.ruby-lang.org/en/2.6.0/String.html) that looks like a pattern's capture group but is actually not a pattern capture group e.g. `"\'"`, then it will have to be preceded by two backslashes like so `"\\'"`.
-
-If the second argument is a [`Hash`](https://docs.ruby-lang.org/en/2.6.0/Hash.html), and the matched text is one of its keys, the corresponding value is the replacement string.
-
-In the block form, the current match string is passed in as a parameter, and variables such as `$1`, `$2`, ``$` ``, `$&`, and `$'` will be set appropriately. The value returned by the block will be substituted for the match on each call.
-
-The result inherits any tainting in the original string or any supplied replacement string.
-```Ruby
-"hello".sub(/[aeiou]/, '*')                  #=> "h*llo"
-"hello".sub(/([aeiou])/, '<\1>')             #=> "h<e>llo"
-"hello".sub(/./) {|s| s.ord.to_s + ' ' }     #=> "104 ello"
-"hello".sub(/(?<foo>[aeiou])/, '*\k<foo>*')  #=> "h*e*llo"
-'Is SHELL your preferred shell?'.sub(/[[:upper:]]{2,}/, ENV)
- #=> "Is /bin/bash your preferred shell?"
-```
-
-#### `String#swapcase` or `String#swapcase!`
-**swapcase → new_str
-swapcase([options]) → new_str**
-
-Returns a copy of _str_ with uppercase alphabetic characters converted to lowercase and lowercase characters converted to uppercase.
-
-See [`String#downcase`](https://docs.ruby-lang.org/en/2.6.0/String.html#method-i-downcase) for meaning of `options` and use with different encodings.
-```Ruby
-"Hello".swapcase          #=> "hELLO"
-"cYbEr_PuNk11".swapcase   #=> "CyBeR_pUnK11"
-```
-
-#### `String#upcase` or `String#upcase!`
-**upcase → new_str
-upcase([options]) → new_str**
-
-Returns a copy of _str_ with all lowercase letters replaced with their uppercase counterparts.
-
-See [`String#downcase`](https://docs.ruby-lang.org/en/2.6.0/String.html#method-i-downcase) for meaning of `options` and use with different encodings.
-```Ruby
-"hEllO".upcase   #=> "HELLO"
-```
-
-#### `String#upto`
-**upto(other_str, exclusive=false) {|s| block } → str
-upto(other_str, exclusive=false) → an_enumerator**
-
-Iterates through successive values, starting at _str_ and ending at _other_str_ inclusive, passing each value in turn to the block. The `String#succ` method is used to generate each value. If optional second argument exclusive is omitted or is false, the last value will be included; otherwise it will be excluded.
-
-If no block is given, an enumerator is returned instead.
-```Ruby
-"a8".upto("b6") {|s| print s, ' ' }
-for s in "a8".."b6"
-  print s, ' '
-end
-```
-_produces:_
-```Ruby
-a8 a9 b0 b1 b2 b3 b4 b5 b6
-a8 a9 b0 b1 b2 b3 b4 b5 b6
-```
-If _str_ and _other_str_ contains only ascii numeric characters, both are recognized as decimal numbers. In addition, the width of string (e.g. leading zeros) is handled appropriately.
-```Ruby
-"9".upto("11").to_a   #=> ["9", "10", "11"]
-"25".upto("5").to_a   #=> []
-"07".upto("11").to_a  #=> ["07", "08", "09", "10", "11"]
-```
-
-### Common Array Methods
-
-
-### Common Enumerable Methods
+Has `String#reverse!` version which modifies `self` in-place and return `self` or `nil` if no modifications are made.
+<br>
 
 ---
 
-### Notes
+### Array Methods
+#### Array - Querying
 
----
+[`length`](https://docs.ruby-lang.org/en/master/Array.html#method-i-length), [`size`](https://docs.ruby-lang.org/en/master/Array.html#method-i-size)\
+**size -> integer\
+length -> integer**
 
-### Questions/Cues
+Returns the count of elements. `length` and `size` are aliases.
+
+
+[`include?`](https://docs.ruby-lang.org/en/master/Array.html#method-i-include-3F)\
+**include?(an_object) -> boolean**
+
+Returns whether any element `==` a given object. Object could be any type e.g. a String, Integer, Array etc.
+
+
+[`empty?`](https://docs.ruby-lang.org/en/master/Array.html#method-i-empty-3F)\
+**empty? -> boolean**
+
+Returns `true` if there are no elements. Else `false`.
+
+
+[`all?`](https://docs.ruby-lang.org/en/master/Array.html#method-i-all-3F)\
+**all? -> boolean\
+all? { |element| block } -> boolean\
+all?(obj) → boolean**
+
+Returns `true` only when **all** elements/block return values are truthy or `==` given object. Else return `false`.
+```Ruby
+# array elements
+[1, 3, 5].all?	                     # => true
+[1, 3, 5, nil].all?                  # => false
+
+# block return values
+[1 ,3, 5].all? { |num| num.odd? }    # => true
+[1, 4, 7, 9].all? { |num| num.odd? } # => false
+
+# == object argument
+['food', 'fool', 'foot'].all?(/foo/) # => true
+['food', 'drink'].all?(/bar/) # => false
+[].all?(/foo/) # => true
+[0, 0, 0].all?(0) # => true
+[0, 1, 2].all?(1) # => false
+```
+
+
+[`any?`](https://docs.ruby-lang.org/en/master/Array.html#method-i-any-3F)
+**any? -> boolean\
+any? { |element| block } -> boolean\
+any?(obj) → boolean**
+
+Returns `true` when **at least 1** element/block return value is truthy or `==` given object. Else return `false`.
+```Ruby
+# array elements
+[nil, 3, false].any?	                # => true
+[false, nil, nil, nil].any?             # => false
+[].any?							        # => false
+
+# block return values
+[1 ,3, 5].any? { |num| num.even? }      # => false
+[1, 4, 7, 9].any? { |num| num.even? }   # => true
+
+# == object argument
+['food', 'drink'].any?(/foo/)           # => true
+['food', 'drink'].any?(/bar/)           # => false
+[0, 1, 2].any?(1)                       # => true
+[0, 1, 2].any?(3)                       # => false
+```
+
+
+[`none?`](https://docs.ruby-lang.org/en/master/Array.html#method-i-none-3F)\
+**none? -> boolean\
+none? { |element| ... } -> boolean\
+none?(obj) -> boolean**
+
+Returns `true` when none of the elements/block return values are truthy or `==` given object. Else return `false`
+
+[`one?`](https://docs.ruby-lang.org/en/master/Array.html#method-i-one-3F)\
+**one? -> boolean\
+one? { |element| ... } -> boolean\
+one?(obj) -> boolean**
+
+Returns `true` when exactly one element/block return value is truthy or `==` given object.
+```Ruby
+# array elements
+[nil, 0].one? # => true
+[0, 0].one? # => false
+[nil, nil].one? # => false
+[].one? # => false
+
+# block return values
+[0, 1, 2].one? {|element| element > 0 } # => false
+[0, 1, 2].one? {|element| element > 1 } # => true
+[0, 1, 2].one?(0) # => true
+[0, 0, 1].one?(0) # => false
+
+# == object argument
+['food', 'drink'].one?(/bar/) # => false
+['food', 'drink'].one?(/foo/) # => true
+```
+
+
+[`count`](https://docs.ruby-lang.org/en/master/Array.html#method-i-count)\
+**count → an_integer\
+count(obj) → an_integer
+count {|element| ... } → an_integer**
+
+Returns a count of either:
+- number of elements in array
+- number of elements in array `==` object
+- number of elements whose block return value is truthy
+```Ruby
+# size of array
+[0, 1, 2].count # => 3
+[].count # => 0
+
+# == object
+[0, 1, 2, 0.0].count(0) # => 2
+[0, 1, 2].count(3) # => 0
+
+# block return values
+[0, 1, 2, 3].count {|element| element > 1} # => 2
+```
+
+
+[`find_index`](https://docs.ruby-lang.org/en/master/Array.html#method-i-find_index), [`index`](https://docs.ruby-lang.org/en/master/Array.html#method-i-index)\
+**index(object) → integer or nil\
+index {|element| ... } → integer or nil\
+index → new_enumerator**
+
+Returns the index of the first element in array that
+- `==` object
+- whose block return value is truthy
+```Ruby
+# == object
+a = [:foo, 'bar', 2, 'bar']
+a.index('bar') # => 1
+
+# first block return value is truthy
+a = [:foo, 'bar', 2, 'bar']
+a.index {|element| element == 'bar' } # => 1
+```
+Or `nil` if not found.
+
+
+[`rindex`](https://docs.ruby-lang.org/en/master/Array.html#method-i-rindex)\
+**index(object) → integer or nil\
+index {|element| ... } → integer or nil\
+index → new_enumerator**
+
+Returns the index of the last element in array that
+- `==` object
+- whose block return value is truthy
+```Ruby
+# == object
+a = [:foo, 'bar', 2, 'bar']
+a.rindex('bar') # => 3
+
+# first block return value is truthy
+a = [:foo, 'bar', 2, 'bar']
+a.rindex {|element| element == 'bar' } # => 3
+```
+Or `nil` if not found.
+
+
+[`hash`](https://docs.ruby-lang.org/en/master/Array.html#method-i-hash)
+
+Returns the integer hash code.
+<br>
+
+#### Array - Comparing
+
+[`#<=>`](https://docs.ruby-lang.org/en/master/Array.html#method-i-3C-3D-3E)
+
+Returns -1, 0, or 1 as `self` is less than, equal to, or greater than a given object.
+
+[`#==`](https://docs.ruby-lang.org/en/master/Array.html#method-i-3D-3D)
+
+Returns whether each element in `self` is `==` to the corresponding element in a given object.
+
+[`eql?`](https://docs.ruby-lang.org/en/master/Array.html#method-i-eql-3F)
+
+Returns whether each element in `self` is `eql?` to the corresponding element in a given object.
+<br>
+
+#### Array - Fetching
+
+These methods do not modify `self`.
+
+[`[]`](https://docs.ruby-lang.org/en/master/Array.html#method-i-5B-5D)\
+**\[index\] -> element\
+\[start_index, size\] -> new_array\
+\[range\] -> new_array\
+
+Returns one or more elements.
+
+[`fetch`](https://docs.ruby-lang.org/en/master/Array.html#method-i-fetch)
+
+Returns the element at a given offset.
+
+[`first`](https://docs.ruby-lang.org/en/master/Array.html#method-i-first)
+
+Returns one or more leading elements.
+
+[`last`](https://docs.ruby-lang.org/en/master/Array.html#method-i-last)
+
+Returns one or more trailing elements.
+
+[`max`](https://docs.ruby-lang.org/en/master/Array.html#method-i-max)
+
+Returns one or more maximum-valued elements, as determined by `<=>` or a given block.
+
+[`max`](https://docs.ruby-lang.org/en/master/Array.html#method-i-max)
+
+Returns one or more minimum-valued elements, as determined by `<=>` or a given block.
+
+[`minmax`](https://docs.ruby-lang.org/en/master/Array.html#method-i-minmax)
+
+Returns the minimum-valued and maximum-valued elements, as determined by `<=>` or a given block.
+
+[`assoc`](https://docs.ruby-lang.org/en/master/Array.html#method-i-assoc)
+
+Returns the first element that is an array whose first element `==` a given object.
+
+[`rassoc`](https://docs.ruby-lang.org/en/master/Array.html#method-i-rassoc)
+
+Returns the first element that is an array whose second element `==` a given object.
+
+[`at`](https://docs.ruby-lang.org/en/master/Array.html#method-i-at)
+
+Returns the element at a given offset.
+
+[`values_at`](https://docs.ruby-lang.org/en/master/Array.html#method-i-values_at)
+
+Returns the elements at given offsets.
+
+[`dig`](https://docs.ruby-lang.org/en/master/Array.html#method-i-dig)
+
+Returns the object in nested objects that is specified by a given index and additional arguments.
+
+[`drop`](https://docs.ruby-lang.org/en/master/Array.html#method-i-drop)
+
+Returns trailing elements as determined by a given index.
+
+[`take`](https://docs.ruby-lang.org/en/master/Array.html#method-i-take)
+
+Returns leading elements as determined by a given index.
+
+[`drop_while`](https://docs.ruby-lang.org/en/master/Array.html#method-i-drop_while)
+
+Returns trailing elements as determined by a given block.
+
+[`take_while`](https://docs.ruby-lang.org/en/master/Array.html#method-i-take_while)
+
+Returns leading elements as determined by a given block.
+
+[`slice`](https://docs.ruby-lang.org/en/master/Array.html#method-i-slice)
+
+Returns consecutive elements as determined by a given argument.
+
+[`sort`](https://docs.ruby-lang.org/en/master/Array.html#method-i-sort)
+
+Returns all elements in an order determined by `<=>` or a given block.
+
+[`reverse`](https://docs.ruby-lang.org/en/master/Array.html#method-i-reverse)
+
+Returns all elements in reverse order.
+
+[`compact`](https://docs.ruby-lang.org/en/master/Array.html#method-i-compact)
+
+Returns an array containing all non-`nil` elements.
+
+[`select`](https://docs.ruby-lang.org/en/master/Array.html#method-i-select), [`filter`](https://docs.ruby-lang.org/en/master/Array.html#method-i-filter)
+
+Returns an array containing elements selected by a given block.
+
+[`uniq`](https://docs.ruby-lang.org/en/master/Array.html#method-i-uniq)
+
+Returns an array containing non-duplicate elements.
+
+[`rotate`](https://docs.ruby-lang.org/en/master/Array.html#method-i-rotate)
+
+Returns all elements with some rotated from one end to the other.
+
+[`bsearch`](https://docs.ruby-lang.org/en/master/Array.html#method-i-bsearch)
+
+Returns an element selected via a binary search as determined by a given block.
+
+[`bsearch_index`](https://docs.ruby-lang.org/en/master/Array.html#method-i-bsearch_index)
+
+Returns the index of an element selected via a binary search as determined by a given block.
+
+[`sample`](https://docs.ruby-lang.org/en/master/Array.html#method-i-sample)
+
+Returns one or more random elements.
+
+[`shuffle`](https://docs.ruby-lang.org/en/master/Array.html#method-i-shuffle)
+
+Returns elements in a random order.
+
+#### Array - Assigning
+
+These methods add, replace, or reorder elements in `self`.
+
+[`[]=`](https://docs.ruby-lang.org/en/master/Array.html#method-i-5B-5D-3D)
+
+Assigns specified elements with a given object.
+
+[`push`](https://docs.ruby-lang.org/en/master/Array.html#method-i-push), [`append`](https://docs.ruby-lang.org/en/master/Array.html#method-i-append), [`<<`](https://docs.ruby-lang.org/en/master/Array.html#method-i-3C-3C)
+
+Appends trailing elements.
+
+[`unshift`](https://docs.ruby-lang.org/en/master/Array.html#method-i-unshift), [`prepend`](https://docs.ruby-lang.org/en/master/Array.html#method-i-prepend)
+
+Prepends leading elements.
+
+[`insert`](https://docs.ruby-lang.org/en/master/Array.html#method-i-insert)\
+**insert(index, \*objects) -> self**
+
+Inserts given objects at a given index; does not replace elements.
+```Ruby
+# positive index
+a = [:foo, 'bar', 2]
+a.insert(1, :bat, :bam) # => [:foo, :bat, :bam, "bar", 2]
+
+# negative index
+a = [:foo, 'bar', 2]
+a.insert(-2, :bat, :bam)
+a # => [:foo, "bar", :bat, :bam, 2]
+
+# index beyond self.size
+a = [:foo, 'bar', 2]
+a.insert(5, :bat, :bam)
+a # => [:foo, "bar", 2, nil, nil, :bat, :bam]
+```
+
+
+[`concat`](https://docs.ruby-lang.org/en/master/Array.html#method-i-concat)\
+**concat(\*other_arrays) -> self**
+
+Appends all elements from `other_arrays` and return `self`.
+```Ruby
+a = [0, 1]
+a.concat([2, 3], [4, 5]) # => [0, 1, 2, 3, 4, 5]
+```
+
+
+[`fill`](https://docs.ruby-lang.org/en/master/Array.html#method-i-fill)
+
+Replaces specified elements with specified objects.
+
+[`replace`](https://docs.ruby-lang.org/en/master/Array.html#method-i-replace)\
+**replace(other_array) -> self**
+
+Replaces the content of `self` with the content of `other_array`.
+
+[`reverse!`](https://docs.ruby-lang.org/en/master/Array.html#method-i-reverse-21)
+
+Replaces `self` with its elements reversed.
+
+[`rotate!`](https://docs.ruby-lang.org/en/master/Array.html#method-i-rotate-21)
+
+Replaces `self` with its elements rotated.
+
+[`shuffle!`](https://docs.ruby-lang.org/en/master/Array.html#method-i-shuffle-21)
+
+Replaces `self` with its elements in random order.
+
+[`sort!`](https://docs.ruby-lang.org/en/master/Array.html#method-i-sort-21)
+
+Replaces `self` with its elements sorted, as determined by `<=>` or a given block.
+
+[`sort_by!`](https://docs.ruby-lang.org/en/master/Array.html#method-i-sort_by-21)
+
+Replaces `self` with its elements sorted, as determined by a given block.
+
+#### Array - Deleting
+Each of these methods removes elements from `self`:
+
+[`pop`](https://docs.ruby-lang.org/en/master/Array.html#method-i-pop)
+
+Removes and returns the last element.
+
+[`shift`](https://docs.ruby-lang.org/en/master/Array.html#method-i-shift)
+
+Removes and returns the first element.
+
+[`compact!`](https://docs.ruby-lang.org/en/master/Array.html#method-i-compact-21)
+
+Removes all non-`nil` elements.
+
+[`delete`](https://docs.ruby-lang.org/en/master/Array.html#method-i-delete)\
+**delete(object) -> object or nil**
+
+Removes all elements equal to a given object from `self` and return object or `nil` if object not present.
+```Ruby
+a = [5, 1, 2, 3, 5]
+a.delete(5)  # => 5
+a			 # => [1, 2, 3]
+a.delete(10) # => nil
+a			 # => [1, 2, 3]
+```
+
+
+[`delete_at`](https://docs.ruby-lang.org/en/master/Array.html#method-i-delete_at)\
+**delete_at(index) -> element or nil**
+
+Removes the element at a given index and return the element or `nil` if out of bound. Index can be positive or negative (starting at end of array).
+
+[`delete_if`](https://docs.ruby-lang.org/en/master/Array.html#method-i-delete_if)\
+**delete_if { |element| block } -> self**
+
+Remove elements that have truthy block return value. Return `self`.
+```Ruby
+a = [1, 2, 3]
+a.delete_if { |num| num == 2 } # => [1, 3]
+a							   # => [1, 3]
+```
+
+[`keep_if`](https://docs.ruby-lang.org/en/master/Array.html#method-i-keep_if)
+
+Removes elements whose block return value are falsy. Return `self`. Alias for `Array#select!`
+
+[`reject!`](https://docs.ruby-lang.org/en/master/Array.html#method-i-reject-21)
+
+Removes elements that have truthy block return value. Return `self`. Alias to `delete_if`.
+
+[`select!`](https://docs.ruby-lang.org/en/master/Array.html#method-i-select-21), [`filter!`](https://docs.ruby-lang.org/en/master/Array.html#method-i-filter-21)
+
+Removes elements not specified by a given block.
+
+[`slice!`](https://docs.ruby-lang.org/en/master/Array.html#method-i-slice-21)
+
+Removes and returns a sequence of elements.
+
+[`uniq!`](https://docs.ruby-lang.org/en/master/Array.html#method-i-uniq-21)
+
+Removes duplicates.
+<br>
+
+#### Array - Combining
+
+[#&](https://docs.ruby-lang.org/en/master/Array.html#method-i-26)\
+**array & other_array -> new_array**
+
+Returns an new array containing elements found both in `self` and other array, duplicates omitted. Order of `self` is preserved.
+```Ruby
+[3, 1, 2, 3, 2] & [2, 2, 3, 5, 3] # => [3, 2]
+```
+
+
+[`intersection`](https://docs.ruby-lang.org/en/master/Array.html#method-i-intersection)\
+**intersection(\*other_arrays) -> new_array**
+
+Returns an array containing common elements found in `self` and in **all** given arrays, duplicates ommitted.
+```Ruby
+[0, 1, 2, 3].intersection([0, 1, 2], [0, 1, 3]) # => [0, 1]
+[0, 0, 1, 1, 2, 3].intersection([0, 1, 2, 0], [0, 1, 3, 0]) # => [0, 1]
+```
+
+
+[`+`](https://docs.ruby-lang.org/en/master/Array.html#method-i-2B)\
+**self + other_array -> new_array**
+
+Returns a new array containing all elements of `self` followed by all elements of `other_array`.
+
+
+[`-`](https://docs.ruby-lang.org/en/master/Array.html#method-i-2D)\
+**self - other_array -> new_array**
+
+Returns a new array containing all elements of `self` that are not found in `other_array`.
+```Ruby
+a = [1, 4, 2, 3, 4, 5, 2]
+a - [5, 2, 5, 7]       # => [1, 4, 3, 4]
+a                      # => [1, 4, 2, 3, 4, 5, 2]
+```
+
+[#|](https://docs.ruby-lang.org/en/master/Array.html#method-i-7C)\
+**self | other_array -> new_array**
+
+Returns a new array containing all elements of `self` and all elements of `other_array`. Elements of `new_array` follow the order of `self` then `other_array`, duplicates removed.
+```Ruby
+a = [1, 2, 2, 3]
+b = [7, 7, 3, 2, 6]
+a | b  # => [1, 2, 3, 7, 6] 
+
+```
+
+
+[`union`](https://docs.ruby-lang.org/en/master/Array.html#method-i-union)\
+**union(\*other_arrays) -> new_array**
+
+Returns a new array containing all elements of `self` and all elements of **one or more arrays**, duplicates removed.
+```Ruby
+a = [1, 2, 2, 3]
+a.union([7, 7, 3, 2, 6], [11, 3, "3"]) # => [1, 2, 3, 7, 6, 11, "3"]
+a  # => [1, 2, 2, 3]
+```
+
+[`difference`](https://docs.ruby-lang.org/en/master/Array.html#method-i-difference)\
+**difference(\*other_arrays) -> new_array**
+
+Returns a new array containing all elements of `self` that are not found in any of the given arrays.
+```Ruby
+a = [1, 2, 2, 3]
+a.difference([5, 3], [1, 1, "2"]) # => [2, 2]
+a # => [1, 2, 2, 3]
+```
+
+[`product`](https://docs.ruby-lang.org/en/master/Array.html#method-i-product)\
+**product(\*other_arrays) -> new_array**
+
+Returns or yields all combinations of elements from `self` and given arrays.
+```Ruby
+a = [1, 2, 3]
+a.product([4, 5]) # => [[1, 4], [1, 5], [2, 4], [2, 5], [3, 4], [3, 5]]
+a  # => [1, 2, 3]
+
+[1, 2].product([3, 4], [5, 6]) # => [[1, 3, 5], [1, 3, 6], [1, 4, 5], [1, 4, 6], [2, 3, 5], [2, 3, 6], [2, 4, 5], [2, 4, 6]] 
+```
+<br>
+
+#### Array - Iterating
+
+[`each`](https://docs.ruby-lang.org/en/master/Array.html#method-i-each)
+
+Passes each element to a given block.
+
+[`reverse_each`](https://docs.ruby-lang.org/en/master/Array.html#method-i-reverse_each)
+
+Passes each element, in reverse order, to a given block.
+
+[`each_index`](https://docs.ruby-lang.org/en/master/Array.html#method-i-each_index)
+
+Passes each element index to a given block.
+
+[`cycle`](https://docs.ruby-lang.org/en/master/Array.html#method-i-cycle)
+
+Calls a given block with each element, then does so again, for a specified number of times, or forever.
+
+
+[`combination`](https://docs.ruby-lang.org/en/master/Array.html#method-i-combination)\
+**combination(n) {|element| ... } → self\
+combination(n) → new_enumerator**
+
+Takes an integer parameter `n` and calls a given block with combinations of elements of `self`; a combination does not use the same element more than once.
+```Ruby
+a = [0, 1, 2]
+a.combination(2) {|combination| p combination }
+# Output:
+[0, 1]
+[0, 2]
+[1, 2]
+
+
+#Another example:
+a = [0, 1, 2]
+a.combination(3) {|combination| p combination }
+# Output:
+[0, 1, 2]
+```
+
+
+[`permutation`](https://docs.ruby-lang.org/en/master/Array.html#method-i-permutation)\
+**permutation {|element| ... } → self\
+permutation(n) {|element| ... } → self\
+permutation → new_enumerator\
+permutation(n) → new_enumerator**
+
+Calls a given block with permutations of elements of `self`. The order of permutations is indeterminate. When `n` is not given, it permutates with `self.size`.
+```Ruby
+a = [0, 1, 2]
+a.permutation(2) {|permutation| p permutation }
+# output
+[0, 1]
+[0, 2]
+[1, 0]
+[1, 2]
+[2, 0]
+[2, 1]
+
+# n not given, permutates with n = self.size
+a.permutation {|permutation| p permutation }
+# output
+[0, 1, 2]
+[0, 2, 1]
+[1, 0, 2]
+[1, 2, 0]
+[2, 0, 1]
+[2, 1, 0]
+```
+
+
+[`repeated_combination`](https://docs.ruby-lang.org/en/master/Array.html#method-i-repeated_combination)\
+**repeated_combination(n) {|combination| ... } → self\
+repeated_combination(n) → new_enumerator**
+
+Calls a given block with combinations of elements of `self`; a combination may use the same element more than once.
+```Ruby
+a = [0, 1, 2]
+a.repeated_combination(1) {|combination| p combination }
+# output
+[0]
+[1]
+[2]
+
+
+# n = 2 
+a.repeated_combination(2) {|combination| p combination }
+# output
+[0, 0]
+[0, 1]
+[0, 2]
+[1, 1]
+[1, 2]
+[2, 2]
+```
+
+
+[`repeated_permutation`](https://docs.ruby-lang.org/en/master/Array.html#method-i-repeated_permutation)\
+**repeated_permutation(n) {|permutation| ... } → self
+repeated_permutation(n) → new_enumerator**
+
+Calls a given block with permutations of elements of `self`; a permutation may use the same element more than once.
+```Ruby
+# n = 1:
+a = [0, 1, 2]
+a.repeated_permutation(1) {|permutation| p permutation }
+# Output:
+[0]
+[1]
+[2]
+
+
+# n = 2:
+a.repeated_permutation(2) {|permutation| p permutation }
+# Output:
+[0, 0]
+[0, 1]
+[0, 2]
+[1, 0]
+[1, 1]
+[1, 2]
+[2, 0]
+[2, 1]
+[2, 2]
+```
+<br>
+
+#### Array - Converting
+
+[`map`](https://docs.ruby-lang.org/en/master/Array.html#method-i-map), [`collect`](https://docs.ruby-lang.org/en/master/Array.html#method-i-collect)
+
+Returns an array containing the block return-value for each element.
+
+[`map!`](https://docs.ruby-lang.org/en/master/Array.html#method-i-map-21), [`collect!`](https://docs.ruby-lang.org/en/master/Array.html#method-i-collect-21)
+
+Replaces each element with a block return-value.
+
+[`flatten`](https://docs.ruby-lang.org/en/master/Array.html#method-i-flatten)
+
+Returns an array that is a recursive flattening of `self`.
+
+[`flatten!`](https://docs.ruby-lang.org/en/master/Array.html#method-i-flatten-21)
+
+Replaces each nested array in `self` with the elements from that array.
+
+[`inspect`](https://docs.ruby-lang.org/en/master/Array.html#method-i-inspect), [`to_s`](https://docs.ruby-lang.org/en/master/Array.html#method-i-to_s)
+
+Returns a new [`String`](https://docs.ruby-lang.org/en/master/String.html) containing the elements.
+
+[`join`](https://docs.ruby-lang.org/en/master/Array.html#method-i-join)
+
+Returns a newsString containing the elements joined by the field separator.
+
+[`to_a`](https://docs.ruby-lang.org/en/master/Array.html#method-i-to_a)
+
+Returns `self` or a new array containing all elements.
+
+[`to_ary`](https://docs.ruby-lang.org/en/master/Array.html#method-i-to_ary)
+
+Returns `self`.
+
+[`to_h`](https://docs.ruby-lang.org/en/master/Array.html#method-i-to_h)
+
+Returns a new hash formed from the elements.
+
+[`transpose`](https://docs.ruby-lang.org/en/master/Array.html#method-i-transpose)
+
+Transposes `self`, which must be an array of arrays.
+
+[`zip`](https://docs.ruby-lang.org/en/master/Array.html#method-i-zip)
+
+Returns a new array of arrays containing `self` and given arrays; follow the link for details.
+
+#### Array - Others
+
+[`*`](https://docs.ruby-lang.org/en/master/Array.html#method-i-2A)
+
+Returns one of the following:
+
+-   With integer argument `n`, a new array that is the concatenation of `n` copies of `self`.
+    
+-   With string argument `field_separator`, a new string that is equivalent to `join(field_separator)`.
+    
+
+[`abbrev`](https://docs.ruby-lang.org/en/master/Array.html#method-i-abbrev)
+
+Returns a hash of unambiguous abbreviations for elements.
+
+[`pack`](https://docs.ruby-lang.org/en/master/Array.html#method-i-pack)
+
+Packs the elements into a binary sequence.
+
+[`sum`](https://docs.ruby-lang.org/en/master/Array.html#method-i-sum)
+
+Returns a sum of elements according to either `+` or a given block.
+### Hash Methods
+#### Hash - Querying
+
+[`any?`](https://docs.ruby-lang.org/en/master/Hash.html#method-i-any-3F)
+
+Returns whether any element satisfies a given criterion.
+
+[`compare_by_identity?`](https://docs.ruby-lang.org/en/master/Hash.html#method-i-compare_by_identity-3F)
+
+Returns whether the hash considers only identity when comparing keys.
+
+[`default`](https://docs.ruby-lang.org/en/master/Hash.html#method-i-default)
+
+Returns the default value, or the default value for a given key.
+
+[`default_proc`](https://docs.ruby-lang.org/en/master/Hash.html#method-i-default_proc)
+
+Returns the default proc.
+
+[`empty?`](https://docs.ruby-lang.org/en/master/Hash.html#method-i-empty-3F)
+
+Returns whether there are no entries.
+
+[`eql?`](https://docs.ruby-lang.org/en/master/Hash.html#method-i-eql-3F)
+
+Returns whether a given object is equal to `self`.
+
+[`hash`](https://docs.ruby-lang.org/en/master/Hash.html#method-i-hash)
+
+Returns the integer hash code.
+
+[`has_value?`](https://docs.ruby-lang.org/en/master/Hash.html#method-i-has_value-3F)
+
+Returns whether a given object is a value in `self`.
+
+[`include?`](https://docs.ruby-lang.org/en/master/Hash.html#method-i-include-3F), [`has_key?`](https://docs.ruby-lang.org/en/master/Hash.html#method-i-has_key-3F), [`member?`](https://docs.ruby-lang.org/en/master/Hash.html#method-i-member-3F), [`key?`](https://docs.ruby-lang.org/en/master/Hash.html#method-i-key-3F)
+
+Returns whether a given object is a key in `self`.
+
+[`length`](https://docs.ruby-lang.org/en/master/Hash.html#method-i-length), [`size`](https://docs.ruby-lang.org/en/master/Hash.html#method-i-size)
+
+Returns the count of entries.
+
+[`value?`](https://docs.ruby-lang.org/en/master/Hash.html#method-i-value-3F)
+
+Returns whether a given object is a value in `self`.
+
+#### Hash - Comparing
+
+[#<](https://docs.ruby-lang.org/en/master/Hash.html#method-i-3C)
+
+Returns whether `self` is a proper subset of a given object.
+
+[#<=](https://docs.ruby-lang.org/en/master/Hash.html#method-i-3C-3D)
+
+Returns whether `self` is a subset of a given object.
+
+[#==](https://docs.ruby-lang.org/en/master/Hash.html#method-i-3D-3D)
+
+Returns whether a given object is equal to `self`.
+
+[#>](https://docs.ruby-lang.org/en/master/Hash.html#method-i-3E)
+
+Returns whether `self` is a proper superset of a given object
+
+[#>=](https://docs.ruby-lang.org/en/master/Hash.html#method-i-3E-3D)
+
+Returns whether `self` is a proper superset of a given object.
+
+#### Hash - Fetching
+
+[`[]`](https://docs.ruby-lang.org/en/master/Hash.html#method-i-5B-5D)
+
+Returns the value associated with a given key.
+
+[`assoc`](https://docs.ruby-lang.org/en/master/Hash.html#method-i-assoc)
+
+Returns a 2-element array containing a given key and its value.
+
+[`dig`](https://docs.ruby-lang.org/en/master/Hash.html#method-i-dig)
+
+Returns the object in nested objects that is specified by a given key and additional arguments.
+
+[`fetch`](https://docs.ruby-lang.org/en/master/Hash.html#method-i-fetch)
+
+Returns the value for a given key.
+
+[`fetch_values`](https://docs.ruby-lang.org/en/master/Hash.html#method-i-fetch_values)
+
+Returns array containing the values associated with given keys.
+
+[`key`](https://docs.ruby-lang.org/en/master/Hash.html#method-i-key)
+
+Returns the key for the first-found entry with a given value.
+
+[`keys`](https://docs.ruby-lang.org/en/master/Hash.html#method-i-keys)
+
+Returns an array containing all keys in `self`.
+
+[`rassoc`](https://docs.ruby-lang.org/en/master/Hash.html#method-i-rassoc)
+
+Returns a 2-element array consisting of the key and value of the first-found entry having a given value.
+
+[`values`](https://docs.ruby-lang.org/en/master/Hash.html#method-i-values)
+
+Returns an array containing all values in `self`/
+
+[`values_at`](https://docs.ruby-lang.org/en/master/Hash.html#method-i-values_at)
+
+Returns an array containing values for given keys.
+
+#### Hash - Assigning
+
+[`[]=`](https://docs.ruby-lang.org/en/master/Hash.html#method-i-5B-5D-3D), [`store`](https://docs.ruby-lang.org/en/master/Hash.html#method-i-store)
+
+Associates a given key with a given value.
+
+[`merge`](https://docs.ruby-lang.org/en/master/Hash.html#method-i-merge)
+
+Returns the hash formed by merging each given hash into a copy of `self`.
+
+[`merge!`](https://docs.ruby-lang.org/en/master/Hash.html#method-i-merge-21), [`update`](https://docs.ruby-lang.org/en/master/Hash.html#method-i-update)
+
+Merges each given hash into `self`.
+
+[`replace`](https://docs.ruby-lang.org/en/master/Hash.html#method-i-replace)
+
+Replaces the entire contents of `self` with the contents of a givan hash.
+
+#### Hash - Deleting
+
+These methods remove entries from `self`:
+
+[`clear`](https://docs.ruby-lang.org/en/master/Hash.html#method-i-clear)
+
+Removes all entries from `self`.
+
+[`compact!`](https://docs.ruby-lang.org/en/master/Hash.html#method-i-compact-21)
+
+Removes all `nil`-valued entries from `self`.
+
+[`delete`](https://docs.ruby-lang.org/en/master/Hash.html#method-i-delete)
+
+Removes the entry for a given key.
+
+[`delete_if`](https://docs.ruby-lang.org/en/master/Hash.html#method-i-delete_if)
+
+Removes entries selected by a given block.
+
+[`filter!`](https://docs.ruby-lang.org/en/master/Hash.html#method-i-filter-21), [`select!`](https://docs.ruby-lang.org/en/master/Hash.html#method-i-select-21)
+
+Keep only those entries selected by a given block.
+
+[`keep_if`](https://docs.ruby-lang.org/en/master/Hash.html#method-i-keep_if)
+
+Keep only those entries selected by a given block.
+
+[`reject!`](https://docs.ruby-lang.org/en/master/Hash.html#method-i-reject-21)
+
+Removes entries selected by a given block.
+
+[`shift`](https://docs.ruby-lang.org/en/master/Hash.html#method-i-shift)
+
+Removes and returns the first entry.
+
+These methods return a copy of `self` with some entries removed:
+
+[`compact`](https://docs.ruby-lang.org/en/master/Hash.html#method-i-compact)
+
+Returns a copy of `self` with all `nil`-valued entries removed.
+
+[`except`](https://docs.ruby-lang.org/en/master/Hash.html#method-i-except)
+
+Returns a copy of `self` with entries removed for specified keys.
+
+[`filter`](https://docs.ruby-lang.org/en/master/Hash.html#method-i-filter), [`select`](https://docs.ruby-lang.org/en/master/Hash.html#method-i-select)
+
+Returns a copy of `self` with only those entries selected by a given block.
+
+[`reject`](https://docs.ruby-lang.org/en/master/Hash.html#method-i-reject)
+
+Returns a copy of `self` with entries removed as specified by a given block.
+
+[`slice`](https://docs.ruby-lang.org/en/master/Hash.html#method-i-slice)
+
+Returns a hash containing the entries for given keys.
+
+#### Hash - Iterating
+
+[`each`](https://docs.ruby-lang.org/en/master/Hash.html#method-i-each), [`each_pair`](https://docs.ruby-lang.org/en/master/Hash.html#method-i-each_pair)
+
+Calls a given block with each key-value pair.
+
+[`each_key`](https://docs.ruby-lang.org/en/master/Hash.html#method-i-each_key)
+
+Calls a given block with each key.
+
+[`each_value`](https://docs.ruby-lang.org/en/master/Hash.html#method-i-each_value)
+
+Calls a given block with each value.
+
+#### Hash - Converting
+
+[`inspect`](https://docs.ruby-lang.org/en/master/Hash.html#method-i-inspect), [`to_s`](https://docs.ruby-lang.org/en/master/Hash.html#method-i-to_s)
+
+Returns a new [`String`](https://docs.ruby-lang.org/en/master/String.html) containing the hash entries.
+
+[`to_a`](https://docs.ruby-lang.org/en/master/Hash.html#method-i-to_a)
+
+Returns a new array of 2-element arrays; each nested array contains a key-value pair from `self`.
+
+[`to_h`](https://docs.ruby-lang.org/en/master/Hash.html#method-i-to_h)
+
+Returns `self` if a Hash; if a subclass of Hash, returns a Hash containing the entries from `self`.
+
+[`to_hash`](https://docs.ruby-lang.org/en/master/Hash.html#method-i-to_hash)
+
+Returns `self`.
+
+[`to_proc`](https://docs.ruby-lang.org/en/master/Hash.html#method-i-to_proc)
+
+Returns a proc that maps a given key to its value.
+
+#### Hash - Transforming Keys and Values
+
+[`transform_keys`](https://docs.ruby-lang.org/en/master/Hash.html#method-i-transform_keys)
+
+Returns a copy of `self` with modified keys.
+
+[`transform_keys!`](https://docs.ruby-lang.org/en/master/Hash.html#method-i-transform_keys-21)
+
+Modifies keys in `self`
+
+[`transform_values`](https://docs.ruby-lang.org/en/master/Hash.html#method-i-transform_values)
+
+Returns a copy of `self` with modified values.
+
+[`transform_values!`](https://docs.ruby-lang.org/en/master/Hash.html#method-i-transform_values-21)
+
+Modifies values in `self`.
+
+#### Hash - Others
+
+[`flatten`](https://docs.ruby-lang.org/en/master/Hash.html#method-i-flatten)
+
+Returns an array that is a 1-dimensional flattening of `self`.
+
+[`invert`](https://docs.ruby-lang.org/en/master/Hash.html#method-i-invert)
+
+Returns a hash with the each key-value pair inverted.
+### Enumerable Methods
 
 
 
