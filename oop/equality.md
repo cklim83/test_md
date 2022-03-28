@@ -1,4 +1,4 @@
-# Equivalence
+# Equality
 
 ## Section Links
 [The `==` Instance Method](#the-`==`-instance-method)\
@@ -8,7 +8,7 @@
 
 ---
 
-There are different measures of equivalence for Ruby objects
+There are different measures of equality for Ruby objects
 
 ## The `==` Instance Method
 - `==` is **not** an operator but an instance method. `a == b` is actually syntactic sugar for `a.==(b)` for developers to write more naturally. `a` is the caller, `b` the argument and `==` the method invoked.

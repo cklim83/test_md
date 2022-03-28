@@ -247,7 +247,7 @@ puts(catty.age = 10)   # returns 10
 puts catty.age         # 20
 ```
 
-### Use attr_* to create getter and setter methods
+### Use `attr_*` to create getter and setter methods
 Ruby provides **`attr_accessor`** method that takes a **symbol** of the instance variable as argument to automatically create plain vanilla _getter_ and _setter_ methods. 
 
 `attr_reader` is used if only getter methods are required\
