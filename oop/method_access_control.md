@@ -44,9 +44,104 @@ end
 **Protected** methods are in between public and private methods and exhibit the following characteristics: 
 - Inside the class definition, `protected` methods are accessible just like public methods
 - Outside the class definition, `protected` methods act like private methods
-- Other objects of same class can invoke an `protected` method but not a `private` method of that class within the class definition (Differentiator between `protected` and `private` method)
+- Protected methods can be called by **any instance of the defining class or its subclasses** but private methods can only be called by the calling object `self`. We cannot access another objects' private method directly.
 
-**Example: `self` calling protected and private method in class definition**
+**Example 1**
+```Ruby
+class MyClass
+  ...
+  
+  def compare_to(x)
+    self.some_method <=> x.some_method
+  end
+  
+  protected
+  
+  def some_method
+    # ...
+  end
+end
+```
+`some_method` cannot be private but must be protected because we need it to support explicit receivers (`x` in this example). The typical internal helper methods can usually be private since they never need to be called this.
+
+
+**Example 2**
+```Ruby
+class Card
+  NON_NUMERIC_CARDS = { 
+    'Jack' => 11, 'Queen' => 12,
+    'King' => 13, 'Ace' => 14
+  }
+  
+  include Comparable      # will generate other comparison methods using <=>
+  
+  attr_reader :rank, :suit
+  
+  def initialize(rank, suit)
+    @rank = rank
+    @suit = suit
+  end
+  
+  def <=>(other_card)
+    self_rank = self.relative_rank
+    other_rank = other_card.relative_rank
+    
+    return 1 if self_rank > other_rank
+    return -1 if self_rank < other_rank
+    0
+  end
+  
+  protected
+  
+  def relative_rank
+    return rank unless rank.to_i == 0
+    NON_NUMERIC_CARDS[rank]
+  end
+end
+```
+Similarly, `relative_rank` has to be protected so that it can also be called upon by another instance of the same class `other_card` within the class definition. Otherwise a `NoMethodError` will be raised by `other_card.relative_rank` as we tried to call private method `relative_rank` in `<=>`.
+
+
+### Invoking Private Method With Self Prefix
+Before Ruby 2.7, private method cannot be invoked with a `self.` prefix.
+
+**Example: Calling Private Method With Self Prefix Pre Ruby 2.7**
+```Ruby
+class Animal
+  def public_protected_method
+    "Will this work? " + self.protected_method
+  end
+
+  def public_private_method_1
+    "Will this work? " + private_method
+  end
+		
+  def public_private_method_2
+    "Will this work? " + self.private_method
+  end
+		
+  protected
+
+  def protected_method
+    "Yes, I'm protected!"
+  end
+		
+  private
+		
+  def private_method
+    "Yes, I'm private!"
+  end
+end
+```
+
+```Ruby
+fido = Animal.new
+fido.public_protected_method  # => "Will this work? Yes, I'm protected!"    
+fido.public_private_method_1  # => "Will this work? Yes, I'm private!"
+fido.public_private_method_2  # => `public_private_method_2': private method `private_method' called for #<Animal:0x000000000114c598> (NoMethodError)
+```
+
+**Example: Calling Private Method With Self Prefix From Ruby 2.7 onwards**
 ```Ruby
 class Animal
   def public_protected_method
@@ -81,41 +176,4 @@ fido.public_protected_method  # => "Will this work? Yes, I'm protected!"
 fido.public_private_method_1  # => "Will this work? Yes, I'm private!"
 fido.public_private_method_2  # => "Will this work? Yes, I'm private!"
 ```
-
-**Note**: Prior to Ruby 2.7, `self.private_method` will have resulted in `NoMethodError`. However, we still **cannot** call a private method using another object of the same type in the class definition.
-
-**Example: Other object calling protected and private method in class definition**
-```Ruby
-class MyNumber
-  attr_reader :value
-
-  def initialize(value)
-    @value = value
-  end
-
-  def <=>(other)
-    return 1 if self > other
-	return 0 if self == other # self.==(other), where == is private
-	-1
-  end
-
-  protected
-
-  def >(other)
-    self.value > other.value
-  end
-
-  private
-
-  def ==(other)
-    self.value == other.value
-  end
-end
-```
-
-```Ruby
-MyNumber.new(100) <=> MyNumber.new(3)  # => 1
-MyNumber.new(10) <=> MyNumber.new(10)  # NoMethodError (private method `==' called for #<MyNumber:0x00007fdb4993b760 @value=10>
-```
-Within `<=>`, `self > other` works because `>` is a protected method. `self == other` results in `NoMethodError` because `==` is a private method.
 
