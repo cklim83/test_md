@@ -67,6 +67,8 @@ puts sparky.speak           # => Sparky says arf!
 puts paws.speak             # => Hello!
 ```
 
+[Back to top](#section-links)
+
 ## super
 Ruby provides the `super` keyword to call a same named method earlier in the method lookup path. In the example below, `super` within `GoodDog#speak` will invoke `Animal#speak` which will return `"Hello!"`. We then append additional text to generate `"Hello! from GoodDog class"`.
 ```ruby
@@ -140,6 +142,8 @@ bear = Bear.new("black")        # => #<Bear:0x007fb40b1e6718 @color="black">
 ```
 In example 3, `super()` within `Bear#initialize` imply that `Animal#initialize` is invoked with no argument passed in.
 
+[Back to top](#section-links)
+
 ## Mixing in Modules
 For behaviors that does not fit nicely into a hierarchical structure, modules can be used to house common methods applicable to some classes so that code need not be repeated. We can then include (i.e. mixin) these modules into those classes to grant them those methods.
 ```ruby
@@ -179,6 +183,7 @@ paws.swim                   # => NoMethodError: undefined method `swim' for #<Ca
 
 Modules are commonly named using a verb describing the behaviors + 'able' suffix e.g. `Walkable`, `Swimmable`.
 
+[Back to top](#section-links)
 
 ## Inheritance vs Modules
 **Class inheritance** refers to the inheritance of behaviors from another type, resulting in the creation of a new type that specializes the superclass.
@@ -191,6 +196,7 @@ Considerations when choosing between class inheritance vs mixins:
 - Use class inheritance for "is-a" relationship, interface inheritance for "has-a" relationship
 - We cannot create objects from modules, they are only used for namespacing and grouping common methods together.
 
+[Back to top](#section-links)
 
 ## Method Lookup Path
 Method lookup path is the **search order** in which classes and mixin modules are inspected when we call a method. To get the lookup path in array form, we can invoke the class method `::ancestors` on the class of interest
@@ -278,6 +284,8 @@ BasicObject
 - Order of module inclusion matters. When multiple modules are included, the **last** included module is searched **first**. Hence `Climbable` appear before `Swimmable` in the method lookup path. 
 - Lookup path includes modules included in super class.
 
+[Back to top](#section-links)
+
 ## Modules for Namespacing
 Namespacing involves the grouping of similar classes using a module to reduce the chance of collision with similarly named classes.
 ```ruby
@@ -324,6 +332,7 @@ value = Mammal.some_out_of_place_method(4)
 value = Mammal::some_out_of_place_method(4)
 ```
 
+[Back to top](#section-links)
 
 ## Accidental Method Overriding
 Every class we create inherently subclass from class `Object`. We confirm this using by invoking the class method `::superclass` on the class of interest.
@@ -404,6 +413,6 @@ from (pry):22:in `instance_of?'
 
 The only instance method from `Object` that is useful to override is `to_s` to allow us to format the output in a useful way. It is important to familiarize ourselves with common `Object` methods so that we do not override them unintentionally and lose critical functionality.
 
-
+[Back to top](#section-links)
 
 
