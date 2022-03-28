@@ -44,7 +44,7 @@ end
 **Protected** methods are in between public and private methods and exhibit the following characteristics: 
 - Inside the class definition, `protected` methods are accessible just like public methods
 - Outside the class definition, `protected` methods act like private methods
-- Protected methods can be called by **any instance of the defining class or its subclasses** but private methods can only be called by the calling object `self`. We cannot access another objects' private method directly.
+- Protected methods can be called by **any instance (self or otherwise) of the defining class or its subclasses** but private methods can only be called by `self` in the class definition. We cannot access another objects' private method directly.
 
 **Example 1**
 ```Ruby
@@ -62,7 +62,7 @@ class MyClass
   end
 end
 ```
-`some_method` cannot be private but must be protected because we need it to support explicit receivers (`x` in this example). The typical internal helper methods can usually be private since they never need to be called this.
+`some_method` cannot be private but must be protected so that another instance `x` can also call it in the class definition. Helper methods that need not be called by other instances can be private.
 
 
 **Example 2**

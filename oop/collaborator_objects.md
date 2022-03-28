@@ -5,8 +5,8 @@
 These objects are called collaborators because they **work in conjunction (collaborate) with the class they are associated with**. The methods of these collaborator objects are available for use to perform required actions
 
 Collaborator objects can be:
-- **Custom**: objects of classes that user defined and not part of the standard ruby library
-- **Non-custom**: objects of standard ruby classes such as `String`, `Integer`, `Array` and `Hash`
+- **Custom**: objects of classes that are user defined and not part of the standard Ruby library
+- **Non-custom**: objects of standard Ruby classes such as `String`, `Integer`, `Array` and `Hash`
 
 Collaborators objects allow us to chop up and modularize the problem domain into cohesive pieces and play an important role in modelling complicated problem domain.
 
