@@ -30,10 +30,10 @@ sara = Person.new("Sara")
 fluffy = Cat.new("Fluffy", sara)
 ```
 Identify all **custom defined objects** that act as collaborator objects within the code. Select all that apply.
-	1. The `Person` object referenced by the variable `sara`
-	2. `"Sara"`
-	3. The `Cat` object referenced by the variable `fluffy`
-	4. `"Fluffy"`
+1. The `Person` object referenced by the variable `sara`
+2. `"Sara"`
+3. The `Cat` object referenced by the variable `fluffy`
+4. `"Fluffy"`
 
 Answer:
 Only **1** is correct
