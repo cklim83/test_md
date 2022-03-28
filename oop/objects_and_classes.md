@@ -10,7 +10,7 @@
 [Class Methods](#class-methods)\
 [Class Variables](#class-variables)\
 [Constants](#constants)\
-[to_s Method](#to-s-method)\
+[to_s Method](#to_s-method)\
 [More About self](#more-about-self)
 
 ---
@@ -247,6 +247,7 @@ puts(catty.age = 10)   # returns 10
 puts catty.age         # 20
 ```
 
+### Use attr_* to create getter and setter methods
 Ruby provides **`attr_accessor`** method that takes a **symbol** of the instance variable as argument to automatically create plain vanilla _getter_ and _setter_ methods. 
 
 `attr_reader` is used if only getter methods are required\
@@ -299,6 +300,7 @@ def ssn
 end
 ```
 
+### Calling Methods With Self
 Unlike getter methods, setter methods needs the `self` prefix when used in instance methods to let Ruby know we are invoking setter methods. Without that, it will be perceived as local variable assignments
 ```ruby
 def change_info(n, h, w)
