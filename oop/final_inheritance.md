@@ -414,5 +414,3 @@ from (pry):22:in `instance_of?'
 The only instance method from `Object` that is useful to override is `to_s` to allow us to format the output in a useful way. It is important to familiarize ourselves with common `Object` methods so that we do not override them unintentionally and lose critical functionality.
 
 [Back to top](#section-links)
-
-
