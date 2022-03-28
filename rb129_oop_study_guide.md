@@ -1,7 +1,7 @@
 # OOP Study Guide
 
 [Classes and Objects](./oop/objects_and_classes.md)\
-[Use attr_* to create getter and setter methods](./oop/objects_and_classes.md#use-`attr_*`-to-create-getter-and-setter-methods)\
+[Use attr_* to create getter and setter methods](./oop/objects_and_classes.md#use-attr_-to-create-getter-and-setter-methods)\
 [How to call setters and getters](./oop/objects_and_classes.md#accessor-methods)\
 [Instance methods](./oop/objects_and_classes.md#instance-methods) vs [class methods](./oop/objects_and_classes.md#class-methods)\
 [Method Access Control](./oop/method_access_control.md)\
