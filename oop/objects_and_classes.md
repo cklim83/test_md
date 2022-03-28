@@ -15,6 +15,7 @@
 
 ---
 
+
 ## Objects
 In Ruby, anything with a **value** is an object: that include numbers, strings, arrays, even _classes and modules_. The following are however **not** objects: methods, blocks and variables.
 
@@ -57,6 +58,7 @@ irb :002 > "world".class
 
 [Back to top](#section-links)
 
+
 ## Classes
 In Ruby, a class definition outline states and behaviours of objects constructed from that class. States track attributes for individual objects while behaviors describe what those objects can do. **Instance variables** keep track of state and **instance methods** expose behaviors for objects.
 
@@ -71,6 +73,7 @@ end
 
 [Back to top](#section-links)
 
+
 ## Initializing a New Object
 We can instantiate an object from a class using the `::new` class method. This will invoke the `initialize` method (aka constructor) of that class under the hood with any arguments forwarded to create the object.
 ```Ruby
@@ -84,6 +87,7 @@ sparky = GoodDog.new        # => "This object was initialized!"
 ```
 
 [Back to top](#section-links)
+
 
 ## Instance Variables
 Instance variables are prepended with `@` symbol and allows data to be tied to objects. They are responsible for tracking states (values) of an object and exists as long as the object instance exists.
@@ -122,6 +126,7 @@ puts fido.speak             # => Fido says arf!
 They have direct access to instance variables (and also constants and class variables) defined within a class
 
 [Back to top](#section-links)
+
 
 ## Accessor Methods
 To allow an object to access the value of an instance variable, we need to define accessor method for that instance variable. Without that, a `NoMethodError` will be raised
@@ -335,6 +340,7 @@ end
 
 [Back to top](#section-links)
 
+
 ## Class Methods
 Class methods are methods we call directly on the class itself, without the need to instantiate any objects. Their method name are prepended with the reserved keyword `self.`
 ```ruby
@@ -349,6 +355,7 @@ GoodDog.what_am_i          # => I'm a GoodDog class!
 Class methods are used for functionality not pertaining to individual objects (and their states).
 
 [Back to top](#section-links)
+
 
 ## Class Variables
 Class variables, prepended by `@@`, are used to capture information for an entire class. The class and all objects of that class refer to a **single instance** of that class variable.
@@ -384,6 +391,7 @@ puts dog2.dog_count                 # => 2
 
 [Back to top](#section-links)
 
+
 ## Constants
 Constants are used in classes to reference values that never need to change. Although only the first letter of the variable name need to be in upper case, it is common for the entire variable name to be in caps. A warning will be raised by Ruby if they are reassigned to a new value.
 ```ruby
@@ -413,6 +421,7 @@ GoodDog.print_constant      # => 7
 ```
 
 [Back to top](#section-links)
+
 
 ## to_s Method
 `to_s` instance method is available to every class in Ruby through inheritance from the root `Object` class. This default implementation output the Class name followed by an encoding of the object's id.
@@ -449,6 +458,7 @@ p sparky         # => #<GoodDog:0x007fe54229b358 @name="Sparky", @age=28>
 ```
 
 [Back to top](#section-links)
+
 
 ## More About self
 - `self` allows Ruby to disambiguate between initializing a local variable and calling a setter method

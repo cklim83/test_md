@@ -44,6 +44,7 @@ puts dog.greeting # Displays: Barny says Woof Woof!
 ```
 Users of `Dog` class need not know how it is implemented. They just need to be know they can change a dog object's nickname through `change_nickname` and also get a greeting message in the form of a string through a `greeting` method call. While users can retrieve a dog's nickname using the `nickname` method call, the developer can also protect the object's state by returning a clone of the instance variable, a safety feature that the user need not know.
 
+[Back to top](#section-links)
 
 ## Polymorphism
 Polymorphism refers to the phenomenon where different object types can respond to a **common method invocation**. To achieve this, participating classes would need to implement that common interface. 
@@ -171,5 +172,4 @@ end
 - All classes implements a common `prepare_wedding` method with the same signature. When invoking this method, there is no need to check the specific type of an object.
 - In the duck idiom, we do not need to check whether an object is truly a duck. As long as it behaves like a duck, it is as good as a real duck.
 
-
-
+[Back to top](#section-links)

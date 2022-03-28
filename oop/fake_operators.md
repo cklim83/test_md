@@ -11,7 +11,6 @@
 ---
 
 
-
 ## List of Operators and Methods
 In Ruby, many methods are written to look like operators due to **syntactic sugar**. `==` is one example. Because they are methods, we can implement them in our classes and take advantage of the special syntax for our own objects. When we do that, we must be careful to follow conventions established in the Ruby standard library. Otherwise, using those methods will be very confusing.
 
@@ -36,7 +35,13 @@ In the table below, we show which operators are real operators and which are met
 |no| `? :` | Ternary if-then-else |
 |no| `=`, `%=`, `/=`, `-=`, `+=`, `!=`, `&=`, `>>=`, `<<=`, `*=`, `&&=`, `!!=`, `**=`, `{` | Assignment(and shortcuts) and block delimiter |
 
-## Equality Methods
+[Back to top](#section-links)
+
+
+## [Equality Methods](./equality.md)
+
+[Back to top](#section-links)
+
 
 ## Comparison Methods
 Implementing comparison methods allow us to compare objects.
@@ -62,6 +67,8 @@ puts "bob is older than kim" if bob > kim
 ```
 
 In Ruby, if we implement `<=>` method that returns `-1, 0, 1 or nil`, and we include [`Comparable`](https://docs.ruby-lang.org/en/3.1/Comparable.html) module in our custom class, we get all comparison methods `<`, `<=`, `==`, `>=`, and `>`) and the method `between?` for free.
+
+[Back to top](#section-links)
 
 
 ## The `<<` and `>>` Shift Methods
@@ -98,6 +105,9 @@ def <<(person)
   members.push person
 end
 ```
+
+[Back to top](#section-links)
+
 
 ## The Plus Method
 ```ruby
@@ -156,6 +166,9 @@ puts dream_team.inspect                     # => #<Team:0x007fac3b9eb878 @name="
 
 In our `Team` class, we use `Array#+` within `Team#+` to concatenate the members, then return it as a new Team object to follow the `+` convention.
 
+[Back to top](#section-links)
+
+
 ## Element Setter and Getter Methods
 `[]` and `[]=` commonly used to retrieve and set array elements are actually getter and setter instance methods `Array#[]` and `Array#[]=`. `arr[n]` is actually `arr.[](n)` and `arr[n]=value` is actually `arr.[]=(n, value)`
 ```ruby
@@ -197,3 +210,5 @@ cowboys[1]                                # => #<Person:0x007fae9295d830 @name="
 cowboys[3] = Person.new("JJ", 72)
 cowboys[3]                                # => #<Person:0x007fae9220fa88 @name="JJ", @age=72>
 ```
+
+[Back to top](#section-links)

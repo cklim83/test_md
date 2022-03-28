@@ -1,10 +1,10 @@
 # Equality
 
 ## Section Links
-[The `==` Instance Method](#the-`==`-instance-method)\
-[The `equal?` Instance Method](#the-`equal?`-instance-method)\
-[The `===` Instance Method](#the-`===`-instance-method)\
-[The `eql?` Instance Method](#the-`eql?`-instance-method)
+[The `==` Instance Method](#the--instance-method)\
+[The `equal?` Instance Method](#the-equal-instance-method)\
+[The `===` Instance Method](#the--instance-method-1)\
+[The `eql?` Instance Method](#the-eql-instance-method)
 
 ---
 
@@ -100,6 +100,9 @@ There are different measures of equality for Ruby objects
 
 - When we define `==`, we automatically get `!=` for free.
 
+[Back to top](#section-links)
+
+
 ## The `equal?` Instance Method
 - The `equal?` is more stringent than `==` and only returns `true` if two variables are referencing the **same object**.
 
@@ -143,6 +146,8 @@ There are different measures of equality for Ruby objects
 	Note: Objects of `Integer` and `Symbol` are unique in the sense that **if they share the same value, they are the same object**, as seen by their object_ids. This is because they occupy the specific section of the memory block. Hence they are more memory efficient data structures. This does not apply to other object types e.g. arrays and strings.
 
 - Unlike `==`, the `equal?` method should never be overridden by subclasses as it is used to establish object identity (i.e. `a.equal?(b)` if and only if `a` is the same object as `b`)
+
+[Back to top](#section-links)
 
 
 ## The `===` Instance Method
@@ -197,8 +202,12 @@ Abc === Abc.new # true
 Abc === Abc #false
 ```
 
+[Back to top](#section-links)
+
+
 ## The `eql?` Instance Method
 - The `eql?` method determine if two objects contain the same value and are of the same class.
 
 - Used implicity by `Hash` to determine equality among its members. Two hashes are equal if they contain the same keys (even if they are in different order) and each key associates with the same value. It is very rarely used explicitly.
 
+[Back to top](#section-links)
