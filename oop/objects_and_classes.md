@@ -19,7 +19,7 @@
 In Ruby, anything with a **value** is an object: that include numbers, strings, arrays, even _classes and modules_. The following are however **not** objects: methods, blocks and variables.
 
 ```Ruby
-# Testing objects using Object#is_a?
+# Testing whether something is an object using Object#is_a?
 
 'hello'.is_a?(Object)             # => true
 0.is_a?(Object)                   # => true
@@ -42,9 +42,9 @@ my_object = EmptyClass.new
 my_object.is_a?(Object)           # => true
 ```
 
-Objects are created from classes (the latter also Objects)
+Objects are created from classes (the latter are also Objects)
 
-**Class** = template/mold for making objects
+**Class** = template/mold for making objects\
 **Object** = something made from a template/mold
 
 Individual objects can contain different information (i.e. states), even when they are instances of the same class
@@ -55,10 +55,12 @@ irb :002 > "world".class
 => String
 ```
 
-## Classes
-In Ruby, a class definition outlines the states and behaviours of objects constructed from that class. States track attributes for individual objects while behaviors describe what those objects can do. **Instance variables** keep track of state and **instance methods** expose behaviors for objects.
+[Back to top](#section-links)
 
-Classes are defined within the `class` ... `end` keywords. Their names should be **CamelCase** and the files should be named in **snake_case** and reflects the class name
+## Classes
+In Ruby, a class definition outline states and behaviours of objects constructed from that class. States track attributes for individual objects while behaviors describe what those objects can do. **Instance variables** keep track of state and **instance methods** expose behaviors for objects.
+
+Classes are defined within `class` ... `end` keywords. Their names should be in **CamelCase** and containing files in **snake_case** reflecting the class name. 
 
 ```ruby
 # good_dog.rb
@@ -67,8 +69,10 @@ class GoodDog
 end
 ```
 
+[Back to top](#section-links)
+
 ## Initializing a New Object
-We can instantiate a object from a class using the `::new` class method. This will in turn invoke the `initialize` method (aka constructor) of that class under the hood with arguments forwarded to create the object.
+We can instantiate an object from a class using the `::new` class method. This will invoke the `initialize` method (aka constructor) of that class under the hood with any arguments forwarded to create the object.
 ```Ruby
 class GoodDog
   def initialize
@@ -79,8 +83,10 @@ end
 sparky = GoodDog.new        # => "This object was initialized!"
 ```
 
+[Back to top](#section-links)
+
 ## Instance Variables
-Instance variables are prepended with an `@` symbol and is how data are tied to objects. They are responsible for tracking the states (values) of an object and exists as long as the object instance exists.
+Instance variables are prepended with `@` symbol and allows data to be tied to objects. They are responsible for tracking states (values) of an object and exists as long as the object instance exists.
 
 ```ruby
 class GoodDog
@@ -91,10 +97,12 @@ end
 
 sparky = GoodDog.new("Sparky")
 ```
-In above example, the string `"Sparky"` is passed to the `initalize` method via the `new` method and assigned to local variable `name`. Within the body of `initialize`, we initialize the instance variable `@name` to reference the same string referenced by `name`.
+In above example, the string `"Sparky"` is passed to the `initialize` method via the `new` method and assigned to local variable `name`. Within the body of `initialize`, we initialize the instance variable `@name` to reference the same string referenced by `name`.
+
+[Back to top](#section-links)
 
 ## Instance Methods
-Instance methods are methods that can be invoked by instances of a class. 
+Instance methods are methods that can be invoked by instances of a class.
 ```ruby
 class GoodDog
   def initialize(name)
@@ -112,6 +120,8 @@ fido = GoodDog.new("Fido")
 puts fido.speak             # => Fido says arf!
 ```
 They have direct access to instance variables (and also constants and class variables) defined within a class
+
+[Back to top](#section-links)
 
 ## Accessor Methods
 To allow an object to access the value of an instance variable, we need to define accessor method for that instance variable. Without that, a `NoMethodError` will be raised
@@ -194,7 +204,7 @@ class Cat
 	
   def name=(n)
     return "test"             # ignored as return value
-	@name = n				  # not executed due to return 
+    @name = n				          # not executed due to return 
   end
 end
 
@@ -210,8 +220,8 @@ class Cat
   end
 	
   def name=(n)
-	@name = n				 # bind @name to object referenced by n
-	n[0] = '!'				 # mutate object reference by n
+    @name = n				         # bind @name to object referenced by n
+    n[0] = '!'				       # mutate object reference by n
   end
 end
 
@@ -225,9 +235,10 @@ class Cat
   def age
     @age
   end
+  
   def age=(n)
-	n = 20			   # reassignment don't change return value
-	@age = n		   # @age set to reassigned value
+    n = 20			             # reassignment don't change return value
+    @age = n		             # @age set to reassigned value
   end
 end
 
@@ -236,9 +247,9 @@ puts(catty.age = 10)   # returns 10
 puts catty.age         # 20
 ```
 
-Ruby provides `attr_accessor` method that takes a symbol of the instance variable as argument to automatically create plain vanilla _getter_ and _setter_ methods. 
+Ruby provides **`attr_accessor`** method that takes a **symbol** of the instance variable as argument to automatically create plain vanilla _getter_ and _setter_ methods. 
 
-`attr_reader` is used if only getter methods are required 
+`attr_reader` is used if only getter methods are required\
 `attr_writer` is used if only setter methods are required
 
 ```ruby
@@ -288,7 +299,7 @@ def ssn
 end
 ```
 
-Unlike getter methods, setter methods needs `self` prefix when used in instance methods to let Ruby know we are invoking setter methods. Without which they will be perceived as local variable assignments
+Unlike getter methods, setter methods needs the `self` prefix when used in instance methods to let Ruby know we are invoking setter methods. Without that, it will be perceived as local variable assignments
 ```ruby
 def change_info(n, h, w)
   self.name = n
@@ -320,9 +331,10 @@ class GoodDog
 end
 ```
 
+[Back to top](#section-links)
 
 ## Class Methods
-Class methods are methods we call directly on the class itself, without the need to instantiate any objects. Their method name are prepended with the reserved word `self.`
+Class methods are methods we call directly on the class itself, without the need to instantiate any objects. Their method name are prepended with the reserved keyword `self.`
 ```ruby
 # ... rest of code ommitted for brevity
 
@@ -334,9 +346,10 @@ GoodDog.what_am_i          # => I'm a GoodDog class!
 ```
 Class methods are used for functionality not pertaining to individual objects (and their states).
 
+[Back to top](#section-links)
 
 ## Class Variables
-Class variables, prepended by `@@`, are used to capture information for an entire class. The class and all objects of that class refer to a **singular instance** of class variable.
+Class variables, prepended by `@@`, are used to capture information for an entire class. The class and all objects of that class refer to a **single instance** of that class variable.
 ```ruby
 class GoodDog
   @@number_of_dogs = 0
@@ -363,10 +376,11 @@ puts GoodDog.total_number_of_dogs   # => 2
 puts dog1.dog_count                 # => 2
 puts dog2.dog_count                 # => 2
 ```
-- We create an initialize class variable `@@number_of_dogs` to 0 and increment this variable every time a GoodDog object is instantiated using `::new`. We then use a class method `self.total_number_of_dogs` to return the value of this class variable
-- As shown in both `initalize`, `self.total_number_of_dogs` and `dog_count`, class variables are accessible in both class and instance methods. (`initialize` in an instance method)
-- Having `dog_count` instance method confirms that all instances of a class reference a singular class variable
+- We initialize class variable `@@number_of_dogs` to 0 and increment this variable every time a GoodDog object is instantiated using `::new`. We then use a class method `self.total_number_of_dogs` to return the value of this class variable
+- As shown in both `initalize`, `self.total_number_of_dogs` and `dog_count`, class variables are accessible in **both** class and instance methods. (`initialize` in a special instance method as it is private and cannot be called by any object of that class)
+- The `dog_count` instance method confirms that all instances of a class reference a single class variable
 
+[Back to top](#section-links)
 
 ## Constants
 Constants are used in classes to reference values that never need to change. Although only the first letter of the variable name need to be in upper case, it is common for the entire variable name to be in caps. A warning will be raised by Ruby if they are reassigned to a new value.
@@ -386,7 +400,7 @@ class GoodDog
   end
 	
   def print_constant
-	puts DOG_YEARS
+    puts DOG_YEARS
   end
 end
 
@@ -396,6 +410,7 @@ spark.print_constant        # => 7
 GoodDog.print_constant      # => 7
 ```
 
+[Back to top](#section-links)
 
 ## to_s Method
 `to_s` instance method is available to every class in Ruby through inheritance from the root `Object` class. This default implementation output the Class name followed by an encoding of the object's id.
@@ -431,6 +446,7 @@ Like `puts`, `p` behaves somewhat similarly. However, instead of calling `to_s` 
 p sparky         # => #<GoodDog:0x007fe54229b358 @name="Sparky", @age=28>
 ```
 
+[Back to top](#section-links)
 
 ## More About self
 - `self` allows Ruby to disambiguate between initializing a local variable and calling a setter method
@@ -441,9 +457,9 @@ class GoodDog
   attr_accessor :name, :height, :weight
 
   def initialize(n, h, w)
-    self.name   = n
-    self.height = h
-    self.weight = w
+    @name   = n
+    @height = h
+    @weight = w
   end
 
   def change_info(n, h, w)
@@ -491,3 +507,5 @@ Within a class definition
 
 	# outputs GoodDog
 	```
+
+[Back to top](#section-links)

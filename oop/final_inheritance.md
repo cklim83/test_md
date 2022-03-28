@@ -13,9 +13,9 @@
 
 
 ## Class Inheritance
-- Inheritance occurs when a class inherits behaviors from another class.
-- The class inheriting the behavior is called the **subclass** while the class it inherits from is called the **superclass**.
-- The phenomenon of making behaviors available through inheritance allows us to move and consolidate common behaviors of related classes to a common superclass so that these common behaviours need not be repeated in each class (DRY principle). Any changes to these behaviors can also be made at one place, making the code more maintainable.
+- Inheritance occurs when a class inherit behaviors from another class.
+- The class inheriting behaviors is called the **subclass** while the class it inherits from is called the **superclass**.
+- Inheritance allows us to place common behaviors of related classes to a common superclass and make them available to those classes without repeating code (DRY princple). Any future changes to these behaviors can also be made at one place, making the code more maintainable.
 - In example below, the `speak` behavior is common to all animal types and can thus be extracted to an `Animal` superclass. Whoever that needs it can inherit from this superclass.
 ```ruby
 class Animal
@@ -36,8 +36,8 @@ puts sparky.speak           # => Hello!
 puts paws.speak             # => Hello!
 ```
 
-- The `<` symbol informs Ruby the class on its left is inheriting from the class on its right. In our example, both `GoodDog` and `Cat` inherits from `Animal` giving objects of these class access to the `speak` method.
-- Ruby also provide the option to **override** inherited methods. In our example, the `speak` method in `Animal` is overridden by the `speak` method defined in `GoodDog`. This works because Ruby always search the object's class for a method first before it looks in the superclass.
+- The `<` symbol indicates the class on the left is inheriting from the class on the right. In our example, both `GoodDog` and `Cat` inherits from `Animal` giving objects of these class access to the `speak` method.
+- Ruby also provides the option to **override** inherited methods. In our example below, the `speak` method in `Animal` is overridden by the `speak` method defined in `GoodDog`. This works because Ruby always start its search for a method from the object's class according to the method lookup path.
 ```ruby
 class Animal
   def speak
@@ -70,7 +70,7 @@ puts paws.speak             # => Hello!
 [Back to top](#section-links)
 
 ## super
-Ruby provides the `super` keyword to call a same named method earlier in the method lookup path. In the example below, `super` within `GoodDog#speak` will invoke `Animal#speak` which will return `"Hello!"`. We then append additional text to generate `"Hello! from GoodDog class"`.
+The `super` keyword will call a method with the **same name** that occur one position earlier in the method lookup path. In the example below, `super` within `GoodDog#speak` will invoke `Animal#speak` which will return `"Hello!"`. We then append additional text to generate `"Hello! from GoodDog class"`.
 ```ruby
 class Animal
   def speak
@@ -88,9 +88,9 @@ sparky = GoodDog.new
 sparky.speak        # => "Hello! from GoodDog class"
 ```
 
-`super` is commonly used in `initialize` and can take one of 3 forms, depending on the arguments required by the recipient method invoked:
+`super` is commonly used in `initialize` to ride on parental implementation plus add on functionality. It can take one of 3 forms, depending on the arguments required by the recipient method invoked:
 
-1. All arguments autoforwarded i.e. `super`
+1. All arguments received auto-forwarded i.e. `super`
 ```ruby
 class Animal
   attr_accessor :name
@@ -102,7 +102,7 @@ end
 
 class GoodDog < Animal
   def initialize(color)
-    super
+    super  # equivalent to Animal#initialize(color)
     @color = color
   end
 end
@@ -122,7 +122,7 @@ end
 
 BadDog.new(2, "bear")        # => #<BadDog:0x007fb40b2beb68 @age=2, @name="bear">
 ```
-In above example, `super` in `BadDog#initialize` only pass the argument `name` up the method lookup chain to `Animal#initialize`. `age` is not passed but assigned to instance variable `@age` that is only applicable to `BadDog` class.
+In above example, `super` in `BadDog#initialize` only pass the argument `name` up the method lookup chain to `Animal#initialize`. `age` is not passed but assigned to instance variable `@age` since this is only applicable to the `BadDog` class.
 
 3. No arguments forwarded `super()`
 ```ruby
@@ -145,7 +145,7 @@ In example 3, `super()` within `Bear#initialize` imply that `Animal#initialize` 
 [Back to top](#section-links)
 
 ## Mixing in Modules
-For behaviors that does not fit nicely into a hierarchical structure, modules can be used to house common methods applicable to some classes so that code need not be repeated. We can then include (i.e. mixin) these modules into those classes to grant them those methods.
+For behaviors that does not fit nicely into a hierarchical structure, modules can be used to house common methods applicable to some classes so that code need not be repeated. We can then include (i.e. mixin) these modules into those classes to grant them access to those methods.
 ```ruby
 module Swimmable
   def swim
@@ -181,7 +181,7 @@ paws.swim                   # => NoMethodError: undefined method `swim' for #<Ca
 ```
 `Dog`, `Fish` and `Cat` are subclasses of `Animal` but only `Dog` and `Fish` objects can `swim`. 
 
-Modules are commonly named using a verb describing the behaviors + 'able' suffix e.g. `Walkable`, `Swimmable`.
+Modules are commonly named using a verb describing the behavior group + 'able' suffix e.g. `Walkable`, `Swimmable`.
 
 [Back to top](#section-links)
 
@@ -193,7 +193,7 @@ Modules are commonly named using a verb describing the behaviors + 'able' suffix
 
 Considerations when choosing between class inheritance vs mixins:
 - We can only subclass from **one** class but can mix in as many modules as needed
-- Use class inheritance for "is-a" relationship, interface inheritance for "has-a" relationship
+- Use class inheritance for **"is-a"** relationship, interface inheritance for **"has-a"** relationship
 - We cannot create objects from modules, they are only used for namespacing and grouping common methods together.
 
 [Back to top](#section-links)
@@ -240,7 +240,7 @@ Object
 Kernel
 BasicObject
 ```
- This means that when we call a method on any `Animal` object, Ruby first looks in the `Animal` class, then the `Walkable` module, then the `Object` class, then the `Kernel` module, and finally the `BasicObject` class.
+ This means that when we call a method on any `Animal` object, Ruby will first search for the method in the following order: `Animal` class -> `Walkable` module -> the `Object` class -> the `Kernel` module -> the `BasicObject` class. At any point the method is found, it will be invoked and the search ends. Otherwise it continue its search in the next class or module in the search sequence. If the method is still not found after the entire search sequence is completed, a `NoMethodError` will be raised.
  
  ```ruby
 fido = Animal.new
@@ -309,7 +309,7 @@ buddy.speak('Arf!')           # => "Arf!"
 kitty.say_name('kitty')       # => "kitty"
 ```
 
-Modules can also be used as containers to house methods. This involves prefixing the method names with `self` and the methods can be used directly without inclusion in a class. Similar to class methods, `self` here refers to the module itself.
+Modules can also be used as containers to **house methods for direct use (i.e. not mixin and used by a class)**. To do that we need to **prefix method names with `self`**.  These methods can then be used directly without inclusion in a class. Similar to class methods, `self` here refers to the module itself.
 ```ruby
 module Mammal
   ...
@@ -346,7 +346,7 @@ end
 Parent.superclass       # => Object
 ```
 
-There are important methods from `Object` that we do not want to override. `send` is an example since it serves as a way to invoke a method by passing a method name in the form of a symbol or string as an argument.
+There are important methods from `Object` that we do not want to override. `send` is such an example as it provides a way to invoke a method using the method name (in string or symbol format) as an argument.
 ```ruby
 class Child < Parent
   def say_hi
