@@ -29,16 +29,22 @@
 Mixin modules affects the [method lookup path](inheritance.md#method-lookup-path).
 
 
-- We use `.ancestor` class method to check the method lookup path of a class
+- We use `::ancestor` class method to check the method lookup path of a class
 
-Which of the following are differences between modules and classes? Select all that apply.
-- Classes let you instantiate objects whereas modules don't.
-- Modules are often used for namespacing.
-- You can sub-class from precisely one parent class, but you can mix in as many modules as you need.
+
 
 
 ## Practice Questions
----![Class hierarchy diagram](https://d1b1wr57ag5rdp.cloudfront.net/images/quizzes/restaurant-hierarchy.png "Restaurant Staff Class Hierarchy")
+Which of the following are differences between modules and classes? Select all that apply.
+- [x] **A** Classes let you instantiate objects whereas modules don't.
+- [x] **B** Modules are often used for namespacing.
+- [x] **C** You can sub-class from precisely one parent class, but you can mix in as many modules as you need.
+- [ ] **D** Classes may contain more than one method, but modules must have precisely one method.
+
+**D** is incorrect because Modules can contain more than one method.
+
+
+![Class hierarchy diagram](https://d1b1wr57ag5rdp.cloudfront.net/images/quizzes/restaurant-hierarchy.png "Restaurant Staff Class Hierarchy")
 One reason to use modules in Ruby is to share common behavior between classes when you can't share them via class inheritance. Given this context, which of the following methods would it be appropriate to extract to a module? Select all that apply.
 - `supervise`
 - `speak_to_customer`
