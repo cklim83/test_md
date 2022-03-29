@@ -491,13 +491,13 @@ class GoodDog
 end
 ```
 
-Within a class definition
+**Within a class definition**
 1.  `self`, inside of an instance method, references the instance (object) that called the method - the calling object. Therefore, `self.weight=` in `change_info` method is the same as `sparky.weight=`.
 	```ruby
 	class GoodDog
 	  # ... omitted for brevity
 	  def what_is_self
-		self
+	    self
 	  end
 	end
 	```
@@ -520,7 +520,7 @@ Within a class definition
 	# outputs GoodDog
 	```
 
-Within Modules\
+**Within Modules**
 1. [Modules as Method Containers](inheritance.md#modules-as-method-containers)
 
 [Back to top](#section-links)
