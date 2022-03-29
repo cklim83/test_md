@@ -297,6 +297,7 @@ end
 ```
 
 Instead of a plain vanilla getter method provided by `attr_accessor` or `attr_reader`, we can manually define accessor methods with the requisite customisation
+- It is good practice to access instance variables using accessor methods and not directly i.e. `@variable_name` to ensure any customisation (e.g. preprocessing/formatting) incorporated into these methods are uniformly applied and we do not have to repeat ourselves
 ```Ruby
 # ssn getter method showing only last 4 digits
 def ssn

@@ -1,4 +1,4 @@
-# OOP Study Guide
+# OOP Assessment Study Guide
 
 [Classes and Objects](./oop/objects_and_classes.md)\
 [Use attr_* to create getter and setter methods](./oop/objects_and_classes.md#use-attr_-to-create-getter-and-setter-methods)\
@@ -16,3 +16,9 @@
 [Fake operators](./oop/fake_operators.md)\
 [Working with collaborator objects](./oop/collaborator_objects.md)
 
+
+## Other Important Materials
+[Steps to Model Problem in OOP](./oop/steps_to_model_in_oop.md)\
+[Variable Scope](./oop/variable_scope.md)\
+[Inheritance and Variable Scope](./oop/inheritance_and_variable_scope.md)\
+[Exceptions](./oop/exceptions.md)
