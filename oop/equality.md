@@ -145,7 +145,7 @@ There are different measures of equality for Ruby objects
 	```
 	Note: Objects of `Integer` and `Symbol` are unique in the sense that **if they share the same value, they are the same object**, as seen by their object_ids. This is because they occupy the specific section of the memory block. Hence they are more memory efficient data structures. This does not apply to other object types e.g. arrays and strings.
 
-- Unlike `==`, the `equal?` method **should never be overridden** by subclasses as it is used to establish object identity (i.e. `a.equal?(b)` if and only if `a` is the same object as `b`)
+- Unlike `==`, the `equal?` method [should never be overridden](./inheritance.md#accidental-method-overriding) by subclasses as it is used to establish object identity (i.e. `a.equal?(b)` if and only if `a` is the same object as `b`)
 
 [Back to top](#section-links)
 

@@ -4,7 +4,7 @@
 [List of Operators and Methods](#list-of-operators-and-methods)\
 [Equality Methods](#equality-methods)\
 [Comparison Methods](#comparison-methods)\
-[The `<<` and `>>` Shift Methods](#the-`<<`-and-`>>`-shift-methods)\
+[The `<<` and `>>` Shift Methods](#the--and--shift-methods)\
 [The `+` Method](#the-plus-method)\
 [Element Setter and Getter Methods](#element-setter-and-getter-methods)
 
@@ -31,14 +31,16 @@ In the table below, we show which operators are real operators and which are met
 |yes| `<=`, `<`, `>`, `>=` | Less than/equal to, less than, greater than, greater than/equal to |
 |yes| `<=>`, `==`, `===`, `!=`, `=~`, `!~` | Equality and pattern matching (`!=` and `!~` cannot be directly defined) |
 |no| `&&` | Logical "and" |
+|no| `||` | Logical "or" |
 |no| `..`, `...` | Inclusive range, exclusive range |
 |no| `? :` | Ternary if-then-else |
-|no| `=`, `%=`, `/=`, `-=`, `+=`, `!=`, `&=`, `>>=`, `<<=`, `*=`, `&&=`, `!!=`, `**=`, `{` | Assignment(and shortcuts) and block delimiter |
+|no| `=`, `%=`, `/=`, `-=`, `+=`, `!=`, `&=`, `>>=`, `<<=`, `*=`, `&&=`, `!!=`, `**=`, `{` | Assignment (and shortcuts) and block delimiter |
 
 [Back to top](#section-links)
 
 
-## [Equality Methods](./equality.md)
+## Equality Methods
+[See equality notes](./equality.md)
 
 [Back to top](#section-links)
 
@@ -66,13 +68,13 @@ kim = Person.new("Kim", 33)
 puts "bob is older than kim" if bob > kim
 ```
 
-In Ruby, if we implement `<=>` method that returns `-1, 0, 1 or nil`, and we include [`Comparable`](https://docs.ruby-lang.org/en/3.1/Comparable.html) module in our custom class, we get all comparison methods `<`, `<=`, `==`, `>=`, and `>`) and the method `between?` for free.
+In Ruby, if we implement a `<=>` method that returns `-1, 0, 1 or nil`, and we include the [`Comparable`](https://docs.ruby-lang.org/en/3.1/Comparable.html) module in our custom class, we get all comparison methods `<`, `<=`, `==`, `>=`, and `>`) and the method `between?` for free.
 
 [Back to top](#section-links)
 
 
 ## The `<<` and `>>` Shift Methods
-The `<<` that we thought is a Ruby operator used to append elements to an array is actually the instance method `Array#<<`. By convention, `<<` mutates the caller by appending the argument.
+The `<<` that we thought is a Ruby operator used to append elements to an array is actually the instance method `Array#<<`. By convention, `<<` mutates the caller by appending the argument, then return the mutated caller.
 
 Example of Implementing `<<` for custom class
 ```ruby
@@ -86,13 +88,14 @@ class Team
 
   def <<(person)
     members.push person
+    self
   end
 end
 
 cowboys = Team.new("Dallas Cowboys")
 emmitt = Person.new("Emmitt Smith", 46)     # suppose we're using the Person class from earlier
 
-cowboys << emmitt                           # will this work?
+cowboys << emmitt                           # We return self similar to how Array#<< return the mutated array
 
 cowboys.members                             # => [#<Person:0x007fe08c209530>]
 ```
@@ -103,6 +106,7 @@ cowboys.members                             # => [#<Person:0x007fe08c209530>]
 def <<(person)
   return if person.not_yet_18?              # suppose we had Person#not_yet_18?
   members.push person
+  self
 end
 ```
 
@@ -114,15 +118,15 @@ end
 1 + 1                                       # => 2
 1.+(1)                                      # => 2
 ```
-The `+` operation is actually a instance method. `1 + 1` is actually `1.(1)` using `Integer#+`. `1.0 + 2` is different because the caller is a `Float` and we are invoking `Float#+` and passing in an integer as argument.
+The `+` operation is actually an instance method. `1 + 1` is actually `1.(1)` using `Integer#+`. `1.0 + 2` is different because the caller is a `Float` and we are invoking `Float#+` and passing in an integer as argument.
 
 Different standard classes have their own `+` implementations:
-- `Integer#+`: increments the value by value of argument, returning a new integer.
-- `String#+`: concatenate with argument, returning a new string
-- `Array#+`: Concatenate with argument, returning a new array
+- `Integer#+`: Increments the value by value of argument, returning a new integer.
+- `String#+`: Concatenates with argument, returning a new string
+- `Array#+`: Concatenates with argument, returning a new array
 - `Date#+`: Increments the date in days by value of argument, returning a new date.
 
-So if we are implement `+` for our custom class, it should increment or concatenate with the argument and return a new object of that class.
+Seeing how `+` is implemented in a variety of classes, if we were to implement `+` for our custom class, it should either **increment or concatenate** with the argument and return a **new** object of that class.
 ```ruby
 class Team
   attr_accessor :name, :members
@@ -134,6 +138,7 @@ class Team
 
   def <<(person)
     members.push person
+    self
   end
 
   def +(other_team)
@@ -170,7 +175,7 @@ In our `Team` class, we use `Array#+` within `Team#+` to concatenate the members
 
 
 ## Element Setter and Getter Methods
-`[]` and `[]=` commonly used to retrieve and set array elements are actually getter and setter instance methods `Array#[]` and `Array#[]=`. `arr[n]` is actually `arr.[](n)` and `arr[n]=value` is actually `arr.[]=(n, value)`
+`[]` and `[]=` are commonly used to retrieve and set array elements are actually getter and setter instance methods `Array#[]` and `Array#[]=`. `arr[n]` is actually `arr.[](n)` and `arr[n]=value` is actually `arr.[]=(n, value)`
 ```ruby
 my_array = %w(first second third fourth)    # ["first", "second", "third", "fourth"]
 
