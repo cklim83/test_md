@@ -15,8 +15,8 @@
 ## Class Inheritance
 - Inheritance occurs when a class inherit behaviors from another class.
 - The class inheriting behaviors is called the **subclass** while the class it inherits from is called the **superclass**.
-- Inheritance allows us to place common behaviors of related classes to a common superclass and make them available to those classes without repeating code (DRY princple). Any future changes to these behaviors can also be made at one place, making the code more maintainable.
-- In example below, the `speak` behavior is common to all animal types and can thus be extracted to an `Animal` superclass. Whoever that needs it can inherit from this superclass.
+- Inheritance allows us to place common behaviors of related classes to a common superclass and make them available to those classes without repeating code (DRY principle). Any future changes to these behaviors can also be made at one place, making the code more maintainable.
+- In example below, the `speak` behavior is common to all animal types and can thus be extracted to an `Animal` superclass. Whichever animal types that needs it can inherit from this superclass.
 ```ruby
 class Animal
   def speak
@@ -71,7 +71,7 @@ puts paws.speak             # => Hello!
 
 
 ## super
-The `super` keyword will call a method with the **same name** that occur one position earlier in the method lookup path. In the example below, `super` within `GoodDog#speak` will invoke `Animal#speak` which will return `"Hello!"`. We then append additional text to generate `"Hello! from GoodDog class"`.
+The `super` keyword will call a method with the **same name** as the one it is residing within and that occur one search position after the current class in the method lookup path. In the example below, `super` within `GoodDog#speak` will invoke `Animal#speak` which will return `"Hello!"`. We then append additional text to generate `"Hello! from GoodDog class"`.
 ```ruby
 class Animal
   def speak
@@ -147,7 +147,7 @@ In example 3, `super()` within `Bear#initialize` imply that `Animal#initialize` 
 
 
 ## Mixing in Modules
-For behaviors that does not fit nicely into a hierarchical structure, modules can be used to house common methods applicable to some classes so that code need not be repeated. We can then include (i.e. mixin) these modules into those classes to grant them access to those methods.
+For behaviors that does not fit nicely into a hierarchical structure, modules can be used to house common methods that are only applicable to some classes so that code need not be repeated. We can then include (i.e. mixin) these modules into those classes to grant them access to those methods.
 ```ruby
 module Swimmable
   def swim
@@ -244,7 +244,7 @@ Object
 Kernel
 BasicObject
 ```
- This means that when we call a method on any `Animal` object, Ruby will first search for the method in the following order: `Animal` class -> `Walkable` module -> the `Object` class -> the `Kernel` module -> the `BasicObject` class. At any point the method is found, it will be invoked and the search ends. Otherwise it continue its search in the next class or module in the search sequence. If the method is still not found after the entire search sequence is completed, a `NoMethodError` will be raised.
+ This means that when we call a method on any `Animal` object, Ruby will first search for the method in the following order: `Animal` class -> `Walkable` module -> `Object` class -> `Kernel` module -> `BasicObject` class. At any point the method is found, it will be invoked and the search ends. Otherwise it continue its search in the next class or module in the search sequence. If the method is still not found after the entire search sequence is completed, a `NoMethodError` will be raised.
  
  ```ruby
 fido = Animal.new
@@ -314,7 +314,7 @@ buddy.speak('Arf!')           # => "Arf!"
 kitty.say_name('kitty')       # => "kitty"
 ```
 
-Modules can also be used as containers to **house methods for direct use (i.e. not mixin and used by a class)**. To do that we need to **prefix method names with `self`**.  These methods can then be used directly without inclusion in a class. Similar to class methods, `self` here refers to the module itself.
+Modules can also be used as containers to **house methods for direct use (i.e. not via mixin as a method in a class)**. To do that we need to **prefix method names with `self`**.  These methods can then be used directly without inclusion in a class. Similar to class methods, `self` here refers to the module itself.
 ```ruby
 module Mammal
   ...
@@ -341,7 +341,7 @@ value = Mammal::some_out_of_place_method(4)
 
 
 ## Accidental Method Overriding
-Every class we create inherently subclass from class `Object`. We confirm this using by invoking the class method `::superclass` on the class of interest.
+Every class we create inherently subclass from class `Object`. We confirm this by invoking the class method `::superclass` on the class of interest.
 ```ruby
 class Parent
   def say_hi
@@ -389,7 +389,7 @@ lad.send :say_hi
 ArgumentError: wrong number of arguments (1 for 0)
 from (pry):12:in `send'
 ```
-Instead of invoking `Object#send` with `:say_hi` as argument, which will invoke `Child#say_hi`, Ruby invokes `Child#send` instead and got a unexpected argument.
+Instead of invoking `Object#send` with `:say_hi` as argument, which will invoke `Child#say_hi`, Ruby invokes `Child#send` instead and got a unexpected argument error.
 
 `instance_of?` is another useful instance method from `Object` we do not want to override. This method returns `true` when an object is an instance of a class and `false` otherwise.
 ```ruby

@@ -1,7 +1,7 @@
 # Method Access Control
 
 ## Private Protected and Public
-Method access control involves granting or restricting access to methods defined in a class. This is achieved through the use of `public`, `protected` and `private` _access modifiers_.
+Method access control involves granting or restricting access to methods defined in a class. This is achieved through the use of `public`, `protected` and `private` **access modifiers**.
 
 All methods in a class definition are `public` by default. **Public** methods are available for the rest of the program to use and comprise the class' _interface_ (how other classes and objects will interact with this class and its objects)
 
@@ -44,7 +44,7 @@ end
 **Protected** methods are in between public and private methods and exhibit the following characteristics: 
 - Inside the class definition, `protected` methods are accessible just like public methods
 - Outside the class definition, `protected` methods act like private methods
-- Protected methods can be called by **any instance (self or otherwise) of the defining class or its subclasses** but private methods can only be called by `self` in the class definition. We cannot access another objects' private method directly.
+- Protected methods can be called by **any instance (self or otherwise) of the defining class or its subclasses** but private methods can only be called by `self` in the class definition. We cannot access another object's private method directly.
 
 **Example 1**
 ```Ruby
@@ -83,11 +83,8 @@ class Card
   end
   
   def <=>(other_card)
-    self_rank = self.relative_rank
-    other_rank = other_card.relative_rank
-    
-    return 1 if self_rank > other_rank
-    return -1 if self_rank < other_rank
+    return 1 if self.relative_rank > other_card.relative_rank
+    return -1 if self.relative_rank < other_card.relative_rank
     0
   end
   
@@ -99,7 +96,7 @@ class Card
   end
 end
 ```
-Similarly, `relative_rank` has to be protected so that it can also be called upon by another instance of the same class `other_card` within the class definition. Otherwise a `NoMethodError` will be raised by `other_card.relative_rank` as we tried to call private method `relative_rank` in `<=>`.
+Similarly, `relative_rank` has to be `protected` so that it can also be called upon by another instance of the same class `other_card` within the class definition. Otherwise a `NoMethodError` will be raised by `other_card.relative_rank` as we tried to call private method `relative_rank` in `<=>`.
 
 
 ### Invoking Private Method With Self Prefix

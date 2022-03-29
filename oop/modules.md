@@ -6,7 +6,7 @@
 ![](https://d1b1wr57ag5rdp.cloudfront.net/images/oop/lesson2/module_class_hierarchy.png)
 - In Ruby, the use of modules can help address both problems:
 	- Each class can mixin as many modules as required
-	- We can house behaviours that do not fit in nicely in class hierarchy tree into a module, then mixin that module in classes that need them. Code is then house in one place and we do not need to repeat ourselves.
+	- We can house behaviours that do not fit in nicely in class hierarchy tree into a module, then mixin that module in classes that need them. Code is then housed in one place and we do not need to repeat ourselves.
 	```ruby
 	module Swim
 	  def swim
@@ -26,7 +26,7 @@
 	```
 
 ## Modules and Method Lookup Path
-Mixin modules affects the [method lookup path](class and objects).
+Mixin modules affects the [method lookup path](inheritance.md#method-lookup-path).
 
 
 - We use `.ancestor` class method to check the method lookup path of a class
