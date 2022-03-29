@@ -521,6 +521,6 @@ Within a class definition
 	```
 
 Within Modules\
-[Modules as Method Containers](inheritance.md#modules-as-method-containers)
+1. [Modules as Method Containers](inheritance.md#modules-as-method-containers)
 
 [Back to top](#section-links)
