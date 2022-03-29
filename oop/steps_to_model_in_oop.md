@@ -1,8 +1,8 @@
 # Steps to Model Problem In OOP
 ## Section Links
 [Steps](#steps)\
-[Rock, Paper, Scissor Game Example](#rock-paper-scissor-game-example)\
-[Tic Tac Toe Game Example](#tic-tac-toe-game-example)
+[Rock, Paper, Scissor Game Example](#example-1-rock-paper-scissor-game-example)\
+[Tic Tac Toe Game Example](#example-2-tic-tac-toe-game)
 
 ---
 
@@ -20,8 +20,8 @@
 6. **\[Optional\]** We could translate these classes and their inter-relations onto Class Responsibility Collaborator (CRC) cards to visualize inter-depencies
 
 
-## Rock, Paper, Scissor Game Example
-Initial Design
+## Example 1: Rock, Paper, Scissor Game
+### Initial Design
 ```Text
 Rock, Paper, Scissors is a two-player game where each player chooses one of three possible moves: rock, paper, or scissors. The chosen moves will then be compared to see who wins, according to the following rules:
 
@@ -45,7 +45,7 @@ Rule
 - compare
 ```
 
-Spike
+### Spike
 ```Ruby
 class Player
   def initialize
@@ -94,12 +94,12 @@ end
 RPSGame.new.play
 ```
 
-**Source Codes**\
+### Source Codes**
 [Version 1](https://github.com/cklim83/launch_school/blob/main/03_rb120_oop/lesson_02_oop/08_oop_rock_paper_scissor/08a_oop_rps.rb) -> [Version 2a](https://github.com/cklim83/launch_school/blob/main/03_rb120_oop/lesson_02_oop/08_oop_rock_paper_scissor/08b_oop_rps_refactor_1.rb) -> [Version 2b](https://github.com/cklim83/launch_school/blob/main/03_rb120_oop/lesson_02_oop/08_oop_rock_paper_scissor/08c_oop_rps_refactor_2.rb) -> [Version 3a](https://github.com/cklim83/launch_school/blob/main/03_rb120_oop/lesson_02_oop/08_oop_rock_paper_scissor/08d_oop_rps_bonus_features.rb) -> [Version 3b](https://github.com/cklim83/launch_school/blob/main/03_rb120_oop/lesson_02_oop/08_oop_rock_paper_scissor/08g_oop_rps_bonus_refactored.rb)
 
 
-## Tic Tac Toe Game Example
-Initial Design
+## Example 2: Tic Tac Toe Game
+### Initial Design
 ```Text
 Tic Tac Toe is a 2-player board game played on a 3x3 grid. Players take turns
 marking a square. The first player to mark 3 squares in a row wins.
@@ -114,7 +114,7 @@ Player
 - play
 ```
 
-Spike
+### Spike
 ```ruby
 class Board
   def initialize
@@ -170,7 +170,7 @@ end
 TTTGame.new.play
 ```
 
-**Source Codes**\
+### Source Codes
 [Spike](https://github.com/cklim83/launch_school/blob/main/03_rb120_oop/lesson_05/01_tictactoe/02_oo_ttt_spike.rb) -> [Improvements](https://github.com/cklim83/launch_school/blob/main/03_rb120_oop/lesson_05/01_tictactoe/03_oo_ttt_improvements.rb) -> [Rubocop](https://github.com/cklim83/launch_school/blob/main/03_rb120_oop/lesson_05/01_tictactoe/04_oo_ttt_rubocop.rb) -> [Bonus Features](https://github.com/cklim83/launch_school/blob/main/03_rb120_oop/lesson_05/01_tictactoe/05_oo_ttt_bonus_features.rb) -> [Reorganize](https://github.com/cklim83/launch_school/blob/main/03_rb120_oop/lesson_05/01_tictactoe/06_oo_ttt_bonus_refactored.rb)
 
 
