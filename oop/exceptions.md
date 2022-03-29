@@ -4,7 +4,7 @@
 [What is an Exception?](#what-is-an-exception)\
 [The Exception Class Hierarchy](#the-exception-class-hierarchy)\
 [How to Handle an Exceptional State](#how-to-handle-an-exceptional-state)\
-[Exceptional Objects and Built-in Methods](#exceptional-objects-and-built-in-methods)\
+[Exception Objects and Built-in Methods](#exception-objects-and-built-in-methods)\
 [Raising Exceptions Manually](#raising-exceptions-manually)\
 [Raising Custom Exceptions](#raising-custom-exceptions)
 
