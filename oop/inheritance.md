@@ -7,6 +7,7 @@
 [Inheritance vs Modules](#inheritance-vs-modules)\
 [Method Lookup Path](#method-lookup-path)\
 [Modules for Namespacing](#modules-for-namespacing)\
+[Modules as Method Containers](#modules-as-method-containers)\
 [Accidental Method Overriding](#accidental-method-overriding)
 
 ---
@@ -314,6 +315,10 @@ buddy.speak('Arf!')           # => "Arf!"
 kitty.say_name('kitty')       # => "kitty"
 ```
 
+[Back to top](#section-links)
+
+
+## Modules as Method Containers
 Modules can also be used as containers to **house methods for direct use (i.e. not via mixin as a method in a class)**. To do that we need to **prefix method names with `self`**.  These methods can then be used directly without inclusion in a class. Similar to class methods, `self` here refers to the module itself.
 ```ruby
 module Mammal
