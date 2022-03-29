@@ -33,7 +33,7 @@ Mixin modules affects the [method lookup path](inheritance.md#method-lookup-path
 
 
 ## Practice Questions
-Question 1\
+**Question 1**\
 Which of the following are differences between modules and classes? Select all that apply.
 - [x] **A** Classes let you instantiate objects whereas modules don't.
 - [x] **B** Modules are often used for namespacing.
@@ -44,17 +44,21 @@ Which of the following are differences between modules and classes? Select all t
 <br>
 
 
-Question 2\
+**Question 2**\
 ![Class hierarchy diagram](https://d1b1wr57ag5rdp.cloudfront.net/images/quizzes/restaurant-hierarchy.png "Restaurant Staff Class Hierarchy")\
 One reason to use modules in Ruby is to share common behavior between classes when you can't share them via class inheritance. Given this context, which of the following methods would it be appropriate to extract to a module? Select all that apply.
-- `supervise`
-- `speak_to_customer`
+- [ ] **A** `cook`
+- [x] **B** `supervise`
+- [x] **C** `speak_to_customer`
+- [ ] **D** `take_food_order`
 
-Although the `cook` method occurs in two classes, `Chef` and `PastryChef`, we can see that `PastryChef` inherits from `Chef`, so we don't need to extract `#cook` to a module. We can remove the method from `PastryChef` if it's identical to the `Chef` version; if they are different, then `PastryChef#cook` overrides `Chef#cook`.
+**Explanations**\
+**A**: Although the `cook` method occurs in two classes, `Chef` and `PastryChef`, we can see that `PastryChef` inherits from `Chef`, so we don't need to extract `#cook` to a module. We can remove the method from `PastryChef` if it's identical to the `Chef` version; if they are different, then `PastryChef#cook` overrides `Chef#cook`.
 
-The `take_food_order` method only occurs in one class, `Waiter`. Although you might want to extract this method to a module for other reasons, such as cleaning up the class structure, you don't need to do it for sharing purposes.
+**D**: The `take_food_order` method only occurs in one class, `Waiter`. Although you might want to extract this method to a module for other reasons, such as cleaning up the class structure, you don't need to do it for sharing purposes.
 
 
+**Question 3**
 You're designing a Recipe Book application. You've identified some classes that you need:
 
 -   `RecipeBook`
