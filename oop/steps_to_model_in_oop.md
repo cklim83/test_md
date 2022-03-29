@@ -1,4 +1,4 @@
-# Steps to Model Problem In OOP
+# Steps to Modelling Problem In OOP
 ## Section Links
 [Steps](#steps)\
 [Rock, Paper, Scissor Game Example](#example-1-rock-paper-scissor-game)\
@@ -12,7 +12,7 @@
 3. Organize and **associate the verbs within nouns**. Each noun represents a class and the associated verbs represent methods of that class
 4. Construct a **spike** (throw away code) to explore the workability of the design
 5. Think of how we could better organize constants, instance variables and methods amongst the classes to **eliminate unnecessary coupling**
-	- If two classes share many common methods and attributes and can be represented in a hierarchical structure (super and child classes), it is best to place the common instance variables and methods in the superclass to avoid repeating code (DRY principle). Differences can then reside in the child classes either a new methods or to override the parent one. 
+	- If two classes share many common methods and attributes and can be represented in a hierarchical structure (super and child classes), it is best to place the common instance variables and methods in the superclass to avoid repeating code (DRY principle). Differences can then reside in the child classes either as new methods or to override the parent one. 
 	- While "bad" design is more noticeable, it is difficult to come up with a "right" design
 	- The tradeoff between designs is often between more flexible code and indirection (indirectness or not straightforward)
 	- Tightly coupled dependencies are easier to understand, but offer less flexibility. 
