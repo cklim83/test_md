@@ -520,7 +520,7 @@ Within a class definition
 	# outputs GoodDog
 	```
 
-Within Modules
+Within Modules\
 [Modules as Method Containers](inheritance.md#modules-as-method-containers)
 
 [Back to top](#section-links)
