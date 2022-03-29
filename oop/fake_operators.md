@@ -27,7 +27,7 @@ In the table below, we show which operators are real operators and which are met
 |yes| `+`, `-` | Plus, minus |
 |yes| `>>`, `<<` | Right and left shift |
 |yes| `&` | Bitwise "and" |
-|yes| `^`, `|` | Bitwise exclusive "or" and regular "or" (inclusive "or") |
+|yes| `^`, `\|` | Bitwise exclusive "or" and regular "or" (inclusive "or") |
 |yes| `<=`, `<`, `>`, `>=` | Less than/equal to, less than, greater than, greater than/equal to |
 |yes| `<=>`, `==`, `===`, `!=`, `=~`, `!~` | Equality and pattern matching (`!=` and `!~` cannot be directly defined) |
 |no| `&&` | Logical "and" |

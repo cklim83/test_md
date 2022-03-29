@@ -1,6 +1,6 @@
 # Collaborator Objects
 
-**Objects stored as state**, i.e. assigned to instance variables, **within another objects** are known as **"collaborator objects"**
+**Objects stored as states**, i.e. assigned to instance variables, **within another objects** are known as **"collaborator objects"**
 
 These objects are called collaborators because they **work in conjunction (collaborate) with the class they are associated with**. The methods of these collaborator objects are available for use to perform required actions
 

@@ -11,7 +11,7 @@
 There are different measures of equality for Ruby objects
 
 ## The `==` Instance Method
-- `==` is **not** an operator but an instance method. `a == b` is actually syntactic sugar for `a.==(b)` for developers to write more naturally. `a` is the caller, `b` the argument and `==` the method invoked.
+- `==` is **not** an operator but an instance method. `a == b` is actually syntactic sugar for `a.==(b)` and meant to allow developers to write more naturally. `a` is the caller, `b` the argument and `==` the method invoked.
 
 - `==` is mostly implemented to compare **values** of objects
 	```ruby
@@ -28,7 +28,7 @@ There are different measures of equality for Ruby objects
 	sym1 == sym2            # => true
 	```
 
-- However the default `==` instance method in all Ruby classes are inherited from `BasicObject` (the root superclass in Ruby) and uses `equal?` for comparison, returning `true` only if two objects are the same object.
+- However the [default `==`](https://docs.ruby-lang.org/en/master/BasicObject.html#method-i-3D-3D) instance method in all Ruby classes are inherited from `BasicObject` (the root superclass in Ruby) and uses `equal?` for comparison, returning **`true`** only if two objects are the **same object**.
 	```ruby
 	class Person
 	  attr_accessor :name
@@ -112,40 +112,40 @@ There are different measures of equality for Ruby objects
 	a = 1
 	b = 1
 
-	a.equal? b					# => true
-	a.object_id					# => 3
-	b.object_id					# => 3
+	a.equal? b                 # => true
+	a.object_id                # => 3
+	b.object_id                # => 3
 
 
 	# Symbols with same value
 	symbol_1 = :something
 	symbol_2 = :something
 
-	symbol_1.equal? symbol_2	# => true
-	symbol_1.object_id			# => 2080988
-	symbol_2.object_id			# => 2080988
+	symbol_1.equal? symbol_2   # => true
+	symbol_1.object_id			   # => 2080988
+	symbol_2.object_id			   # => 2080988
 
 
 	# Strings with same value
 	str1 = "something"
 	str2 = "something"
 
-	str1.equal? str2			# => false
-	str1.object_id				# => 200
-	str2.object_id				# => 220
+	str1.equal? str2           # => false
+	str1.object_id             # => 200
+	str2.object_id             # => 220
 
 
 	# Arrays with same value
 	arr1 = ['1', 2, :ok]
 	arr2 = ['1', 2, :ok]
 
-	arr1.equal? arr2			# => false
-	arr1.object_id				# => 420
-	arr2.object_id				# => 440
+	arr1.equal? arr2           # => false
+	arr1.object_id             # => 420
+	arr2.object_id             # => 440
 	```
 	Note: Objects of `Integer` and `Symbol` are unique in the sense that **if they share the same value, they are the same object**, as seen by their object_ids. This is because they occupy the specific section of the memory block. Hence they are more memory efficient data structures. This does not apply to other object types e.g. arrays and strings.
 
-- Unlike `==`, the `equal?` method should never be overridden by subclasses as it is used to establish object identity (i.e. `a.equal?(b)` if and only if `a` is the same object as `b`)
+- Unlike `==`, the `equal?` method **should never be overridden** by subclasses as it is used to establish object identity (i.e. `a.equal?(b)` if and only if `a` is the same object as `b`)
 
 [Back to top](#section-links)
 
@@ -184,7 +184,7 @@ String === "hello" # => true
 String === 15      # => false
 ```
 
-- `===` returns true if value and class are the same
+- `===` returns true if two objects have the same value and class
 ```Ruby
 a = "hello"
 b = "hello"
