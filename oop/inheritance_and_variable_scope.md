@@ -8,7 +8,8 @@
 ---
 
 ## Inheritance On Instance Variable Scope
-- Unlike methods, instance variables and their values are **only available if initialized**, else they return `nil` when accessed.
+Unlike methods, instance variables and their values are **only available if initialized**, else they return `nil` when accessed.
+
 
 **Example: Instance Variable From A Superclass**
 ```ruby
@@ -47,7 +48,7 @@ end
 teddy = Dog.new("Teddy")
 puts teddy.dog_name                       # => bark! bark! bark! bark!
 ```
-Here, `@name` was never initialized as `Animal#initialize` was never called. `Dog::new` called `Dog#initialize` with `"Teddy"` as argument but never do anything. Hence `@name` returned `nil` which interpolates to "".
+Here, `@name` was never initialized as `Animal#initialize` was never called. `Dog::new` called `Dog#initialize` with `"Teddy"` as argument but never do anything with it. Hence `@name` returned `nil` which interpolates to "".
 
 
 **Example: Instance Variable From Included Module**
@@ -147,11 +148,12 @@ class Tricycle < Vehicle
   @@wheels = 3
 end
 
-Vehicle.wheels    							# => 3
-Car.wheels									# => 3
-Motorcycle.wheels							# => 3
-Tricycle.wheels								# => 3
+Vehicle.wheels                              # => 3
+Car.wheels                                  # => 3
+Motorcycle.wheels                           # => 3
+Tricycle.wheels                             # => 3
 ```
+All classes sharing the class variable will be referencing the last assigned value.
 
 [Back to top](#section-links)
 
@@ -321,7 +323,7 @@ class Car
   WHEELS = 4
 
   def wheels
-	puts "self is #{self}"
+    puts "self is #{self}"
     self.class::WHEELS
   end
 end
@@ -349,7 +351,7 @@ class Car
   WHEELS = 4
 
   def wheels
-	puts "self is #{self}"
+    puts "self is #{self}"
     self.class::WHEELS
   end
 end

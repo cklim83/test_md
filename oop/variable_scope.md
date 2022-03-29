@@ -35,7 +35,7 @@ Person.class_get_name         # => nil
 ```ruby
 class Person
   def initialize
-	@age = 10
+    @age = 10
   end
 	
   def get_name
