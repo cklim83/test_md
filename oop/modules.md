@@ -33,7 +33,7 @@ Mixin modules affects the [method lookup path](inheritance.md#method-lookup-path
 
 
 ## Practice Questions
-Question 1
+Question 1\
 Which of the following are differences between modules and classes? Select all that apply.
 - [x] **A** Classes let you instantiate objects whereas modules don't.
 - [x] **B** Modules are often used for namespacing.
@@ -44,8 +44,8 @@ Which of the following are differences between modules and classes? Select all t
 <br>
 
 
-Question 2
-![Class hierarchy diagram](https://d1b1wr57ag5rdp.cloudfront.net/images/quizzes/restaurant-hierarchy.png "Restaurant Staff Class Hierarchy")
+Question 2\
+![Class hierarchy diagram](https://d1b1wr57ag5rdp.cloudfront.net/images/quizzes/restaurant-hierarchy.png "Restaurant Staff Class Hierarchy")\
 One reason to use modules in Ruby is to share common behavior between classes when you can't share them via class inheritance. Given this context, which of the following methods would it be appropriate to extract to a module? Select all that apply.
 - `supervise`
 - `speak_to_customer`
