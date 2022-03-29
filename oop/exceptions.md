@@ -1,7 +1,20 @@
 # Exceptions
 
+## Section Links
+[What is an Exception?](#what-is-an-exception)\
+[The Exception Class Hierarchy](#the-exception-class-hierarchy)\
+[How to Handle an Exceptional State](#how-to-handle-an-exceptional-state)\
+[Exceptional Objects and Built-in Methods](#exceptional-objects-and-built-in-methods)\
+[Raising Exceptions Manually](#raising-exceptions-manually)\
+[Raising Custom Exceptions](#raising-custom-exceptions)
+
+---
+
 ## What is an Exception?
 An exception is way for Ruby to inform the developer the code is **behaving unexpectedly**. If an exception is raised and not handled properly, the program will crash. Ruby will then generate a message informing about the type of error encountered.
+
+[Back to top](#section-links)
+
 
 ## The Exception Class Hierarchy
 ```text
@@ -46,12 +59,17 @@ The list above shows the hierarchy of exception classes. All the top is the over
 - `SystemStackError` arose when a stack overflow e.g. due to infinite loop or infinite recursion.
 - `StandardError` consists of many commonly encountered errors such as `ArgumentError` (e.g. non-matching number of arguments in method call), `TypeError`, `ZeroDivisionError` and `NoMethodError`.
 
+[Back to top](#section-links)
+
+
 ## When Should An Exception Be Handled?
 We should mostly **focus on StandardError and its descendents** as they often arises due to unexpected user inputs, faulty type conversions, division by zero and are relative **safe** to handle these and continue to run the program.
 
 We should **not handle all exceptions** as certain failures can be dangerous. When they occur, we should let the program crash rather than handle as **masking it can be dangerous and also make debugging difficult**. Error such as `NoMemoryError`, `SyntaxError` and `LoadError` must be addressed for program to operate appropriately.
 
 To avoid causing unwanted behaviour through exception handling, we should be **intentional and very specific which exception to handle** and what action to take (e.g. logging error, displaying error to user, email administrator).
+
+[Back to top](#section-links)
 
 
 ## How To Handle An Exceptional State
@@ -79,6 +97,9 @@ rescue ZeroDivisionError, TypeError
   # common action
 end
 ```
+
+[Back to top](#section-links)
+
 
 ## Exception Objects and Built-in Methods
 We can call useful build-in instance methods such as `Exception#message` and `Exception#backtrace` to either return the error message or backtrace associated with the exception. Refer to [exception documentation](https://docs.ruby-lang.org/en/3.0/Exception.html) for more information.
@@ -118,6 +139,9 @@ rescue
 end
 ```
 
+[Back to top](#section-links)
+
+
 ## Raising Exceptions Manually
 Ruby allows us to manually raise exceptions by calling `Kernel#raise`. We can select the type of exception to raise and even set the error message. 
 ```ruby
@@ -133,7 +157,6 @@ def validate_age(age)
 end
 ```
 
-
 We can handle the error as such:
 ```ruby
 begin  
@@ -142,6 +165,9 @@ rescue RuntimeError => e
   puts e.message              #=> "invalid age"  
 end
 ```
+
+[Back to top](#section-links)
+
 
 ## Raising Custom Exceptions
 Ruby allow us to create our own custom exception classes. The custom exception classes will have full access to all built-in exception instance methods such as `Exception#message` and `Exception#backtrace`.
@@ -165,4 +191,4 @@ end
 ```
 To handle both `MyLibrary::WidgetError` and `MyLibrary::FrobError`, we can just rescue `MyLibrary::Error`
 
-
+[Back to top](#section-links)

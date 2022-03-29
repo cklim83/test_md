@@ -78,6 +78,8 @@ teddy.swim                                  # => swimming!
 ```
 For `#swim` to return `swimming`, we need to invoke `enable_swimming` first to set the instance variable `@can_swim` to `true`.
 
+[Back to top](#section-links)
+
 
 ## Inheritance On Class Variable Scope
 - Class variables have a very insidious behavior of allowing sub-classes to override super-class class variables. Further, the change will affect all other sub-classes of the super-class. 
@@ -150,6 +152,9 @@ Car.wheels									# => 3
 Motorcycle.wheels							# => 3
 Tricycle.wheels								# => 3
 ```
+
+[Back to top](#section-links)
+
 
 ## Inheritance On Constant Variable Scope
 - Constants have lexical scope: Any reference to a constant will be search within the group of code the constant appears in. 
@@ -365,3 +370,5 @@ puts bullet.wheels
 #=> nil
 ```
 If `Motorcyle` did not have its own `WHEELS` initialized, it will use the `WHEELS` inherited from `Car`
+
+[Back to top](#section-links)

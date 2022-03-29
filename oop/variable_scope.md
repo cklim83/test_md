@@ -61,6 +61,8 @@ bob = Person.new
 bob.get_name                  # => nil
 ```
 
+[Back to top](#section-links)
+
 
 ## Class Variable Scope
 - Class variables start with `@@`
@@ -98,6 +100,8 @@ joe.total_people                # => 4
 Person.total_people             # => 4
 ```
 - Both instances of Person `bob` and `joe` are accessing a common copy of class variable `@@total_people` when they call the instance method `total_people`
+
+[Back to top](#section-links)
 
 
 ## Constant Variable Scope
@@ -156,6 +160,4 @@ bob.name                        # => "Ms bob"  (output may vary)
 
 Constants have a **lexical** (aka static) scope. This means that it may only be referenced from within the block of code it is defined in. This gives rise to some peculiarities especially when inheritance is involved:
 
-
-
-
+[Back to top](#section-links)
