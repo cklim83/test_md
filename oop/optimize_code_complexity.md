@@ -10,7 +10,7 @@
 
 
 ## What is Rubocop's AbcSize Complaint?
-AbcSize stands for assignment, branch and conditional size and is a measure code complexity.
+AbcSize stands for **assignment**, **branch** and **conditional** size and is a measure code complexity.
 ```ruby
 abc_size = Math.sqrt(a**2 + b**2 + c**2)
 
@@ -67,7 +67,7 @@ This replaces 3 conditions with 1 condition and 1 branch
 
 
 ## Counting branches
-- A lot of Ruby operators are actually method calls (remember fake operators). Example include
+- A lot of Ruby operators are actually method calls (remember [fake operators](fake_operators.md)). Example include
 	- `+`, `-`, `*`, `/`, `%`
 	- `==`, `>`, `<`
 	- `[]`, `[]=` (Note: this is not assignment)
