@@ -1,4 +1,4 @@
-# OOP Assessment Study Guide
+# RB129 OOP Assessment Study Guide
 
 [Classes and Objects](./oop/objects_and_classes.md)\
 [Use attr_* to create getter and setter methods](./oop/objects_and_classes.md#use-attr_-to-create-getter-and-setter-methods)\
@@ -21,4 +21,5 @@
 [Steps to Model Problem in OOP](./oop/steps_to_model_in_oop.md)\
 [Variable Scope](./oop/variable_scope.md)\
 [Inheritance and Variable Scope](./oop/inheritance_and_variable_scope.md)\
-[Exceptions](./oop/exceptions.md)
+[Exceptions](./oop/exceptions.md)\
+[Optimizing Code Complexity](./oop/optimize_code_complexity.md)

@@ -510,7 +510,7 @@ end
 	p sparky.what_is_self
 	# => #<GoodDog:0x007f83ac062b38 @name="Sparky", @height="12 inches", @weight="10 lbs">
 	```
-This meaning of `self` is also useful for [dynamic constant scope resolution](inheritance_and_variable_scope.md#inheritance-on-constant-variable-scope).
+  This meaning of `self` is also useful for [dynamic constant scope resolution](inheritance_and_variable_scope.md#inheritance-on-constant-variable-scope).
 
 
 2.  `self`, outside of an instance method, references the class and can be used to define class methods. Therefore if we were to define a `name` class method, `def self.name=(n)` is the same as `def GoodDog.name=(n)`.
