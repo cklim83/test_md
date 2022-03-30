@@ -1,7 +1,7 @@
 # Steps to Modelling Problem In OOP
 ## Section Links
 [Steps](#steps)\
-[Other Considerations: OOP Relationships](#other-considerations-oop-relationships)
+[Other Considerations: OOP Relationships](#other-considerations-oop-relationships)\
 [Rock, Paper, Scissor Game Example](#example-1-rock-paper-scissor-game)\
 [Tic Tac Toe Game Example](#example-2-tic-tac-toe-game)
 
