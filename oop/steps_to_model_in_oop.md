@@ -1,6 +1,7 @@
 # Steps to Modelling Problem In OOP
 ## Section Links
 [Steps](#steps)\
+[Other Considerations: OOP Relationships](#other-considerations-oop-relationships)
 [Rock, Paper, Scissor Game Example](#example-1-rock-paper-scissor-game)\
 [Tic Tac Toe Game Example](#example-2-tic-tac-toe-game)
 
@@ -18,6 +19,13 @@
 	- Tightly coupled dependencies are easier to understand, but offer less flexibility. 
 	- Loosely coupled dependencies are more difficult to understand, but offer more long term flexibility.
 6. **\[Optional\]** We could translate these classes and their inter-relations onto Class Responsibility Collaborator (CRC) cards to visualize inter-depencies
+
+[Back to top](#section-links)
+
+## Other Considerations: OOP Relationships
+- Hierarchical **is-a** relationship: Use **class inheritance**
+- Non-hierarchical **has-a** relationships: Use **modules** for interface inheritance
+- Contains or Ownership: Use **collaborator objects**
 
 [Back to top](#section-links)
 

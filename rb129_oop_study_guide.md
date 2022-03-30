@@ -19,6 +19,7 @@
 
 ## Other Important Materials
 [Steps to Model Problem in OOP](./oop/steps_to_model_in_oop.md)\
+[CRC Cards (Optional)](./oop/crc_cards.md)\
 [Coding Tips](./oop/coding_tips.md)\
 [Variable Scope](./oop/variable_scope.md)\
 [Inheritance and Variable Scope](./oop/inheritance_and_variable_scope.md)\

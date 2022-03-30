@@ -48,7 +48,7 @@ class Player
 end
 ```
 
-Since the method name includes the class name, it leads to awakward looking code when we use it.
+Since the method name includes the class name, it leads to awkward looking code when we use it.
 ```Ruby
 player1 = Player.new
 player2 = Player.new
