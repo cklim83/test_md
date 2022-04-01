@@ -18,7 +18,7 @@
 ![CRC model](https://d1b1wr57ag5rdp.cloudfront.net/images/oop/lesson2/crc_model.png)
 
 ### Example: CRC Card for RPSGame Class (Orchestrator)
-![CRC card - RPSGame class](https://d1b1wr57ag5rdp.cloudfront.net/images/oop/lesson2/rpsgame_crc_card.png)
+![CRC card - RPSGame class](https://d1b1wr57ag5rdp.cloudfront.net/images/oop/lesson2/rpsgame_crc_card.png)\
 **Note**: We do not list all methods in RPSGame class, only the public ones
 
 [Back to top](#section-links)
