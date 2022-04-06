@@ -11,7 +11,7 @@
 
 
 ## Explore Problem before Design
-Use **exploratory code** to play around with problem and **gain understanding**: they can help validate hunches and hypotheses. We do not need to worry about code quality at this stage since these are throwaway code to crystalize our inital idea dump. Once we have a better understanding of the problem, we can use it to **organize our code** into coherent classes and methods
+Use **spike (exploratory code)** to play around with problem and **gain understanding**: they can help validate hunches and hypotheses. We do not need to worry about code quality at this stage since these are throwaway code to crystalize our inital idea dump. Once we have a better understanding of the problem, we can use it to **organize our code** into coherent classes and methods
 
 [Back to top](#section-links)
 

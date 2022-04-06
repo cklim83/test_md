@@ -16,21 +16,31 @@
 
 ## OOP
 ### What is OOP and why is it important?
-Object oriented programming is a software engineering **approach** to **model problem domains** as a **system of interacting objects**. Objects, created from classes acting as molds, contain information (states) and perform actions on each other (methods) to fulfill requisite functions within the problem domain. 
+Object oriented programming is a software engineering **approach** to **model a problem domain** as a **system of interacting objects**. Objects, created from classes acting as molds, contain information (states) and perform actions on each other (methods) to fulfill requisite functions within the problem domain. 
 
-This approach is important as it help **overcome the tight dependency drawback of procedural programming**, where small changes made in one location can cause a **big ripple effect** across the entire program. This meant software systems become increasingly hard to maintain as they grow in scale and complexity.
+This approach is important as it help **overcome the tight dependency drawback of procedural programming**, where small changes made in one location can cause a **big ripple effect** across the entire program (possibly also contributed by the numerous data exchanges via arguments). This meant software systems become increasingly hard to maintain as they grow in scale and complexity.
 
 By utilising abstraction, encapsulation, inheritance and polymorphism, OOP made software easier to design, maintain and scale.
 
 - **Abstraction** allow developers to design solutions based on 'real-world' concepts and create high-level models using basic data structures such as numbers, strings, arrays and hashes.
 
-- **Encapsulation** allow developers to **mask internal representations** of objects and **selective exposure of methods to provide requisite functionality**. By controlling the interaction boundary, it confers the following benefits:
+- **Encapsulation** allow developers to **mask internal representations** of objects and **selectively expose methods to provide requisite functionality**. By controlling the interaction boundary, it confers the following benefits:
 	- Safeguard data integrity of objects.
 	- Reduce code dependency. Implementation changes can be isolated within classes and not affect the rest of the program as long as public method signatures, i.e. arguments and return objects, remained unchanged.
 
 - **Inheritance** allow developers to build on top of basic classes with large reusability to define more specialized subclasses without repeating code.
 
 - **Polymorphism** gives different object types the ability to respond to a common method invocation, granting developers greater flexibility during development. 
+
+
+Benefits of OOP
+- Creating objects allows programmers to think more abstractly about the code they are writing.
+- Objects are represented by nouns so are easier to conceptualize.
+- It allows us to only expose functionality to the parts of code that need it, meaning namespace issues are much harder to come across.
+- It allows us to easily give functionality to different parts of an application without duplication.
+- We can build applications faster as we can reuse pre-written code.
+- As the software becomes more complex this complexity can be more easily managed.
+
 
 [Encapsulation & Polymorphism](encapsulation_and_polymorphism.md)\
 [Inheritance](inheritance.md#class-inheritance)
