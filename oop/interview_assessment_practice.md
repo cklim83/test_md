@@ -1,11 +1,23 @@
 # Interview Assessment Preparation
 
-## Explain what is OOP?
+## Section Links
+[Explain Encapsulation With An Example](#explain-encapsulation-with-an-example)\
+[Explain Polymorphism With An Example](#explain-polymorphism-with-an-example)\
+[Explain The Relationship Between Classes And Objects](#explain-the-relationship-between-classes-and-objects)\
+[What Are Modules And How Are They Useful?](#what-are-modules-and-how-are-they-useful)\
+[Explain Method Lookup Path](#explain-method-lookup-path)\
+[Explain The Difference Between States And Behaviours](#explain-the-difference-between-states-and-behaviours)\
+[Explain The Difference Between Public, Private And Protected](#explain-the-difference-between-public-private-and-protected)\
+[Why Is It Preferable To Access Instance Variables Through Getters And Setters Whenever Available?](#why-is-it-preferable-to-access-instance-variables-through-getters-and-setters-whenever-available)\
+[Explain The Difference Between Class And Instance Methods](#explain-the-difference-between-class-and-instance-methods)\
+[Explain The Difference Between Class, Instance Variables And Constants](#explain-the-difference-between-class-instance-variables-and-constants)\
+[Explain The Use Of `super`](#explain-the-use-of-super)\
+[What Are The Different Meanings Of Self?](#what-are-the-different-meanings-of-self)
 
-## Explain encapsulation with the help of an example.
-- Encapsulation refers to the **deliberate hiding of internal representation** of an object and only **selectively exposing methods** and properties to **control** how external users can **interact** with objects belonging to a class. This helps protect information (state) stored within an object from unintended access or change.
-- In the example below, when a new credit card object is created, it will auto-generate a 16 digit number. We also deliberately prevent users from changing the name and number on the card after creation, only allowing them to view the last 4 digits and validate the name and numbers on the card.
 
+## Explain Encapsulation With An Example
+- Encapsulation refers to the **deliberate hiding of internal representation** and **selectively expose** methods belonging to objects of a class. By controling how external users can **interact** with objects of a class,  it serves to protect information (state) stored in objects from unintended access or change.
+- In the example below, we want to hide the complexities involved in generating a card number for a new credit card from external users. We also do not want them to be able to change any of those information, only allowing them to view the last four digits or validate the details match with entered inputs.
 ```ruby
 class CreditCard
   def initialize(name)
@@ -40,9 +52,11 @@ david_card.last_four_digits
 
 ```
 
-## Explain polymorphism with the help of an example.
-Polymorphism is a phenomenon where different object types can all respond to a common method invocation. This can be achieved through class inheritance or duck typing. Polymorphism is useful in programming as it offers developers the flexibility to invoke a method call on a pool of different object types without discerning which type they fall under.
+[Back to top](#section-links)
 
+
+## Explain Polymorphism With An Example
+Polymorphism is a phenomenon where **different object types** can all **respond to a common method invocation**. This can be achieved through **class inheritance** or **duck typing**. Polymorphism offers **flexibility** in programming as we can **call a method on a pool of object types** without discerning what type each object belongs to.
 ```ruby
 # Polymorphism by Inheritance
 class Animal
@@ -100,10 +114,13 @@ talents = [Guitarist.new, Dancer.new, Comedian.new]
 talents.each { |talent| puts talent.perform }
 ```
 
+[Back to top](#section-links)
 
-## Explain, with examples, the relationship between classes and objects.
-A class is akin a mold that outlines attributes and methods that will be present in objects created from that class. Objects of a class are instantiations of that class. They can have different states but all will have the same methods.
 
+## Explain The Relationship Between Classes And Objects
+A class is akin to a **mold** that outlines the **type of attributes and methods present** in objects created from that class. Objects of a class are instantiations of that class. They can have different states but all will have the same methods.\
+
+In the example below, we define a `Dog` class and created 2 objects (`spotty` and `rex`) with different names and ages from that class.
 ```ruby
 class Dog
   DOG_TO_HUMAN_YEARS = 7
@@ -132,9 +149,14 @@ rex.speak
 puts rex.age_in_human_years
 ```
 
-## What are modules and when are they useful? Mixins, Method container, Namespacing
-Modules are containers of code that can house methods to be used as class mixins for interface inheritance, as a generic method container and to namespace related classes to avoid name collision.
+[Back to top](#section-links)
 
+
+## What Are Modules And How Are They Useful?
+Modules are containers of code and they useful as mixins, method container or in namespacing.\
+**Mixins** are modules that can be included in multiple classes to share common methods. They are particularly useful in situations those methods do not fit nicely into a hierachical structure demanded of class inheritance.\
+Modules can also be use as **class containers** to hold generic methods to be used in any program without inclusion in a class.\
+Modules are also used in **namespacing** to house related classes to avoid name collision.
 ```ruby
 # As mixin
 module Movable
@@ -156,7 +178,9 @@ end
 
 Car.new.move
 Boat.new.move
+```
 
+```ruby
 # As Generic Method Container
 module Computable
   def self.add(a, b)
@@ -170,7 +194,9 @@ end
 
 puts Computable.add(3, 5)
 puts Computable.subtract(5, 8)
+```
 
+```ruby
 # As Namespace for related Classes
 module Shape
   class Rectangle
@@ -208,9 +234,12 @@ my_circle = Shape::Circle.new(10)
 p my_circle.area
 ```
 
+[Back to top](#section-links)
+
+
 ## Explain Method Lookup Path
-Method Lookup path is the sequence of Classes and/or Modules used by Ruby when it is searching for a method. It always starts with the class in question,
-followed by the mixins it contains, and then its superclasses and their mixins as required. We can view the lookup method by invoking the class method
+Method lookup path is the sequence of Classes and/or Modules visited by Ruby when searching for a method. It always starts with the class in question,
+followed by the mixins it contains, and then its superclasses and their mixins. The search stops once the first same named method is found. If no same named method is found after Ruby exhausted the list of classes/modules, a `NoMethodError` is raised. We can view the lookup method by invoking the class method
 ::ancestors on the class of interest.
 
 ```ruby
@@ -230,10 +259,13 @@ end
 MyClass.ancestors   # => [MyClass, Printable, Formattable, Object, Kernel, BasicObject] 
 ```
 
+[Back to top](#section-links)
 
 
-## Explain the difference between states and behaviours
-States represent the values stored in objects while behaviours are actions that can be undertaken by those objects. Objects of the same class can have different states but will definitely have the same behaviours.
+## Explain The Difference Between States And Behaviours
+States represent the values stored in objects while behaviours are actions that can be undertaken by those objects. Objects of the same class can have different states but have the same behaviours.\
+
+In the example below, we have two objects of `Person` class. They have different value for their name (state) but both are able to greet (behaviour).
 
 ```ruby
 class Person
@@ -254,8 +286,14 @@ tom.greet
 david.greet
 ```
 
-## Explain the difference between public, private and protected access modifiers with an example
-`public`, `private` and `protected` are access modifiers for instance methods of a class. They control who can make use of these methods. `public` methods can be called by any instance of an object outside the class definition. `private` methods cannot be called by objects outside the class. They can only be called by instance methods of a class or `self` within the class definition. `protected` is similar to `private` methods but they can be called by both `self` and other instances of the same class within the class definition.
+[Back to top](#section-links)
+
+
+## Explain The Difference Between Public, Private And Protected
+`public`, `private` and `protected` are **access modifiers** for instance methods of a class. They **control** who can **access** of these methods.\
+`public` methods can be called by **any instance** of that class **outside the class definition**.\
+`private` methods **cannot** be called by objects outside the class. They can only be called by instance methods of a class or `self` within the class definition.\
+`protected` is similar to `private` methods but they can be called by **both `self` and other instances** of that class **within** the class definition.
 
 ```ruby
 class Circle
@@ -290,11 +328,11 @@ circle_a == circle_b
 circle_a.area
 ```
 
-
-## Why is it preferable to access instance variables using getters and setters, where available, in instance methods?
-It is preferable to use getters and setters where available as any built-in customisation can be consistently applied.
+[Back to top](#section-links)
 
 
+## Why Is It Preferable To Access Instance Variables Through Getters And Setters Whenever Available?
+It is preferable to use getters and setters where available as any **built-in customisation** can be **consistently applied**. In the example below, we process any input string to remove any non-letters before the assignment. This ensure all inputs are cleaned up before assigning to instance variables.
 ```ruby
   class Person
     attr_reader :name
@@ -309,8 +347,12 @@ It is preferable to use getters and setters where available as any built-in cust
   tom.name
 ```
 
-## Explain the difference between class and instance methods
-Instance methods provide functions for objects of a class and are invoked by them. Class methods, which are prefixed with `self.`, provide necessary functions for the class and are invoked on the class directly, without the need to create an object of that class. 
+[Back to top](#section-links)
+
+
+## Explain The Difference Between Class And Instance Methods
+**Instance methods** provide functions for **objects** of a class and are invoked by them.\
+**Class methods**, which are prefixed with `self.`, provide necessary functions for the **class** and are invoked on the class directly, without the need to create an object of that class. 
 
 ```ruby
 class Dog
@@ -351,9 +393,13 @@ Shiba.total          # => 10
 Dog.total            # => 10
 ```
 
-## Explain the difference between class, instance variables and constants
-Instance variables has a single `@` prefix while class variables have `@@` prefix. Instance variables are scoped at the instance level, with each object having its own instance variable but class variables are scoped at the class level. All class and their subclasses will share a single copy of the class variable. This explains why we obvious the abnormal behaviour when using class variables with inheritance. 
-Class constants are variables beginning with capitalize letter and are initialized within class definition but outside instance methods. They have a lexical scope.
+[Back to top](#section-links)
+
+
+## Explain The Difference Between Class, Instance Variables And Constants
+**Instance variables** have a single `@` prefix and are used to reference values for an object. They are scoped at the instance level.\
+**Class variables** have `@@` prefix, and are scoped at the class level. They are used to store value for the class. There is only a single copy of class variable even when the class variable is made available through inheritance to subclasses. This explains why we may see unintuitive behaviour when multiple related classes all operate on a particular class variable.\ 
+**Class constants** are variables beginning with a **capital letter**. They are initialized within the boundaries of a class definition but outside of instance methods. They have a **lexical scope** (i.e. they tend to be binded to the group of code they are defined in).
 
 ```ruby
 class Dog
@@ -373,9 +419,104 @@ puts std_dog
 my_golden = GoldenRetriever.new
 puts my_golden
 ```
-## Explain the use of super with examples
 
-## What are different meaning of self
+[Back to top](#section-links)
+
+
+## Explain The Use Of `super`
+`super` is a keyword used to invoke a same named method next up in the method lookup path. It is often used to reuse functionality already defined in the superclass and potentially add-on extra functionality. It can be involved in one of the following forms:
+- `super`: all arguments to the method it resides in is forwarded to the same named method
+- `super(a, b)`: only selected arguments are forwarded to the same named method
+- `super()`: no arguments are forwarded to the same named method
+```ruby
+class Car
+  def initialize(brand)
+    @brand = brand
+  end
+  
+  def to_s
+    "#{self.class} by #{@brand}!"
+  end
+end
+
+class ElectricVehicle < Car
+  def initialize(brand, battery_rating)
+    super(brand)
+    @battery_rating = battery_rating
+  end
+  
+  def to_s
+    super + " Go Green!"
+  end
+end
+
+ev = ElectricVehicle.new("Tesla", 1000)
+puts ev
+```
+
+[Back to top](#section-links)
+
+
+## What Are The Different Meanings Of Self?
+`self` can refer to one of the following
+- the object calling the instance method
+- the class itself
+- the module `self` is in
+```ruby
+class Car
+  @@car_count = 0
+  
+  puts self
+  
+  def initialize(brand)
+    @brand = brand
+    @@car_count += 1
+  end
+  
+  def self.car_count
+    @@car_count
+  end
+  
+  def print_self
+    puts self
+  end
+end
+
+Car.car_count
+my_car = Car.new("Audi")
+Car.car_count
+my_car.print_self
+```
+
+```ruby
+# self in Module Method Container
+module Movable
+  puts self
+  
+  def self.move
+    puts "moving"
+  end
+end
+
+Movable.move
+```
+
+```ruby
+module MyMixin
+  def special
+    puts "#{self} within special"
+  end
+end
+
+class MyClass
+  include MyMixin
+end
+
+my_class = MyClass.new
+my_class.special
+```
+
+[Back to top](#section-links)
 
 
 
