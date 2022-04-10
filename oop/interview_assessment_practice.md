@@ -548,6 +548,7 @@ end
 ## Complex Example Involving Self, Inheritance, Method Lookup and Class and Instance Methods
 ```ruby
 class GrandParent
+  # Add your modifications below
   def self.which_method
     "From GrandParent class method"
   end
@@ -579,8 +580,8 @@ tom = Child.new("Tom")
 tom.info  # => "From GrandParent class method, we want to print Tom" 
 ```
 In the example above, modify only GrandParent class to get the output "From GrandParent class method, we want to print Tom". Explain how we arrive at this output
-- `tom.info` will execute `Child#info` since this method appears earlier than `Parent#info` in the method lookup path
-- Interpolation of `self.class.which_method` will invoke `::which_method` rather than `#which_method` since `self.class` returns `Child` class. Even though `Child` does not have a class method `which_method`, it got this from the `GrandParent` class through inheritance. Hence `#{self.class.which_method}` returns `"From GrandParent class method"``. Hence **class methods are also inherited.**
+- `tom.info` will execute `Child#info`
+- Interpolation of `self.class.which_method` will invoke class method `::which_method` rather than instance method`#which_method` since `self.class` returns a `Child` class. Even though `Child` does not have a class method `which_method`, it can get this from the `GrandParent` class through inheritance. Hence we can add `which_method` class method in `GrandParent` to get the first part of the required string. `#{self.class.which_method}` returns `"From GrandParent class method"``. From this example, we can see that **class methods, like instance methods, are also inherited.**
 - Interpolation of `#{person.name}` caused Ruby to search for a variable or method named `person`. To get this to return the value referenced by `@name` without changing `Child` or `Parent` class, we create a `#parent` method in `GrandParent` that returns `self`. This caused `parent.name` to be evaluated to `self.name`, with `self` referring to `tom`, a `Child` object, which also have access to `#name` attribute reader from `Parent` to return value referenced by `@name`.
 
 [Back to top](#section-links)
