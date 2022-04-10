@@ -12,12 +12,13 @@
 [Explain The Difference Between Class And Instance Methods](#explain-the-difference-between-class-and-instance-methods)\
 [Explain The Difference Between Class, Instance Variables And Constants](#explain-the-difference-between-class-instance-variables-and-constants)\
 [Explain The Use Of `super`](#explain-the-use-of-super)\
-[What Are The Different Meanings Of Self?](#what-are-the-different-meanings-of-self)
+[What Are The Different Meanings Of Self?](#what-are-the-different-meanings-of-self)\
+[Complex Example Involving Self, Inheritance, Method Lookup and Class and Instance Methods](#complex-example-involving-self-inheritance-method-lookup-and-class-and-instance-methods)
 
 
 ## Explain Encapsulation With An Example
-- Encapsulation refers to the **deliberate hiding of internal representation** and **selectively expose** methods belonging to objects of a class. By controling how external users can **interact** with objects of a class,  it serves to protect information (state) stored in objects from unintended access or change.
-- In the example below, we want to hide the complexities involved in generating a card number for a new credit card from external users. We also do not want them to be able to change any of those information, only allowing them to view the last four digits or validate the details match with entered inputs.
+- Encapsulation involves restricting direct access to some components (data and/or methods) of an object of a class by controlling the public interfaces available to external users. This helps to safeguard an object's internal state from unintentional modification and is also used to hide implementation details users do not need to know about.  
+- In the example below, we intentianally hid `generate_number` method from users of `CreditCard` class as they do not need to be concerned with how the number is generated and in what form. Getters and setters were also not available as we do not want users to be able to reveal any sensitive information or made any changes of these field once object is created. Users are limited to viewing the last four digits or validate the card details.
 ```ruby
 class CreditCard
   def initialize(name)
@@ -544,5 +545,42 @@ end
 [Back to top](#section-links)
 
 
+## Complex Example Involving Self, Inheritance, Method Lookup and Class and Instance Methods
+```ruby
+class GrandParent
+  def self.which_method
+    "From GrandParent class method"
+  end
+  
+  def person
+    self
+  end
+end
 
+class Parent < GrandParent
+  attr_reader :name
+  
+  def initialize(name)
+    @name = name
+  end
+  
+  def which_method
+    "From Parent instance method"
+  end
+end
 
+class Child < Parent
+  def info
+    "#{self.class.which_method}, we want to print #{person.name}"
+  end
+end
+
+tom = Child.new("Tom")
+tom.info  # => "From GrandParent class method, we want to print Tom" 
+```
+In the example above, modify only GrandParent class to get the output "From GrandParent class method, we want to print Tom". Explain how we arrive at this output
+- `tom.info` will execute `Child#info` since this method appears earlier than `Parent#info` in the method lookup path
+- Interpolation of `self.class.which_method` will invoke `::which_method` rather than `#which_method` since `self.class` returns `Child` class. Even though `Child` does not have a class method `which_method`, it got this from the `GrandParent` class through inheritance. Hence `#{self.class.which_method}` returns `"From GrandParent class method"``. Hence **class methods are also inherited.**
+- Interpolation of `#{person.name}` caused Ruby to search for a variable or method named `person`. To get this to return the value referenced by `@name` without changing `Child` or `Parent` class, we create a `#parent` method in `GrandParent` that returns `self`. This caused `parent.name` to be evaluated to `self.name`, with `self` referring to `tom`, a `Child` object, which also have access to `#name` attribute reader from `Parent` to return value referenced by `@name`.
+
+[Back to top](#section-links)

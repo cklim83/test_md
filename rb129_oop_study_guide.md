@@ -16,6 +16,9 @@
 [Fake operators](./oop/fake_operators.md)\
 [Working with collaborator objects](./oop/collaborator_objects.md)
 
+## Interview Preparation
+[Interview Assessment Practice](./oop/interview_assessment_practice.md)
+
 
 ## Other Important Materials
 [Steps to Model Problem in OOP](./oop/steps_to_model_in_oop.md)\
