@@ -546,6 +546,39 @@ end
 
 
 ## Complex Example Involving Self, Inheritance, Method Lookup and Class and Instance Methods
+
+In the example below, modify only `GrandParent` class to get the output "From GrandParent class method, we want to print Tom". Explain how we arrive at this output with the solution provided.
+- `tom.info` will execute `Child#info`
+```ruby
+class GrandParent
+  # Add your modifications below
+
+end
+
+class Parent 
+  attr_reader :name
+  
+  def initialize(name)
+    @name = name
+  end
+  
+  def which_method
+    "From Parent instance method"
+  end
+end
+
+class Child < Parent
+  def info
+    "#{self.class.which_method}, we want to print #{person.name}"
+  end
+end
+
+tom = Child.new("Tom")
+tom.info  # => "From GrandParent class method, we want to print Tom" 
+```
+
+
+**Solution**
 ```ruby
 class GrandParent
   # Add your modifications below
@@ -579,8 +612,6 @@ end
 tom = Child.new("Tom")
 tom.info  # => "From GrandParent class method, we want to print Tom" 
 ```
-In the example above, modify only `GrandParent` class to get the output "From GrandParent class method, we want to print Tom". Explain how we arrive at this output
-- `tom.info` will execute `Child#info`
 - Interpolation of `self.class.which_method` will invoke class method `::which_method` rather than instance method`#which_method` since `self.class` returns a `Child` class. Even though `Child` does not have a class method `which_method`, it can get this from the `GrandParent` class through inheritance. Hence we can add `which_method` class method in `GrandParent` to get the first part of the required string. `#{self.class.which_method}` returns `"From GrandParent class method"``. From this example, we can see that **class methods, like instance methods, are also inherited.**
 - Interpolation of `#{person.name}` caused Ruby to search for a variable or method named `person`. To get this to return the value referenced by `@name` without changing `Child` or `Parent` class, we create a `#parent` method in `GrandParent` that returns `self`. This caused `parent.name` to be evaluated to `self.name`, with `self` referring to `tom`, a `Child` object, which also have access to `#name` attribute reader from `Parent` to return value referenced by `@name`.
 
