@@ -8,12 +8,14 @@
 - [Tracing Execution Sequence](#tracing-execution-sequence)
 - [Yielding With Argument](#yielding-with-argument)
 - [Return Value From Yielding to Block](#return-value-from-yielding-to-block)
-- [When To Use Blocks In Own Methods](#when-to-use-blocks-in-own-methods)
+- [When to Design Methods to Use Blocks](#when-to-design-methods-to_use_blocks)
 - [Methods With Explicit Block Parameter](#methods-with-explicit-block-parameter)
 - [Using Closures](#using-closures)
 
 [Blocks and Variable Scope](#blocks-and-variable-scope)\
-[Symbol to Proc](#symbol-to-proc)
+[Two Different and Opposite Usage of &](#two-different-and-opposite-usage-of-&)\
+[Exploring Procs, Lambda and Blocks: Definition and Arity](#exploring-procs-lambda-and-blocks-definition-and-arity)
+[Use of Splat Operator `*` in Argument Passing](#use-of-splat-operator-*-in-argument-passing)
 
 ---
 
@@ -26,9 +28,9 @@
 - Methods and blocks can return a chunk of code by returning a `Proc` or `lambda`.
 
 ## What Is A Closure
-- A **closure** is a general programming concept that allows programmers to **save a chunk of code** to be executed at a later time. This construct is useful to pass code into methods. 
+- A **closure** is a general programming concept that allows programmers to **save a chunk of code** for execution at a later time. The chunk code can be passed into methods for execution. 
 
-- It is called a closure as it **binds surrounding artifacts** (i.e. variables and constants the code chunk references and the methods it calls) and builds an "enclosure" around them so that these artifacts can be referenced when the closure is executed later.
+- This construct is called a closure because it **binds surrounding artifacts** (i.e. variables, constants or methods referenced within the code chunk) and builds an "enclosure" around them so that they (binded artifacts) can be referenced during closure execution.
 
 - In Ruby, a closure can be implemented in one of 3 ways:
 	- Instantiating a **`Proc`** object 
@@ -41,7 +43,7 @@ We will focus on blocks in this lesson.
 
 
 ## Calling Methods With Blocks
-`do ... end` or `{ ... }` following a method invocation represents a block passed as an **argument** to the method call.
+`do ... end` or `{ ... }` that follows a method invocation are blocks passed in as an **argument** to the method call.
 
 ```ruby
 # Example 1: passing in a block to the `Integer#times` method.
@@ -69,13 +71,13 @@ end
 - `Array#map` returns a **new array** with elements being the values returned by the block
 - `Hash#select` returns a **new hash** with key-value pairs that evaluates to true in the block
 
-Whether a block will affect the return value of the method invocation depends on how the method is implemented. The method implementation determines whether if execute or ignores the block and how it treats the block's return values.
+As seen in the different method above, whether a block affects the return value of the method depends on the method implementation: how it uses the block and its return values.
 
 [Back to Top](#section-links)
 
 
 ## Writing Methods That Take Blocks
-In Ruby, **every method, regardless of its definition, takes an implict block**. It may ignore the implicit block but it still accepts it and does not cause an error. 
+In Ruby, **every method accepts an implict block**. Even if the method doesn't make use of the implicit block, that does not result in an error. 
 ```ruby
 def hello
   "hello!"
@@ -105,7 +107,7 @@ echo("hello", "world!") { puts "world" }      # => ArgumentError: wrong number o
 
 
 ### Yielding
-A method will only execute the passed-in block if it contains the `yield` keyword. When `yield` is evaluated, execution is passed from the method to the block. After the block completes execution and returns (a value), execution resumes after the yield keyword.
+A method will only execute a passed-in block if it contains the `yield` keyword. When Ruby interpreter ecnounter `yield`, execution flows from the method to the block. After the block completes execution and returns a value, execution will resume after the `yield` keyword.
 ```ruby
 def echo_with_yield(str)
   yield
@@ -121,13 +123,13 @@ echo_with_yield("hello", "world!") { puts "world" }     # => ArgumentError: wron
 ```
 
 
-We encounter a `LocalJumpError` when a method expects to yield to a block but no block was passed in.
+A `LocalJumpError` is raised when a method expects to `yield` to a block but no block was actually passed in.
 ```ruby
 echo_with_yield("hello!")                          # => LocalJumpError: no block given (yield)
 ```
 
 
-To provide a method the flexibility to be invoked with or without a block, we use `block_given?` as a conditional guard for `yield`. `block_given` is a **Kernel** method and returns `true` only if a block is passed into a method invocation. 
+To provide a method the flexibility to be invoked with or without a block, `Kernel#block_given?` can be used as a conditional guard for `yield`. This method returns `true` only if a block is passed in during method invocation. 
 
 ```ruby
 def echo_with_yield(str)
@@ -158,48 +160,53 @@ say("hi there") do
 end                                                # clears screen first, then outputs "> hi there"
 ```
 
-1.  Execution starts at method invocation, on line 8. The `say` method is invoked with two arguments: a `"hi there"` string and a block (the block is an implicit parameter and not part of the method definition).
-2.  Execution goes to line 2, where the method local variable `words` is assigned the string `"hi there"`. The block is passed in implicitly, without being assigned to a variable.
+1.  Execution starts at method invocation, on line `8`. The `say` method is invoked with two arguments: a `"hi there"` string and a block (the block is an **implicit parameter** and not part of the method definition).
+2.  Execution then jumps to line 2, where the method's local variable `words` is assigned to the string `"hi there"`. The block is passed in implicitly, without being assigned to a variable.
 3.  Execution continues into the first line of the method implementation, line 3, which immediately yields to the block.
-4.  The block, line 9, is now executed, which clears the screen.
+4.  The block, on line 9, then gets executed, clearing the screen.
 5.  After the block is done executing, execution continues in the method implementation on line 4. Executing line 4 results in output being displayed.
-6.  The method ends, which means the last expression's value is returned by this method. The last expression in the method invokes the `puts` method, so the return value for the method is `nil`.
+6.  The last expression in the method returns `nil`, which is also the return value for the `say` method.
 
 [Back to Top](#section-links)
 
 
 ### Yielding With Argument
-Sometimes, the block passed to a method requires an argument. In the example below, the block passed to `#times` has a single parameter `num` and takes 1 argument when yielded.
+Similar to methods, blocks can be defined with parameters. In the example below, the block passed to `#times` has a single parameter `num`.
 ```ruby
 3.times do |num|
   puts num
 end
 ```
 
-In Ruby, the **number of arguments** that we must pass to a `block`, `proc` or `lambda` is called its **arity**. `Method` and `lambda` has **strict arity** i.e. the number of argument **have to match** what is expected, else an error is raise. `Blocks` and `procs` have lenient arity: passing wrong number of arguments **would not** generate an error.
-1. Passing more arguments than block require: Extra arguments simply ignored.
-```ruby
-# method implementation
-def test
-  yield(1, 2)                           # passing 2 block arguments at block invocation time
-end
 
-# method invocation
-test { |num| puts num }                 # outputs "1" and second argument is ignored
-```
+**Arity**: the **number of arguments** that we must pass to a `block`, `proc` or `lambda`.
 
-2. Passing less arguments than block expects. The local variable with missing argument will be assigned `nil` value
-```ruby
-# method implementation
-def test
-  yield(1)                              # passing 1 block argument at block invocation time
-end
+- `Method` and `lambda` objects observe **strict arity**: the number of arguments passed **have to match** what is expected, else an **ArgumentError** will be raised.
 
-# method invocation
-test do |num1, num2|                    # expecting 2 parameters in block implementation
-  puts "#{num1} #{num2}"                # outputs "1 " since num2 is nil
-end
-```
+- Blocks and `proc` objects have **lenient arity**: mismatches between number of arguments and parameters defined **would not** generate an error.
+	1. Passing more arguments than what a block requires just meant that **extra arguments are ignored**.
+	```ruby
+	# method implementation
+	def test
+	  yield(1, 2)                           # passing 2 block arguments at block invocation time
+	end
+
+	# method invocation
+	test { |num| puts num }                 # outputs "1" and second argument is ignored
+	```
+
+	2. Passing less arguments than what a block expects just meant that **parameters matched with missing arguments are assigned `nil`**
+	```ruby
+	# method implementation
+	def test
+	  yield(1)                              # passing 1 block argument at block invocation time
+	end
+
+	# method invocation
+	test do |num1, num2|                    # expecting 2 parameters in block implementation
+	  puts "#{num1} #{num2}"                # outputs "1 " since num2 is nil
+	end
+	```
 
 [Back to Top](#section-links)
 
@@ -222,13 +229,13 @@ Before: hello
 After: HELLO
 => nil
 ```
-Similar to methods, the last evaluated statement from a block will return a value, which can be used within the method. In above example, the return value is assigned to `after` for subsequent output.
+Similar to methods, the last evaluated statement in a block will form its return value. It is up to the method to determine how this value will be used. In above example, the return value is assigned to `after` for subsequent output.
 
 [Back to Top](#section-links)
 
 
-### When To Use Blocks In Own Methods
-1. To defer implementation code to method invocation time. For any method, we have a **method implementator** and a **method caller**. There are times when the method implementator will just setup the processes (e.g. iterate through elements of a collection) but provide flexibility for the method caller to supply their processing logic at invocation time. `#each`, `#map`, `#select` are good examples of such methods. In general, in situations where we are **calling a method multiple times, each time with a minor tweak**, we could explore implementing a generic method that yields to a block. 
+### When to Design Methods to Use Blocks
+1. **To defer implementation code to method invocation time**. For any method, we have a method implementator and a method caller. There are times when the method implementator will just setup the processes (e.g. iterate through elements of a collection) but provide flexibility for the method caller to supply their processing logic at invocation time. `#each`, `#map`, `#select` are good examples of such methods. In general, if we have situations where we are **calling a method multiple times, each time with a minor tweak**, a generic method that yields to a block could be the solution. 
 
 2. Methods that need to perform some **"before" and "after" actions** - sandwich code. Examples include timing methods, opening and closing of files, connecting and disconnect to sql servers.
 ```ruby
@@ -247,14 +254,14 @@ time_it { "hello world" }               # It took 3.0e-06 seconds.
                                         # => nil
 ```
 
-Typically, we use `File::open` to open a file and have to **manually close** it to release system resources used by `my_file`.
+When we use `File::open` to open a file, we have to **manually close** it to release system resources.
 ```ruby
 my_file = File.open("some_file.txt", "w+")          # creates a file called "some_file.txt" with write/read permissions
 # write to this file using my_file.write
 my_file.close
 ```
 
-`File::open` can also take a block and **automatically close** the file after block is executed. This happens because the method implementator of `File::open` will open the file, yields to the block, then close the file.
+`File::open` can also take a block, then **automatically close** the file after block execution. This happens because the method implementator of `File::open` have designed it to open the file, yield to supplied block, then close the file.
 ```ruby
 File.open("some_file.txt", "w+") do |file|
   # write to this file using file.write
@@ -265,20 +272,22 @@ end
 
 
 ### Methods With Explicit Block Parameter
-An explicit block is a block that gets assigned to a method parameter and is treated as a named object. Like any object, it can be reassigned, passed to toher methods and invoked multiple times. 
+An **explicit block** is one that gets **assigned to a method parameter** and is treated like a named object. Like any object, it can be reassigned, passed to another method or invoked multiple times. 
 
-To define an explicit block, we add a parameter to the method definition whose name begins with a `&` character. The `&` signify to Ruby to convert the block into a `Proc` object.
+To define an explicit block, the parameter accepting the block should be in the **last position** and be prepended with a `&` character. The `&` signify to Ruby to convert the block into a `Proc` object. A method can only have **one** parameter with `&`.
 ```ruby
-def test(&block)
+def test(word, &block)
   puts "What's &block? #{block}"
+  puts word
 end
 
-test { sleep(1) }
+test("Nothing") { sleep(1) }
 
 # What's &block? #<Proc:0x007f98e32b83c8@(irb):59>
+# Nothing
 # => nil
 ```
-In above example, `{ sleep(1) }` is assigned to `block` which when interpolated within the string with `to_s`, reveals that it is referencing a `Proc` object.
+In above example, `{ sleep(1) }` is assigned to `block`. The `&` converts the block to a `Proc` object and is interpolated within the string using `to_s`, confirming it is a regular `Proc` object.
 
 Explicit block confers the following benefits:
 - There is a handle for the block, unlike an implicit block
@@ -301,13 +310,13 @@ test { |prefix| puts prefix + "xyz" }
 # => >>>xyz
 # => 2
 ```
-In above example, `{ |prefix| puts prefix + "xyz" }` is assigned to explict block `block` when `test` is invoked. `block` now references a `Proc` object. `block` is then passed into `display` as an argument (notice we do not need an `&` prefix for block in `display` since we argument passed in is already a `Proc` object). We then invoke this `Proc` using `call` and supply it with `">>>"` as argument.
+In above example, `{ |prefix| puts prefix + "xyz" }` is assigned to explict block `block` when `test` is invoked. `block` now references a `Proc` object. `block` is then passed into `display` as an argument (notice we do not need an `&` prefix for block in `display` since the argument passed in is already a `Proc` object). We then invoke this `Proc` using `call` and supply it with `">>>"` as argument.
 
 [Back to Top](#section-links)
 
 
 ### Using Closures
-A powerful capability in Ruby and other languages is the ability to pass chunks of code i.e. `closures` which can be formed by blocks, `Proc` objects and `lamda`s. They retain a memory of their surrounding scope (binding) and can use and update variables in that scope when they are executed, even if the block, `Proc` or `lambda` is called from somewhere else.
+A powerful capability in Ruby and other languages is the ability to pass chunks of code i.e. `closures` which can be formed by blocks, `Proc` objects and `lamda`s. Closures **retain a memory** of their surrounding scope (binding) and **can use and update variables in those scope** even when they are executed elsewhere.
 ```ruby
 def for_each_in(arr)
   arr.each { |element| yield element }
@@ -323,10 +332,11 @@ end
 
 p results # => [0, 1, 3, 6, 10, 15]
 ```
-Though the block passed to `for_each_in` is invoked inside that method, the block still retained access to `results` array through closure. 
+Although `for_each_in` cannot access `results` array based on scoping rules, the implicit block it received enables `results` to be accessed and updated when yielded to within the method.
 
+Methods and block can return `Proc` or `lambda` objects (note: a block cannot be a return value) that enhances the usefulness of closures.
 
-Where closures is really useful is when a method or block returns a closure in the form of `Proc` or `lamda` (note: we cannot return a block). Below is an example of a method returning a `Proc`
+**Proc as Return Value**
 ```ruby
 def sequence
   counter = 0
@@ -344,16 +354,16 @@ p s2.call           # => 1
 p s1.call           # => 4 (note: this is s1)
 p s2.call           # => 2
 ```
-In above example, `#sequence` method returns a `Proc` that forms a closure with local variable `counter`. Subsequently, we can call the returned `Proc` repeatedly and each time we call, it increments it own **private copy** of `counter`. Hence it returns `1`, `2`, and `3` on the first, second and third call.
-
-We can create multiple `Proc` objects from sequence, each with its own independent copy of `counter`. Thus when `s2` is assigned `#sequence` and called, it outputs its own copy of `counter`.
+- `#sequence` method returns a `Proc` object that forms a closure with local variable `counter`.
+- Each time we call the `Proc` object, it increments it own **private copy** of `counter`, returning `1`, `2`, `3` etc on each subsequent call.
+- Every call to `sequence` returns a new `Proc` object, each with its **own copy** of `counter`. Hence the counter values of `s1` and `s2` are independent 
 
 [Back to Top](#section-links)
 
 
 ## Blocks and Variable Scope
 ### Refresher on local variable scope
-A block creates a new scope for local variables and only outer local variables are accessible to inner blocks.
+A block creates a new scope for local variables. Only outer local variables are accessible to inner blocks.
 ```ruby
 level_1 = "outer-most variable"
 
@@ -379,13 +389,13 @@ end
 
 
 ### Closure and Binding
-A closure keeps track its binding (i.e. local variables, method references, constants and other artifacts) to have all the information it needs for execution later. Whenever it is executed, it will drag all of it around. 
+A closure **tracks its bindings** (i.e. local variables, method references, constants and other artifacts) to have all the information it needs for execution later. Whenever it is executed, it will drag all of it around. 
 ```ruby
 def call_me(some_code)
   some_code.call
 end
 
-#name = "Robert"
+name = "Robert"
 chunk_of_code = Proc.new {puts "hi #{name}"}
 name = "Griffin III"        # re-assign name after Proc initialization
 
@@ -398,8 +408,8 @@ hi Griffin III
 => nil
 ```
 - In above example, local variable `name` that is otherwise out-of-scope in the method `call_me` is made available through closure binding when `some_code` was invoked within `call_me`. 
-- Even though `name` was reassigned to a new value after the `Proc` was created, invocation of `chunk_of_code` still outputs the updated value. This shows that when the `Proc` was first created, the current value of name was not preprocessed and stored for later use. Instead, when a `Proc` is called, it can **dynamically reference** the current values of binded artifacts.
-- Note: removing `name = "Robert"` would mean that `name` is not part of the binding of the `Proc` object since `name` is only initialized after the `Proc` is instantiated and is thus not in scope. Calling the `Proc` now will generate a NameError.
+- Even though `name` was reassigned to a new value after the `Proc` object was created, it was still able to output the updated value when `chunk_of_code` was called. This suggest that the **value of bindings at `Proc` object creation** was **not stored for use during invocation**. Instead, the `Proc` object can **dynamically reference** and retrieve the up-to-date values at point of invocation.
+- **Note**: If a **variable referenced in a closure is not in scope at point of closure instantiation, it will not be part of the binding** of the closure. For example, if we initialize `name = "Robert"` **after** the `Proc` object instantiation, `name` will not be part of the binding. Calling the `Proc` object will then raise a `NameError`.
 ```ruby
 def call_me(some_code)
   some_code.call
@@ -419,63 +429,53 @@ block in <main>': undefined local variable or method `name' for main:Object (Nam
 [Back to Top](#section-links)
 
 
-## Symbol to Proc
+## Two Different and Opposite Usage of `&`
+### Methods with an Explicit Block Parameter
 ```ruby
-[1, 2, 3, 4, 5].map do |num|
-  num.to_s
+def test(&recipient)
+  puts "What's &recipient? #{recipient}"
 end
 
-# => ["1", "2", "3", "4", "5"]
-```
+test { sleep(1) }
 
-Equivalent shortcut:
+# What's &recipient? #<Proc:0x007f98e32b83c8@(irb):59>
+# => nil
+```
+- In this scenario, `&` converts the block that is passed in into a named `Proc` object. This `Proc` object can be invoked within the method or passed to another method like any other object
+
+### Convert A Method Argument To A Block
 ```ruby
-[1, 2, 3, 4, 5].map(&:to_s)                     # => ["1", "2", "3", "4", "5
+# Syntax
+caller.method(&object)
 ```
 
-**When applied to an argument object for a method, a lone `&` causes ruby to
-try to convert that object to a block. If that object is a proc, the
-conversion happens automatically, just as shown above. If the object is
-not a proc, then & attempts to call the #to_proc method on the object first.
-Used with symbols, e.g., &:to_s, Ruby creates a proc that calls the #to_s
-method on a passed object, and then converts that proc to a block. This is
-the "symbol to proc" operation (though perhaps it should be called "symbol
-to block").
-
-Note that &, when applied to an argument object is not the same as an &
-applied to a method parameter, as in this code:
-```ruby
-def foo(&block)
-  block.call
-end
-```
-
-While & applied to an argument object causes the object to be converted to
-a block, & applied to a method parameter causes the associated object to be
-converted to a proc. In essence, the two uses of & are opposites.**
-
-Comparing the two code above, we see that `(&:to_s)` is equivalent to `{ |n| n.to_s }`. This is achieved in a two step process:
-1. Ruby first calls `Symbol#to_proc` to convert `:to_s` to a `Proc` object
-2. The `&` operator will then convert the `Proc` object into a block
+The argument can be **any object**, including `Proc` or Symbol objects. If the argument is already a `Proc` object, `&` will directly convert it to a block.
 
 ```ruby
-def my_method
-  yield(2)
-end
-
-# turns the symbol into a Proc, then & turns the Proc into a block
-my_method(&:to_s)               # => "2"
+squared = proc { |x| x**2 }
+[1, 2, 3].map(&squared)
+# => [1, 4, 9]
 ```
 
-Is equivalent to:
+If the argument is not already a `Proc` object, Ruby will first try to convert it into a `Proc` by calling `#to_proc` on it. If successful, `&` will then convert the  `Proc` object into a block. This is essentially how **symbol to proc** works. Symbols have the [Symbol#to_proc](https://docs.ruby-lang.org/en/master/Symbol.html#method-i-to_proc) instance method to return a `Proc` object
+
 ```ruby
-def my_method
-  yield(2)
-end
-
-a_proc = :to_s.to_proc          # explicitly call to_proc on the symbol
-my_method(&a_proc)              # convert Proc into block, then pass block in. Returns "2"
+[1, 2, 3].map(&:to_s)
+# => ["1", "2", "3"]
 ```
+
+Is actually achieved in **two steps**:
+```ruby
+# Step 1: Convert Symbol to Proc
+to_s_proc = :to_s.to_proc
+puts to_s_proc              # <Proc:0x00007fed5917b120(&:to_s)>
+
+# Step 2: & convert proc to block
+[1, 2, 3].map(&to_s_proc)   # (&to_s_proc) => { |n| n.to_s }
+# => ["1", "2", "3"]
+```
+
+Comparing the two code above, we see that `(&:to_s)` was converted to `{ |n| n.to_s }` so that both syntax have the same output.
 
 This shortcut works with **any collection method that takes a block**, not only on `map`
 ```ruby
@@ -484,19 +484,51 @@ This shortcut works with **any collection method that takes a block**, not only 
 [1, 2, 3, 4, 5].select(&:odd?).any?(&:even?)    # => false
 ```
 
-Note: this shortcut **does not work for methods with parameters** e.g. `String#prepend(*other_string)`. So we cannot do something like 
-```ruby     
-[1, 2].map(&:to_s).map { |n| n.prepend("The number is: ") }  # => ["The number is: 1", "The number is: 2"]
+**Symbol-to-proc** shortcut works with any methods, including custom ones, as long as they don't have parameters
+```ruby
+def return_hi
+  "hi"
+end
 
-[1, 2].map(&:to_s).map(&:prepend("The number is: "))         # => syntax error, unexpected ')', expecting end-of-input ...ap(&:prepend "The number is: ")
+[1, 2, 3].map(&:return_hi)
+# => ["hi", "hi", "hi"]
 ```
 
+**Methods with parameters don't work**
+```ruby
+# String#prepend(*other_string) takes at least 1 string argument
+
+["1", "2"].map { |n| n.prepend("The number is: ") }  # => ["The number is: 1", "The number is: 2"]
+
+["1", "2"].map(&:prepend("The number is: "))         # => syntax error, unexpected ')', expecting end-of-input ...ap(&:prepend "The number is: ")
+```
+
+Fortunately, there is a workaround using `Method` objects.
+```ruby
+def convert_to_base_8(n)
+  n.to_s(8).to_i 
+end
+
+method_object = method(:convert_to_base_8)
+puts method_object    # <Method: main.convert_to_base_8(n) (irb):189>
+
+[8, 10, 12, 14, 16, 33].map(&method_object)
+# => [10, 12, 14, 16, 20, 41]
+```
+- [Object#method(sym)](https://docs.ruby-lang.org/en/master/Object.html#method-i-method) takes a method name (without the parameters) in the form of symbol and returns a `Method` object
+- `&method_object` first convert `method_object` to a `Proc` object, before `&` converts the `Proc` to a block that is equivalent to `{ |n| convert_to_base_8(n) }`. 
+- This way, we have a indirect workaround for methods with parameters that cannot use the symbol-to-proc shortcut directly.
+
+[Link to full example](../../../04_rb130_more_topics/03_exercises/04_medium_1/06_method_to_proc.rb)
+
+
+Sometimes, we might have a situation where a method we call need to call another method that needs a block. We can do it by accepting the block as an explict parameter using `&parameter`, then convert `parameter` which is now a `Proc` object back to a block using `&` again for a method called within. 
 
 **Example: Using `&` to Convert a Block to a Proc and then back to a Block**
 ```ruby
 # any? returns true if any block return value is truthy
-def any?(collection)
-  collection.each { |item| return true if yield(item) }
+def any?(collection) 
+  collection.each { |item| return true if yield(item) }  # expects a block
   false
 end
 
@@ -507,7 +539,7 @@ end
 
 none?([1, 3, 5, 6]) { |value| value.even? }  # => # no block given (yield) (LocalJumpError)
 ```
-While `#none?` is the negation of `#any?`, we cannot directly use the `#any?` code within `#none?` since The block passed to `#none?` will not be available to `#any?`, leading to `LocalJumpError`.
+While `#none?` is logically the negation of `#any?`, we cannot directly use the `#any?` code within `#none?` since the block passed to `#none?` will not be available to `#any?`, leading to `LocalJumpError`.
 
 Solution:
 ```ruby
@@ -518,7 +550,113 @@ end
 none?([1, 3, 5, 6]) { |value| value.even? }  # => false
 none?([1, 3, 5, 7]) { |value| value.even? }  # => true
 ```
-- Store the block as an explicit parameter using `&my_block`. This will convert the block passed in to a `Proc` object named `my_block`
-- When we call `#any?`, we DO NOT just pass in `my_block` as an argument it is now a `Proc` object while `#any?` is expecting a block. To convert back to a block for `#any?` to use, we need to prepend `&` to convert back to a block, hence `&my_block` again.
+- Use explicit parameter `&my_block`. This will convert the block passed in to a `Proc` object and assigned to `my_block`.
+- When we call `#any?`, we cannot just pass in `my_block` as an argument since it is now a `Proc` object and not in block form that `#any?` is expecting. To convert the `Proc` object back into a block for `#any?` to use, we again prepend `&` to the `Proc` object, hence we call `any?` with a second argument `&my_block` even though it only accepts one based on its method definition.
+
+[Back to Top](#section-links)
+
+
+## Exploring Procs, Lambda and Blocks: Definition and Arity
+### Proc
+- A new `Proc` object can be created with `Kernel#proc { ... }` and is **equivalent** to those created using `Proc.new { ... }`
+- **Proc** objects have **soft arity** (number of arguments taken): Mismatches between number of supplied arguments and parameters do not raise an ArgumentError. Missing arguments take on value of nil while extra arguments are ignored.
+```Ruby
+my_proc = proc { |thing| puts "This is a #{thing}." }
+puts my_proc            # #<Proc:0x00007faec3095488 (irb):17>
+puts my_proc.class      # output: Proc
+	
+my_proc.call			# output: "This is a ."
+my_proc.call('cat')     # output: This is a cat.""
+```
+
+### Lambda
+- A new `Lambda` object can be created with a call to `lambda` or `->`. We **cannot** create a new Lambda object with `Lambda.new` as Lambda class **does not exist**.
+- While a `lambda` object is also a type of `Proc`, it **differs** from a regular `Proc`: this is seen when output using `puts`, with an extra `(lambda)` seen that is not present in regular `Proc` objects
+- Lambda objects, like methods has **hard arity**: mismatch between supplied arguments and definition will raise an `ArgumentError`
+```Ruby
+my_lambda = lambda { |thing| puts "This is a #{thing}." }
+my_second_lambda = -> (thing) { puts "This is a #{thing}." }
+
+puts my_lambda         # output: #<Proc:0x00007faec68c6fa0 (irb):22 (lambda)>
+puts my_second_lambda  # output: #<Proc:0x00007faec30802e0 (irb):23 (lambda)>
+puts my_lambda.class   # output: Proc
+
+my_lambda.call('dog')  # output: "This is a dog."
+my_lambda.call         # ArgumentError (wrong number of arguments (given 0, expected 1))
+```
+
+### Blocks
+- An **implicit block** is a grouping of code, a type of closure but **not an object**
+- Like `Proc` objects, it has a **soft arity**
+- Blocks will throw an error if a variable is referenced that doesn't exist in the block's scope
+- A method yielding to a missing block will raise a `LocalJumpError`
+```Ruby
+def block_method(animal)
+  yield(animal)
+end
+
+block_method('turtle') { |turtle| puts "This is a #{turtle}." }  # output: "This is a turtle."
+
+block_method('turtle') do |turtle, seal|
+  puts "This is a #{turtle} and a #{seal}."
+end
+ # output: "This is a turtle and a ."
+
+block_method('turtle') { puts "This is a #{animal}." }
+ # => NameError (undefined local variable or method `animal' for main:Object)
+
+block_method('turtle')
+ # => LocalJumpError (no block given (yield))
+```
+
+[Code Example for Proc, Lambda and Blocks](../../../04_rb130_more_topics/03_exercises/06_advanced_1/02_proc_lambda_blocks.rb)
+
+
+## Use of Splat Operator `*` in Argument Passing
+- At method invocation or block yielding, a splat operator converts an array (n elements) argument into a list i.e. n arguments
+
+- On the receiving end i.e. method/block parameter definition, a splat operator allow a parameter receive a list of arguments i.e. match a variable number of arguments.
+
+- The splat operator can be used at the start, middle, tail of the parameter list or not at all for a method definition or block
+
+### Difference in Behavior Between Method Call and Yielding to Block
+- In a **method call**, the splat operator `*` is **required** to convert an array into a list of arguments to match the parameters defined for that method. 
+```ruby
+def my_method(a, *b, c)
+  p a
+  p b
+  p c
+end
+
+my_method(*[1, 2, 3])  # => a = 1, b = [2], c = 3
+my_method(*[1, 2])     # => a = 1, b = [], c = 2
+my_method([1, 2, 3])   # => Argument error, given 1, expected 2+
+```
+
+- When **yielding to a block**, the splat operator `*` is **not required** to convert an array argument to a list of arguments. This conversion happens **automatically** under the hood irrespective whether `*` is applied.
+```ruby
+def to_block(arr)
+  yield(arr)
+end
+
+to_block([1, 2, 3, 4]) do |a, *b, c|
+  p a
+  p b
+  p c
+end
+# argument assignment: a = 1, b = [2, 3], c = 4
+
+def to_block(arr)
+  yield(*arr)
+end
+
+to_block([1, 2, 3, 4]) do |a, *b, c|
+  p a
+  p b
+  p c
+end
+# argument assignment: a = 1, b = [2, 3], c = 4
+```
+[Link to pass parameter example](../../../04_rb130_more_topics/03_exercises/04_medium_1/05_pass_parameter_3.rb)
 
 [Back to Top](#section-links)
