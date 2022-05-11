@@ -8,14 +8,14 @@
 - [Tracing Execution Sequence](#tracing-execution-sequence)
 - [Yielding With Argument](#yielding-with-argument)
 - [Return Value From Yielding to Block](#return-value-from-yielding-to-block)
-- [When to Design Methods to Use Blocks](#when-to-design-methods-to_use_blocks)
+- [When to Design Methods to Use Blocks](#when-to-design-methods-to-use-blocks)
 - [Methods With Explicit Block Parameter](#methods-with-explicit-block-parameter)
 - [Using Closures](#using-closures)
 
 [Blocks and Variable Scope](#blocks-and-variable-scope)\
-[Two Different and Opposite Usage of &](#two-different-and-opposite-usage-of-&)\
-[Exploring Procs, Lambda and Blocks: Definition and Arity](#exploring-procs-lambda-and-blocks-definition-and-arity)
-[Use of Splat Operator `*` in Argument Passing](#use-of-splat-operator-*-in-argument-passing)
+[Two Different and Opposite Usage of &](#two-different-and-opposite-usage-of-)\
+[Exploring Procs, Lambda and Blocks: Definition and Arity](#exploring-procs-lambda-and-blocks-definition-and-arity)\
+[Use of Splat Operator `*` in Argument Passing](#use-of-splat-operator--in-argument-passing)
 
 ---
 
@@ -610,6 +610,8 @@ block_method('turtle')
 ```
 
 [Code Example for Proc, Lambda and Blocks](../../../04_rb130_more_topics/03_exercises/06_advanced_1/02_proc_lambda_blocks.rb)
+
+[Back to Top](#section-links)
 
 
 ## Use of Splat Operator `*` in Argument Passing
