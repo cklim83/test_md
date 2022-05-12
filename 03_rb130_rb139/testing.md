@@ -72,14 +72,14 @@ Finished in 0.001034s, 967.2303 runs/s, 967.2303 assertions/s.
 
 
 ## Using Minitest
-- Overview:
-	- Create a test file
-	- Create a test class by subclassing `MiniTest::Test`.
-	-  Create a test by creating an instance method that starts with `test_`.
-	-  Create assertions with `assert_equal`, and pass it the expected value and the actual value.
-	-  Colorize Minitest output with `minitest-reporters`
-	-  You can skip tests with `skip`.
-	-  Minitest comes in two syntax flavors: assertion style and expectation style. The latter is to appease RSpec users, but the former is far more intuitive for beginning Ruby developers.
+### Steps Overview
+- Create a test file
+- Create a test class by subclassing `MiniTest::Test`.
+-  Create a test by creating an instance method that starts with `test_`.
+-  Create assertions with `assert_equal`, and pass it the expected value and the actual value.
+-  Colorize Minitest output with `minitest-reporters`
+-  You can skip tests with `skip`.
+-  Minitest comes in two syntax flavors: assertion style and expectation style. The latter is to appease RSpec users, but the former is far more intuitive for beginning Ruby developers.
 
 ### Minitest vs RSpec
 - Minitest is the default testing library and comes installed with Ruby while RSpec doesn't
