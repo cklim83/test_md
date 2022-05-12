@@ -3,7 +3,7 @@
 
 ## Section Links
 [Summary](#summary)\
-[Why Write Test?](#why-write-test)\
+[Why Write Tests?](#why-write-tests)\
 [Setting up Minitest](#setting-up-minitest)\
 [Minitest Summary](#minitest-summary)\
 [Important Notes on Testing](#important-notes-on-testing)\
@@ -71,9 +71,8 @@ Finished in 0.001034s, 967.2303 runs/s, 967.2303 assertions/s.
 ```
 
 
-## Minitest Summary
-- Minitest is an intuitive test library. It comes installed with Ruby.
-- Usage steps:
+## Using Minitest
+- Overview:
 	- Create a test file
 	- Create a test class by subclassing `MiniTest::Test`.
 	-  Create a test by creating an instance method that starts with `test_`.
@@ -118,12 +117,12 @@ end
 ```
 - `require minitest/autorun` is needed to load all necessary files from the `minitest` gem.
 - `require_relative 'car'` is needed to load the `car.rb` file so that object of the class can be instantiated in the test suite. `require_relative` indicates that `car.rb` is in the same directory as this test file `car_test.rb`
-- Sometimes, the class to be tested have custom collaborator objects. In that case, we also need to include the class of the collaborator object.
+- Sometimes, the class to be tested have custom collaborator objects. In that case, we also need to include the file of the collaborator object class using `require_relative`.
 - We create our test class. By convention, it is usually named **ClassnameTest** in CamelCase, where Classname denoted the class being tested.
 - This class should subclass `Minitest::Test` to inherit all the methods necessary for writing tests e.g. `assert, assert_equal.
 - Tests are instance methods within the test class. They **must start with `test_`** so that Minitest will know these methods are individual tests that needs to be run.
 - Before making assertions, we need to setup the appriopriate data/context to make assertions against. Here, we instantiate a `Car` object to test that newly created `Car` objects indeed have 4 wheels (based on the test method name)
-- We use `assert_equal`, an inherited instance method for the assertion. It takes two parameters, the first is the expected value, the second is the test or actual value. If the two values are equal, the assertion pass. Otherwise `assert_equal` will save the error and `Minitest` will report the error as a failure at the end of test run.
+- We use `assert_equal`, an inherited instance method for the assertion. It takes two parameters, the first is the expected value, the second is the test or actual value. If the two values are equal, the assertion pass. Otherwise `assert_equal` will save the error and `Minitest` will report the error as a failure at the end of test run. Assertion methods generally also take an optional string parameter to display failure message.
 
 ### Reading Test Output
 ```terminal
@@ -182,11 +181,12 @@ Expected: 3
 - The error message give more information on the fail test.
 
 ### Adding Color With minitest-reporter
-- We need to install the `minitest-reporters` gem
+We need to install the `minitest-reporters` gem
 ```terminal
 $ gem install minitest-reporters
 ```
-- Then add these lines to the top of the file
+
+Then add these lines to the top of the file
 ```ruby
 require "minitest/reporters"
 Minitest::Reporters.use!
@@ -216,10 +216,10 @@ Failed test colorized output:
 ![failed test image](https://d1b1wr57ag5rdp.cloudfront.net/images/failed_test_output.png)
 
 Sample successful run:
-![[Pasted image 20220512000218.png]]
+![success test image](https://d1b1wr57ag5rdp.cloudfront.net/images/success_test_run.png)
 
 ### Skipping Tests
-- We can skip tests (e.g. not ready yet) using the `skip` keyword at the **top** of the test instance method
+- We can skip tests (e.g. those not ready to be test) using the `skip` keyword at the **top** of the test instance method
 ```ruby
 require 'minitest/autorun'
 require "minitest/reporters"
@@ -249,12 +249,11 @@ Skipped test output:
 - Besides _assert-style_ syntax shown above, Minitest also has an _expectation_ or _spec-style_ syntax. 
 - Under expectation style, 
 	- tests are grouped into describe blocks
-	- individual tests are writtern with the `it` method
+	- individual tests are written with the `it` method
 	- use _expectation matchers_ instead of assertions
 	- This Domain Specific Language (DSL) mimics RSpec's syntax but doesn't look like normal Ruby code.
 ```ruby
 require 'minitest/autorun'
-
 require_relative 'car'
 
 describe 'Car#wheels' do
@@ -282,11 +281,9 @@ Finished in 0.001067s, 937.0051 runs/s, 937.0051 assertions/s.
 
 
 ## Important Notes on Testing
-- When writing test, try not to rely on dependencies (e.g. other untested methods used by the method under test) so that we can be sure. See [example](../../../04_rb130_more_topics/03_exercises/05_medium_2_testing/03_test_accept_money.rb) for details.
+- When writing tests, try not to rely on dependencies (e.g. other methods beyond the one being tested) so that we can isolate any failure to the method being tested. See [example](../../../04_rb130_more_topics/03_exercises/05_medium_2_testing/03_test_accept_money.rb) for details.
 
-- To automate testing involving inputs, we can use `StringIO` to avoid the need the manual entry by keyboard. e.g. `StringIO.new('10\n').gets.chomp` will return `'10'`, simulating entering `10` and pressing enter on keyboard. Each `StringIO` object can only be `gets` once, subsequent `gets` will return `nil`. See [input retrieval](../../../04_rb130_more_topics/03_exercises/05_medium_2_testing/06_test_prompt_payment.rb) and [output suppression](../../../04_rb130_more_topics/03_exercises/05_medium_2_testing/07_test_prompt_payment2.rb) examples.
-
-- `#assert` and `#assert_equal` both takes an optional string as second parameter to display failure message. The parenthesis to `#assert` or `#assert_equal` is optional.
+- To automate testing involving inputs, we can use `StringIO` to avoid the need for manual entry via keyboard. e.g. `StringIO.new('10\n').gets.chomp` will return `'10'`, simulating entering `10` and pressing enter on keyboard. Each `StringIO` object can only be `gets` once, subsequent `gets` will return `nil`. See [input retrieval](../../../04_rb130_more_topics/03_exercises/05_medium_2_testing/06_test_prompt_payment.rb) and [output suppression](../../../04_rb130_more_topics/03_exercises/05_medium_2_testing/07_test_prompt_payment2.rb) examples.
 
 - Within a test, once an assertion failure occurs, subsequent assertions below the failed one are not executed. Subsequent tests (i.e. runs) are still executed however.
 
@@ -306,7 +303,7 @@ Finished in 0.001067s, 937.0051 runs/s, 937.0051 assertions/s.
 
 Full list can be found in the [Minitest documentation](https://docs.seattlerb.org/minitest/Minitest/Assertions.html)
 
-Examples
+**Examples**
 ```ruby
 class Car
   attr_accessor :wheels, :name
@@ -506,7 +503,7 @@ Expected "hi there" (oid=70321861410720) to be the same as "hi there" (oid=70321
 ### Equality with Custom Class
 For standard ruby classes such as strings, arrays and hashes, `==` is already implemented so that `assert_equal` will work as expected i.e. comparing values.
 
-For custom classes, for `assert_equal` to work as expected, we will need to implement `==` for the custom class. Otherwise, assert_equal will utilise `BasicObject#==` made available through inheritance, which will fail the test if both objects are not the same. Nonetheless, the test will indicate a fail run and remind us to implement `==` for our custom class.
+For custom classes, for `assert_equal` to work as expected, we will need to implement `==` for the custom class. Otherwise, assert_equal will utilise `BasicObject#==` made available through inheritance, which will fail the test if both objects are not the same. Nonetheless, the test will indicate a failed run and remind us to implement `==` for our custom class.
 ```ruby
 class Car
   attr_accessor :wheels, :name
