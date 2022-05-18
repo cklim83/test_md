@@ -7,7 +7,7 @@
 [Ruby Version Managers](#ruby-version-managers)\
 [Bundler](#bundler)\
 [Rake](#rake)\
-[Hands-on Walkthrough](#handson-walkthrough)
+[Hands-on Walkthrough](#hands-on-walkthrough)
 
 
 ## Summary
