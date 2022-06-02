@@ -2,7 +2,6 @@
 ## Section Links
 
 [What Is A Closure](#what-is-a-closure)\
-[\[Refresher\] Blocks and Variable Scope](#refresher-blocks-and-variable-scope)\
 [Blocks, Procs and Lambda](#blocks-procs-and-lambda)\
 [Calling Methods With Blocks](#calling-methods-with-blocks)\
 [Explicit Block Parameter](#explicit-block-parameter)\
@@ -17,6 +16,31 @@ A **closure** is an abstract programming concept that exists across multiple lan
 
 This **binding** creates an _virtual enclosure_ (the reason why this construct is called a closure) around the artifacts, allowing them to be referenced and/or updated when the closure is subsequently executed, _even in a code location where these variables are not-in-scope._
 ![closure illustration](./closure_illustration.png)
+
+### \[Refresher\] Blocks and Variable Scope
+A block creates a new scope for local variables. Only outer local variables are accessible to inner blocks.
+```ruby
+level_1 = "outer-most variable"
+
+[1, 2, 3].each do |n|                     # block creates a new scope
+  level_2 = "inner variable"
+
+  ['a', 'b', 'c'].each do |n2|            # nested block creates a nested scope
+    level_3 = "inner-most variable"
+
+    # all three level_X variables are accessible here
+  end
+
+  # level_1 is accessible here
+  # level_2 is accessible here
+  # level_3 is not accessible here
+
+end
+
+# level_1 is accessible here
+# level_2 is not accessible here
+# level_3 is not accessible here
+```
 
 ### Closure and Binding
 A closure **tracks its bindings continually** to have up-to-date information available during execution. Whenever it is executed, it will drag all of it around. Hence any changes in artifacts' values after closure definition will be reflected when the closure is executed.
@@ -82,34 +106,6 @@ p s2.call           # => 2
 - `#sequence` method returns a `Proc` object that forms a closure with local variable `counter`.
 - Each time we call the `Proc` object, it increments it own **private copy** of `counter`, returning `1`, `2`, `3` etc on each subsequent call.
 - Every call to `sequence` returns a new `Proc` object, each with its **own copy** of `counter`. Hence the counter values of `s1` and `s2` are independent 
-
-[Back to Top](#section-links)
-
-
-## \[Refresher\] Blocks and Variable Scope
-A block creates a new scope for local variables. Only outer local variables are accessible to inner blocks.
-```ruby
-level_1 = "outer-most variable"
-
-[1, 2, 3].each do |n|                     # block creates a new scope
-  level_2 = "inner variable"
-
-  ['a', 'b', 'c'].each do |n2|            # nested block creates a nested scope
-    level_3 = "inner-most variable"
-
-    # all three level_X variables are accessible here
-  end
-
-  # level_1 is accessible here
-  # level_2 is accessible here
-  # level_3 is not accessible here
-
-end
-
-# level_1 is accessible here
-# level_2 is not accessible here
-# level_3 is not accessible here
-```
 
 [Back to Top](#section-links)
 
