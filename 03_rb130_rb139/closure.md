@@ -353,9 +353,9 @@ Arity refers to the **rule** specifying the **number of arguments** we need to p
 	```
 
 #### Use of Splat Operator `*` in Argument Passing
-At argument sending end (i.e. method invocation or yielding to block): a splat operator (`*`) applied on an array argument will convert it into a list of `n` arguments.
+_At argument sending end (i.e. method invocation or yielding to block)_: a splat operator (`*`) applied on an array argument will convert it into a list of `n` arguments.
 
-At argument receiving end (i.e. method or block definition): Splat operator will convert that parameter into a collection to receive a list of arguments i.e. match a variable number of arguments. 
+_At argument receiving end (i.e. method or block definition)_: Splat operator will convert that parameter into a collection to receive a list of arguments i.e. match a variable number of arguments. 
 
 The splat operator, while optional, but can be applied to a **parameter in any position** (start, middle or tail) in the parameter list of a method or block when required.
 
@@ -433,7 +433,7 @@ If we want more flexibility in using the block, we can pass it in explicitly. An
  - allowing it to be passed around or referenced and
  - allowing it to be invoked whenever needed
 
-Defining And Using An Explicit Block: 
+**Defining And Using An Explicit Block**: 
 - The parameter being assigned the block has to be the **last** parameter in the method definition and be prepended with the unary `&` operator. 
 - The `&` operator will convert the incoming block to a `Proc` object and assigned it to the parameter
 - This `Proc` object can now be referenced or passed to another method inside the method body via the parameter (without any `&` prepended).
