@@ -61,7 +61,7 @@ The output is:
 hi Griffin III
 => nil
 ```
-In above example, even though `name` was reassigned to a new value after the `Proc` object `chunk_of_code` was created, the `Proc` object was still able to output the updated value on execution. This suggest that the **value of bindings at `Proc` object creation** was **not stored for use during invocation**. Instead, the `Proc` object can **dynamically reference** and retrieve the up-to-date values at point of invocation.
+In above example, even though `name` was reassigned to a new value after the `Proc` object `chunk_of_code` was created, the `Proc` object was still able to output the updated value on execution. This suggest that the **binding is not static**: just storing the values of artifacts at `Proc` object creation. Instead, the binding allows the `Proc` object to **dynamically reference** and retrieve the up-to-date values at point of invocation.
 
 ### Out of Scope Binding
 Artifacts that are **not in scope** during closure definition is not part of the binding and will raise a `NameError`, not during closure definition, but when the closure is executed.
@@ -74,16 +74,16 @@ say_color = Proc.new { puts "The color is #{color}" }
 color = "blue"
 call_chunk(say_color)
 ```
-In the code snippet above, local variable `color` isn't part of the `Proc` object's binding since it isn't in scope when the `Proc` object is instantiated. This will raise an error when we try to call the `code_chunk` closure within the `call_chunk` method, and not during the closure definition. This is fixed by placing `color = "blue"` above the closure definition to make it in-scope.
+In the code snippet above, local variable `color` isn't part of the `Proc` object's binding since it isn't in scope when the `Proc` object is instantiated. This will raise an error when we try to call the `code_chunk` closure within the `call_chunk` method, and not during the closure definition. This can be fixed by placing `color = "blue"` above the closure definition to make it in-scope.
 
-### Forms of Closures in Ruby
-In Ruby, closures can take one of 3 forms:
+### Creating Closures in Ruby
+In Ruby, we can create closures in 3 ways:
 - **Blocks**,
 - **Proc** objects, and 
 - **lambda** objects
 
 ### Using Closures
-Methods and block can return `Proc` or `lambda` objects (note: a block cannot be a return value) that enhances the usefulness of closures.
+As methods and blocks can return `Proc` or `lambda` objects (note: a block cannot be a return value), that make closures very useful.
 
 **Example: Proc as Return Value**
 ```ruby
@@ -290,7 +290,7 @@ end
 ### Yielding
 In a method body, execution will pass from the method to the block each time the Ruby interpreter encounters the `yield` keyword. After the block finishes execution and returns, execution resumes where it left off in the method body.
 
-It is possible to call a method containing one or more `yield` keyword without passing in a block. When that happens, execution of the `yield` statement will result in a `LocalJumpError`.
+If we call a method containing one or more `yield` keyword without passing in a block, execution of the `yield` statement will result in a `LocalJumpError`.
 ```ruby
 def echo_with_yield(str)
   puts str
@@ -300,7 +300,7 @@ end
 echo_with_yield("hello!")                          # => LocalJumpError: no block given (yield)
 ```
 
-To allow methods to be flexible enough to be invoked with and without a block, we can use `Kernel#block_given?` as a conditional guard for the `yield` keyword. Since this method only returns `true` when a block has been passed in, we will not run into the situation of yielding to an non-existence block. 
+To allow methods to be flexible enough to be invoked with or without a block, we can use `Kernel#block_given?` as a conditional guard for the `yield` keyword. Since this method only returns `true` when a block has been passed in, we will not run into the situation of yielding to an non-existent block. 
 ```ruby
 def echo_with_yield(str)
   yield if block_given?
@@ -323,7 +323,7 @@ end
 ```
 
 #### Arity
-Arity refers to the **rule** concerning the **number of arguments** we need to pass to a `block`, `proc` or `lambda` in Ruby.
+Arity refers to the **rule** specifying the **number of arguments** we need to pass to a `block`, `proc` or `lambda` in Ruby.
 
 - Methods and `lambda` objects observe **strict arity**: the number of arguments passed in **need to match** what is expected, otherwise an **ArgumentError** will be raised.
 
@@ -353,14 +353,13 @@ Arity refers to the **rule** concerning the **number of arguments** we need to p
 	```
 
 #### Use of Splat Operator `*` in Argument Passing
-**At method invocation or block yielding**, a splat operator (`*`) applied on an array argument will convert it into a list of `n` arguments.
+At argument sending end (i.e. method invocation or yielding to block): a splat operator (`*`) applied on an array argument will convert it into a list of `n` arguments.
 
-Splat operator **at the method or block parameter end** will convert that parameter into a collection to receive a list of arguments i.e. match a variable number of arguments. 
+At argument receiving end (i.e. method or block definition): Splat operator will convert that parameter into a collection to receive a list of arguments i.e. match a variable number of arguments. 
 
 The splat operator, while optional, but can be applied to a **parameter in any position** (start, middle or tail) in the parameter list of a method or block when required.
 
-
-There is behavioral difference when we pass array arguments in method calls vs yielding to block.
+There is a difference when we pass array arguments in method calls vs yielding to block.
 - **Method invocation**: It is mandatory to apply the  splat operator to the array argument to avoid an 	`ArgumentError` 
 	```ruby
 	def my_method(a, *b, c)
@@ -427,9 +426,9 @@ Like methods, the evaluated value of the last executed statement in a block will
 
 
 ## Explicit Block Parameter
-All methods in Ruby can take an implicit block. An implicit block is one passed to a method call without assigned to a parameter of that method. Because of this, an implicit block is essentially anonymous. The block cannot be saved for repeated use and the only way to execute the block content within the method is to handle execution to it via `yield` and passing along any arguments it may require. 
+All methods in Ruby can take an implicit block. An implicit block is one passed to a method call without being assigned to a parameter of that method. Because of this, an implicit block is essentially anonymous. The block cannot be saved for repeated use and the only way to execute the block content within the method is to hand execution to it via `yield` and pass along any arguments it may require. 
 
-If we wanted more flexibility in using the block, we can pass it in explicitly. An **explicit block** is one that gets **assigned to a parameter** of the method being invoked. The `&` operator applied to this parameter helps convert the block into a `Proc` object, conferring it the following benefits over an implicit block:
+If we want more flexibility in using the block, we can pass it in explicitly. An **explicit block** is one that gets **assigned to a parameter** of the method being invoked. The `&` operator applied to this parameter helps convert the block into a `Proc` object, conferring it the following benefits over an implicit block:
  - giving it a name handle, 
  - allowing it to be passed around or referenced and
  - allowing it to be invoked whenever needed
@@ -438,7 +437,7 @@ Defining And Using An Explicit Block:
 - The parameter being assigned the block has to be the **last** parameter in the method definition and be prepended with the unary `&` operator. 
 - The `&` operator will convert the incoming block to a `Proc` object and assigned it to the parameter
 - This `Proc` object can now be referenced or passed to another method inside the method body via the parameter (without any `&` prepended).
-- To execute it, we can just invoke the `Proc#call` method on the parameter.
+- If we want to execute it, we can invoke the `Proc#call` method on the parameter.
 
 Note: A method can only have **one** parameter with `&`.
 
@@ -521,17 +520,18 @@ none?([1, 3, 5, 7]) { |value| value.even? }  # => true
 - Since method `any?` expects a block (see the `yield` keyword), we prepend `my_block` with `&` which will convert the `Proc` back to its block form to be passed into `any?` in the method call.
 
 ### Symbol to Proc
-We often also see the `&` prepended to a Symbol. Since Symbol is not a `Proc` object, how does `&` convert it into its block equivalent?
+We often also see `&` prepended to a `Symbol`. Since `Symbol` is not a `Proc` object, how does `&` convert it into its block equivalent?
 ```ruby
 [1, 2, 3].map(&:to_s)           # => ["1", "2", "3"]
 
-# is functionally equivalent to
-[1, 2, 3].map { |n| n.to_s }
+# is converted to the following equivalent block
+
+[1, 2, 3].map { |n| n.to_s }    # => ["1", "2", "3"]
 ```
 
 This is actually achieved in **two steps**:
-- Ruby will first call [Symbol#to_proc]((https://docs.ruby-lang.org/en/master/Symbol.html#method-i-to_proc) on the symbol prepended with `&` to convert it into a `Proc` object. 
-- `&` then convert the `Proc` to its block equivalent, then call the method with the generated block.
+- Ruby will first call [Symbol#to_proc](https://docs.ruby-lang.org/en/master/Symbol.html#method-i-to_proc) on the symbol prepended with `&` to convert it into a `Proc` object. 
+- `&` can then convert the `Proc` to its block equivalent, then call the method with the generated block.
 ```ruby
 # Step 1: Convert Symbol to Proc
 to_s_proc = :to_s.to_proc
@@ -564,7 +564,7 @@ Now that we understand the steps that occur under the hood, we can define a gene
 ```ruby
 caller.method(&argument)
 ```
-- Step 1: Attemp to convert argument to a `Proc` object if it is not already so.
+- Step 1: Attempt to convert argument to a `Proc` object if it is not already so.
 - Step 2: `&` converts the `Proc` object to its equivalent block, then calls the method with the block. Alternatively, if step 1 failed to produce a `Proc` object, applying `&` on argument will raise a `TypeError`.
 	```ruby
 	class MyClass      #to_proc method not defined for MyClass
@@ -588,7 +588,7 @@ a = :undefined_method.to_proc
 # NoMethodError (undefined method `undefined_method' for 1:Integer)
 ```
 
-Also, symbol-to-proc shortcut **doesnt work with **Methods with parameters
+Also, symbol-to-proc shortcut **doesnt work** with for methods with parameters
 ```ruby
 # String#prepend(*other_strings) → string
 ["1", "2"].map { |n| n.prepend("The number is: ") }  # => ["The number is: 1", "The number is: 2"]
@@ -643,7 +643,7 @@ time_it { "hello world" }               # It took 3.0e-06 seconds.
                                         # => nil
 ```
 
-**Example: File Opening and Closing**
+**Example: File Opening and Closing**\
 When we use `File::open` to open a file, we have to **manually close** it to release system resources.
 ```ruby
 my_file = File.open("some_file.txt", "w+")          # creates a file called "some_file.txt" with write/read permissions
