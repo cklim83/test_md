@@ -16,7 +16,7 @@
 A **closure** is an abstract programming concept that exists across multiple languages. It refers to a "chunk of code" that can be saved for execution at a later time, likely from a different location. Closures work by **binding** surrounding artifacts, which can be variables, constants or methods, that are referenced within the code chunk.
 
 This **binding** creates an _virtual enclosure_ (the reason why this construct is called a closure) around the artifacts, allowing them to be referenced and/or updated when the closure is subsequently executed, _even in a code location where these variables are not-in-scope._
-![[./closure_illustration.png]]
+![closure illustration](./closure_illustration.png)
 
 ### Closure and Binding
 A closure **tracks its bindings continually** to have up-to-date information available during execution. Whenever it is executed, it will drag all of it around. Hence any changes in artifacts' values after closure definition will be reflected when the closure is executed.
