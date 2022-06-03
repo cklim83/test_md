@@ -1,12 +1,11 @@
 # Truthiness
 
-
 ## Section Links
 [Boolean](#boolean)\
 [Expressions and Conditionals](#expressions-and-conditionals)\
 [Logical Operators](#logical-operators)\
 [Short Circuiting](#short-circuiting)\
-[Truthiness](#truthiness)
+[What is Truthiness](#what-is-truthiness)
 
 ---
 
@@ -158,7 +157,7 @@ Similar to `||` above, `true && 3/0` will generate an error.
 [Back to top](#section-links)
 
 
-## Truthiness
+## What Is Truthiness
 Truthiness is more than just `true`. In Ruby, everything that is not `false` or `nil` is considered `truthy`. Values such as `0`, `""` or `[]` are all considered truthy that **evaluates to true** when used in a conditional. 
 
 Corresponding, `false` and `nil` are both considered falsey and evaluates to `false` in a conditional.
