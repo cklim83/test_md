@@ -10,7 +10,7 @@
 ---
 
 ## Boolean
-**Boolean** datatype are important in a programming language as they can express "true" or "false" values to build conditional logic. In Ruby, boolean datatypes are represented by `true` or `false` objects in Ruby.
+**Boolean** datatypes are important in a programming language as they can express "true" or "false" values to build conditional logic. In Ruby, boolean datatypes are represented by `true` or `false` objects in Ruby.
 ```ruby
 true.class          # => TrueClass
 true.nil?           # => false
@@ -61,7 +61,7 @@ Above code will output "its's true!" only if `some_method_call` returns `true`
 
 ## Logical Operators
 Logical operators will return either a "truthy" or "falsey" value when evaluating two expressions
-- **`&&`** logical "and" operator: returns a `true` only when **both** expressions being evaluated are `true`
+- **`&&`** logical "and" operator: returns `true` only when **both** expressions being evaluated are `true`
 	```irb
 	irb:001> true && true
 	=> true
@@ -89,7 +89,7 @@ Logical operators will return either a "truthy" or "falsey" value when evaluatin
     => 1
 	```
 
-- **`||`** the "or" operator: returns a `true` value as long as one expression is `true`.
+- **`||`** the "or" operator: returns `true` as long as one expression is `true`.
 	```irb
 	irb:001> true || true
 	=> true
@@ -162,7 +162,7 @@ Truthiness is more than just `true`. In Ruby, everything that is not `false` or 
 
 Corresponding, `false` and `nil` are both considered falsey and evaluates to `false` in a conditional.
 
-**Example: 5 As Truthy Value**
+**Example: Conditional With Truthy Value**
 ```ruby
 num = 5
 
@@ -172,7 +172,7 @@ else
   puts "error!"
 end
 ```
-Above code outputs "valid number" as `num` which holds the value of `5` evaluates to true in the if conditional.
+Above code outputs "valid number" since `num` holds the value of `5` and evaluates to true in the if conditional.
 
 A valid can be truthy but doesn't necessarily equate to `true`
 ```ruby
@@ -189,7 +189,7 @@ num == true        # => false
 !!false  # => false
 ```
 
-Truthiness from assignment could sometimes be used in a conditional. Presumably, `find_name` method should return `nil` rather than `""` if no name was found if this were to work. Nevertheless, doing this is dangerous as others can easily thought the developer meant to do an equality comparsion and not assignment.  
+Truthiness from assignment could sometimes be used in a conditional. Presumably, the `find_name` method should return `nil` rather than `""` if no name was found for this to work. Nevertheless, doing this is dangerous as others can easily thought the developer meant to do an equality comparsion rather than an assignment.  
 ```ruby
 if name = find_name
   puts "got a name"
