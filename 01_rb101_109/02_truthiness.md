@@ -69,7 +69,7 @@ Logical operators will return either a "truthy" or "falsey" value when evaluatin
 	=> false
 	```
 
-- **Note**: `&&` can also return non-boolean values, if the expressions do not return a boolean value. Nevertheless, the conditional can still work based on [truthiness](#truthiness)
+- **Note**: `&&` can also return non-boolean values, if the expressions do not return a boolean value. Nevertheless, the conditional can still work based on [truthiness](#what-is-truthiness)
 	```ruby
 	# && has to evaluate both operands
 	# if 1st operand is false or nil, it will
