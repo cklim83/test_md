@@ -33,7 +33,7 @@ else
 end
 ```
 
-[Back to top](#sections)
+[Back to top](#section-links)
 
 
 ## Expressions and Conditionals

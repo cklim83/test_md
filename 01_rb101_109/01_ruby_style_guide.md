@@ -52,14 +52,14 @@ For **blocks**, use `{}` braces for single line blocks and `do ... end` for mult
 end
 ```
 
-**Parentheses** are **optional** when calling methods. Although this improves convenience during coding, it can make it difficult to differentiate between local variables and method invocation.
+**Parentheses** are **optional** when calling methods. Although this improves convenience during coding, it can make it difficult to differentiate between local variables and method invocations.
 ```ruby
 gets.chomp # usual way to get input
 
 Kernel.gets().chomp() # equivalent way but parentheses are usually omitted.
 ```
 
-Even the interpreter shares this confusion. An undefined name `a` will raise a `NameError` but the error message will indicate the uncertainty as to whether `a` is referring to local variable or a method. However, if we add the `()` suffix to `a`, the error message sharpens to indicate an unknown method.
+Even the interpreter shares this confusion. An undefined name `a` will raise a `NameError` but the error message would express this uncertainty by indicating that `a` could be a local variable or a method. However, if we try to execute `a()` instead, the ambiguity is resolved, with the error message referring to an undefined method.
 ```ruby
 irb(main):002:0> a 
 NameError (undefined local variable or method `a' for 	main:Object)
